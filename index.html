@@ -1,6 +1,7 @@
 <html>
 <head>
     <link rel="stylesheet" href="codemirror.css">
+        <title>Functional Programming in Javascript</title>
     <script src="codemirror.js"></script>
     <script src="javascript.js"></script>
     <style type="text/css">
@@ -134,7 +135,7 @@ Observable.fromEvent = function(dom, eventName, action) {
 
 var oldMerge = Observable.prototype.merge;
 
-Observable.prototype.merge = function() {
+Observable.prototype.mergeAll = function() {
     var args = Array.prototype.slice.call(arguments);
     if (arguments.length === 0) {
         return Observable.prototype.mergeObservable.apply(this, args);
@@ -179,7 +180,7 @@ function deepStringifyRecurse(obj) {
     return output;
 }
 
-Array.prototype.merge = function() {
+Array.prototype.mergeAll = function() {
     var results = [];
     this.forEach(function(subArray) {
 	  subArray.forEach(function(itemInArray) {
@@ -195,7 +196,7 @@ Array.prototype.mapMany = function(projection) {
         map(function(item) {
             return projection(item);
         }).
-        merge();
+        mergeAll();
 }
 
 Array.prototype.sortBy = function (keySelector) {
@@ -405,11 +406,12 @@ var last = new Date();
                     go.onclick = function() {
                         try {
                             var verifier = eval("(" + verifierScript.innerText + ")");
-                            
+
                             try {
                                 codeMirror.save();
                                 save();                                
                                 verifier($(code).val(), item);
+
                                 if (post !== undefined) {
                                     post.style.visibility = "visible";
                                 }
@@ -439,13 +441,33 @@ var last = new Date();
 </head>
 <body style="font-family:sans-serif">
     <div class="all">
-    <h1>Functional Programming in Javascript: Hands on Lab</h1>
-    <a href="javascript:delete localStorage.newState; document.location.reload();">Restart Lab</a>
-    <h2>Traversing an Array</h2>
+    <h1>Functional Programming in Javascript</h1>
+    <p>Functional programming provides developers with the tools to abstract common collection operations into reusable, composable building blocks. You'll be surprised to learn that most of the operations you can perform on collections can be accomplished with <b>five simple functions</b>:</p>
+    <ol>
+    <li>map</li>
+    <li>filter</li>
+    <li>mergeAll</li>
+    <li>reduce</li>
+    <li>zip</li>
+    </ol>
+<p>Here's my promise to you: if you learn these 5 functions your code will become shorter, more self-descriptive, and more durable. Also, for reasons that might not be obvious right now, you'll learn that these five functions hold the key to simplifying asynchronous programming. Once you've finished this tutorial you'll also have all the tools you need to easily avoid race conditions, propagate and handle asynchronous errors, and sequence events and AJAX requests. In short, <b>these 5 functions will probably be the most powerful, flexible, and useful functions you'll ever learn.</b></p>
+
+    <h2>Finishing the Interactive Exercises</h2>
+<p>This isn't just a tutorial, it's a <b>series of interactive exercises that you can fill out right in your browser!</b> It's easy to finish the exercises. Just edit the code and press "Run." If the code works, a new exercise will appear below.  Otherwise an error will appear.</p>
+
+<p>This tutorial may have bugs, so if you get into a weird state or you're sure you've got the right answer but can't move on, just refresh your browser. If you're using a modern browser, and if you're here I assume you are, the state of your exercises will be saved. If you want, you can also <a href="javascript:delete localStorage.newState; document.location.reload();">restart the lab.</a></p>
+
+<p>This tutorial is on <a href="https://github.com/jhusain/learnrx">GitHub</a>, and is asymptotically approaching completion. If you'd like to add an exercise, clarify a problem description, or fix a bug feel free to <a href="https://github.com/jhusain/learnrx/fork_select">fork</a> and send me a pull request. I'll try and fit user-contributed exercises into a narrative.</p>
+
+    <h2>Working with Arrays</h2>
+    <p>The Array is Javascript's only collection type. Arrays are everywhere. We're going to add the five functions to the Array type, and in the process make it much more powerful and useful. As a matter of fact, Array already has the map, filter, and reduce functions! However we're going to to reimplement these functions as a learning exercise.</p>
     
+    <p>This section will follow a pattern. First we'll solve problems the way you probably learned in school, or on your own by reading other peoples code. In other words, we'll transform collections into new collections using loops and statements. Then we'll implement one of the five functions, and then use it to solve the same problem again <i>without</i> the loop. Once we've learned the five functions, you'll learn how to combine them to solve complex problems with very little code.</p>
+
+    <h3>Traversing an Array</h3>
     
     <div class="lesson" style="visibility:visible">
-        <h3>Exercise 1: Print all the names in an array</h3>
+        <h4>Exercise 1: Print all the names in an array</h4>
         <textarea class="code" rows="8" cols="80">
 function(console) {
     var names = ["Ben", "Jafar", "Matt", "Priya", "Brian"],
@@ -490,7 +512,7 @@ function(console) {
         <p class="post">Ask yourself this question: <b>did we need to specify the <i>order</i> in which the names were printed?</b> If not, why do it?</p>
     </div>
     <div class="lesson">
-        <h3>Exercise 2: Use forEach to print all the names in an array</h3>
+        <h4>Exercise 2: Use forEach to print all the names in an array</h4>
         <p>Let's repeat the previous exercise using the forEach function.</p>
         <textarea class="code" rows="8" cols="80">
 function(console) {
@@ -538,10 +560,10 @@ function(console) {
     </div>
 
 
-    <h2>Projecting Arrays</h2>
-    <p>Applying a function to a value and creating a new value is called a <i>projection</i>. To project one array into another, we apply a projection function to each item in the array and collect the results in a new array.</p>
+    <h3>Projecting Arrays</h3>
+    <p>Applying a function to a value and creating a new value is called a <i>projection</i>. To project one array into another, we apply a projection function to each item in the array and collect the results in a new array. </p>
     <div class="lesson">
-        <h3>Exercise 3: Project an array of videos into an array of {id,title} pairs using forEach()</h3>
+        <h4>Exercise 3: Project an array of videos into an array of {id,title} pairs using forEach()</h4>
         <p>For each video, add a projected {id, title} pair to the videoAndTitlePairs array.</p>
     <textarea class="code" rows="60" cols="80">
 function() {
@@ -583,8 +605,10 @@ function() {
     
     // ------------   INSERT CODE HERE!  -----------------------------------
     // Use forEach function to accumulate {id, title} pairs from each video.
-    // Put the results into the videoAndTitlePairs array
+    // Put the results into the videoAndTitlePairs array using the Array's 
+    // push() method. Example: videoAndTitlePairs.push(newItem);
     // ------------   INSERT CODE HERE!  -----------------------------------
+    
     
     return videoAndTitlePairs;
 }
@@ -665,7 +689,7 @@ function() {
 
 
     <div class="lesson">
-    <h3>Exercise 4: Implement map()</h3>
+    <h4>Exercise 4: Implement map()</h4>
     <p>To make projections easier, let's add a <b>map()</b> function to the Array type. Map accepts the projection function to be applied to each item in the source array, and returns the projected array.</p>
     <textarea class="code" rows="20" cols="80">
 Array.prototype.map = function(projectionFunction) {
@@ -719,7 +743,7 @@ Array.prototype.map = function(projectionFunction) {
     </div>    
 
     <div class="lesson">
-        <h3>Exercise 5: Use map() to project an array of videos into an array of {id,title} pairs</h3>
+        <h4>Exercise 5: Use map() to project an array of videos into an array of {id,title} pairs</h4>
         <p>Let's repeat the exercise of collecting {id, title} pairs for each video in the newReleases array, but <b>this time we'll use our map function.</b></p>
     <textarea class="code" rows="60" cols="80">
 function() {
@@ -827,10 +851,10 @@ function() {
 </pre>
     <p class="post">Notice that map allows us to specify <i>what</i> projection we want to apply to an array, but hides <i>how</i> the operation is carried out.</p>
     </div>
-    <h2>Filtering Arrays</h2>
+    <h3>Filtering Arrays</h3>
     <p>Like projection, filtering an array is also a very common operation. To filter an array we apply a test to each item in the array and collect the items that pass into a new array.</p>
     <div class="lesson">
-        <h3>Exercise 6: Use forEach() to collect only those videos with a rating of 5.0</h3>
+        <h4>Exercise 6: Use forEach() to collect only those videos with a rating of 5.0</h4>
         <p>Use forEach() to loop through the videos in the newReleases array and, if a video has a rating of 5.0, add it to the videos array.</p>
     <textarea class="code" rows="60" cols="80">
 function() {
@@ -955,7 +979,7 @@ function() {
     </div>
     
     <div class="lesson">
-    <h3>Exercise 7: Implement filter()</h3>
+    <h4>Exercise 7: Implement filter()</h4>
     <p>To make filtering easier, let's add a filter() function to the Array type. The filter() function accepts a <i>predicate</i>. A predicate is a function that accepts an item in the array, and returns a boolean indicating whether the item should be retained in the new array.</p>
     <textarea class="code" rows="20" cols="80">
 Array.prototype.filter = function(predicateFunction) {
@@ -1010,9 +1034,9 @@ Array.prototype.filter = function(predicateFunction) {
     <p class="post">Like map(), filter() let's us express <i>what</i> data we want without requiring us to specify <i>how</i> we want to collect the data.</p>
     </div>
     
-    <h2>Query Data by Chaining Method Calls</h2>
+    <h3>Query Data by Chaining Method Calls</h3>
     <div class="lesson">
-        <h3>Exercise 8: Chain filter and map to collect the ids of videos that have a rating of 5.0</h3>
+        <h4>Exercise 8: Chain filter and map to collect the ids of videos that have a rating of 5.0</h4>
     <textarea class="code" rows="60" cols="80">
 function() {
     var newReleases = [            
@@ -1130,10 +1154,10 @@ function() {
 </pre>
     <p class="post">Chaining together map() and filter() gives us a lot of expressive power. These high level functions let us express <i>what</i> data we want, but leave the underlying libraries a great deal of flexibility in terms of <i>how</i> our queries are executed.</p>
     </div>
-    <h2>Querying Trees</h2>
-    <p>Sometimes, in addition to flat arrays, we need to query trees. Trees pose a challenge because we need to flatten them into arrays in order to apply filter() and map() operations on them. In this section we'll define a merge() function that we can combine with map() and filter() to query trees.</p>
+    <h3>Querying Trees</h3>
+    <p>Sometimes, in addition to flat arrays, we need to query trees. Trees pose a challenge because we need to flatten them into arrays in order to apply filter() and map() operations on them. In this section we'll define a mergeAll() function that we can combine with map() and filter() to query trees.</p>
     <div class="lesson">
-        <h3>Exercise 9: Flatten the movieLists array into an array of video ids</h3>
+        <h4>Exercise 9: Flatten the movieLists array into an array of video ids</h4>
         <p>Let's start by using two nested forEach loops collect the id of every video in the two-dimensional movieLists array.</p>
     <textarea class="code" rows="60" cols="80">
 function() {
@@ -1270,10 +1294,10 @@ function() {
     </div>    
 
     <div class="lesson">
-    <h3>Exercise 10: Implement merge()</h3>
-    <p>Let's add a merge() function to the Array type. The merge() function iterates over each sub-array in the array and collects the results in a new, flat array. Note: <b>the merge() function expects that each item in the array will be another array.</b></p>
+    <h4>Exercise 10: Implement mergeAll()</h4>
+    <p>Let's add a mergeAll() function to the Array type. The mergeAll() function iterates over each sub-array in the array and collects the results in a new, flat array. Note: <b>the mergeAll() function expects that each item in the array will be another array.</b></p>
     <textarea class="code" rows="20" cols="80">
-Array.prototype.merge = function() {
+Array.prototype.mergeAll = function() {
     var results = [];
     this.forEach(function(subArray) {
         // ------------   INSERT CODE HERE!  ----------------------------
@@ -1284,8 +1308,8 @@ Array.prototype.merge = function() {
     return results;
 };
 
-// JSON.stringify([ [1,2,3], [4,5,6], [7,8,9] ].merge()) === "[1,2,3,4,5,6,7,8,9]"
-// [1,2,3].merge(); // throws an error because this is a one-dimensional array
+// JSON.stringify([ [1,2,3], [4,5,6], [7,8,9] ].mergeAll()) === "[1,2,3,4,5,6,7,8,9]"
+// [1,2,3].mergeAll(); // throws an error because this is a one-dimensional array
     </textarea><button class="go">Run</button><button class="showAnswer">Show Answer</button>
     <div class="output">
     </div>
@@ -1297,7 +1321,7 @@ Array.prototype.merge = function() {
             result,
             expected = "[1,2,3,4,5,6,7,8,9]";
         
-        result = arr.merge();
+        result = arr.mergeAll();
         result = result.sortBy(function(x) { return x; });
         if (JSON.stringify(result) !== expected) {
             throw 'Expected that [1,2,3].map(function(x) { return x + 1}) would equal [2,3,4].'
@@ -1305,7 +1329,7 @@ Array.prototype.merge = function() {
     }        
     </pre>
     <pre class="answer">
-Array.prototype.merge = function() {
+Array.prototype.mergeAll = function() {
     var results = [];
     this.forEach(function(subArray) {
         results.push.apply(results, subArray);
@@ -1314,15 +1338,15 @@ Array.prototype.merge = function() {
     return results;
 };
 
-// JSON.stringify([ [1,2,3], [4,5,6], [7,8,9] ].merge()) === "[1,2,3,4,5,6,7,8,9]"
-// [1,2,3].merge(); // throws an error because this is a one-dimensional array        
+// JSON.stringify([ [1,2,3], [4,5,6], [7,8,9] ].mergeAll()) === "[1,2,3,4,5,6,7,8,9]"
+// [1,2,3].mergeAll(); // throws an error because this is a one-dimensional array        
     </pre>
     <p class="post">Merge is a very simple function, so much so that it may not be obvious yet how it can be combined with map() to query a tree. Let's try an example...</p>
     </div>
     
     <div class="lesson">
-        <h3>Exercise 11: Use map() and merge() to project and flatten the movieLists into an array of video ids</h3>
-        <p>Hint: use two nested calls to map() and one call to merge().</p>        
+        <h4>Exercise 11: Use map() and mergeAll() to project and flatten the movieLists into an array of video ids</h4>
+        <p>Hint: use two nested calls to map() and one call to mergeAll().</p>        
     <textarea class="code" rows="60" cols="80">
 function() {
     var movieLists = [
@@ -1371,7 +1395,7 @@ function() {
         ];
     
     // ------------   INSERT CODE HERE!  -----------------------------------
-    // Use map and merge to flatten the movieLists in a list of video ids.
+    // Use map and mergeAll to flatten the movieLists in a list of video ids.
     // ------------   INSERT CODE HERE!  -----------------------------------
     
     return movieLists // Complete this expression!
@@ -1440,7 +1464,7 @@ function() {
         ];
     
     // ------------   INSERT CODE HERE!  -----------------------------------
-    // Use map and merge to flatten the movieLists in a list of video ids.
+    // Use map and mergeAll to flatten the movieLists in a list of video ids.
     // ------------   INSERT CODE HERE!  -----------------------------------
     
     return movieLists.
@@ -1450,17 +1474,23 @@ function() {
 			return video.id;
 		  });
 	  }).
-	  merge();
+	  mergeAll();
     
 }        
     </pre>
     
-    <p class="post">Wow! <b>Great work.</b> Mastering the combination of map() and merge() is key to effective functional programming. You're half way there! Let's try a more complicated example...</p>
+    <p class="post">Wow! <b>Great work.</b> Mastering the combination of map() and mergeAll() is key to effective functional programming. You're half way there! Let's try a more complicated example...</p>
     </div>
     
     <div class="lesson">
-        <h3>Exercise 12: Retrieve id, title, and a 150x200 box art url for every video</h3>
-        <p>You've managed to flatten a tree that's two levels deep, let's try for three! Let's say that instead of a single boxart url on each video, we had a collection of boxart objects, each with a different size and url. Create a query that selects {id, title, boxart} for every video in the movieLists. This time though, the boxart property in the result will be the url of the boxart object with dimensions of 150x200px. Let's see if you can solve this problem with map(), merge(), and filter().</p>
+        <h4>Exercise 12: Retrieve id, title, and a 150x200 box art url for every video</h4>
+        <p>You've managed to flatten a tree that's two levels deep, let's try for three! Let's say that instead of a single boxart url on each video, we had a collection of boxart objects, each with a different size and url. Create a query that selects {id, title, boxart} for every video in the movieLists. This time though, the boxart property in the result will be the url of the boxart object with dimensions of 150x200px. Let's see if you can solve this problem with map(), mergeAll(), and filter().</p>
+        <a name="indexers"></a>
+        <p><b>There's just more one thing: you <u>can't</u> use indexers.</b> In other words, this is <span style="color:red">illegal</span>:</p>
+        <pre>
+    var itemInArray = movieLists<span style="color:red">[0]</span>;
+        </pre>
+        <p>Furthermore, <b>you're not allowed to use indexers in any of the remaining exercises</b> unless you're implementing one of the five functions. There is a very good reason for this restriction, and that reason will eventually be explained. For now, you'll simply have to accept it on faith that this restriction serves a purpose. :-)</p>
     <textarea class="code" rows="60" cols="80">
 function() {
     var movieLists = [
@@ -1523,7 +1553,7 @@ function() {
         ];
     
     
-    // Use one or more map, merge, and filter calls to create an array with the following items
+    // Use one or more map, mergeAll, and filter calls to create an array with the following items
     // [
     //     {"id": 675465,"title": "Fracture","boxart":"http://cdn-0.nflximg.com/images/2891/Fracture150.jpg" },
     //     {"id": 65432445,"title": "The Chamber","boxart":"http://cdn-0.nflximg.com/images/2891/TheChamber150.jpg" },                
@@ -1622,7 +1652,7 @@ function() {
         ];
     
     
-    // Use one or more map, merge, and filter calls to create an array with the following items
+    // Use one or more map, mergeAll, and filter calls to create an array with the following items
     // [
     //     {"id": 675465,"title": "Fracture","boxart":"http://cdn-0.nflximg.com/images/2891/Fracture150.jpg" },
     //     {"id": 65432445,"title": "The Chamber","boxart":"http://cdn-0.nflximg.com/images/2891/TheChamber150.jpg" },                
@@ -1642,19 +1672,19 @@ function() {
 				return {id: video.id, title: video.title, boxart: boxart.url};
 			  });
 		  }).
-		  merge();
+		  mergeAll();
 	  }).
-	  merge();
+	  mergeAll();
     
 }        
     </pre>
-        <p class="post">Fantastic job! Now you've learned to use merge() alongside map() and filter() to queries trees. Notice that <b>map() and merge() are very commonly chained together.</b> Let's create a small helper function to help us with this common pattern.</p>
+        <p class="post">Fantastic job! Now you've learned to use mergeAll() alongside map() and filter() to queries trees. Notice that <b>map() and mergeAll() are very commonly chained together.</b> Let's create a small helper function to help us with this common pattern.</p>
     </div>
 
 
     <div class="lesson">
-    <h3>Exercise 13: Implement mapMany()</h3>
-    <p>Nearly every time we flatten a tree we chain map() and merge(). Sometimes, if we're dealing with a tree several levels deep, we'll repeat this combination many times in our code. To save on typing, let's create a mapMany function that's just a map operation, followed by a merge.</p>
+    <h4>Exercise 13: Implement mapMany()</h4>
+    <p>Nearly every time we flatten a tree we chain map() and mergeAll(). Sometimes, if we're dealing with a tree several levels deep, we'll repeat this combination many times in our code. To save on typing, let's create a mapMany function that's just a map operation, followed by a mergeAll.</p>
     <textarea class="code" rows="20" cols="80">
 Array.prototype.mapMany = function(projectionFunctionThatReturnsArray) {
     return this.
@@ -1665,8 +1695,8 @@ Array.prototype.mapMany = function(projectionFunctionThatReturnsArray) {
             // two-dimensional array.
             // ------------   INSERT CODE HERE!  ----------------------------
         }).
-        // apply the merge function to flatten the two-dimensional array
-        merge();
+        // apply the mergeAll function to flatten the two-dimensional array
+        mergeAll();
 };
 
 /*
@@ -1683,7 +1713,7 @@ Array.prototype.mapMany = function(projectionFunctionThatReturnsArray) {
     <div class="output">
     </div>
     <pre class="verifier">
-    // Implement merge
+    // Implement mergeAll
     function(str) {
         var fun = eval(str),
             spanishFrenchEnglishWords = [ ["cero","rien","zero"], ["uno","un","one"], ["dos","deux","two"] ],
@@ -1708,8 +1738,8 @@ Array.prototype.mapMany = function(projectionFunctionThatReturnsArray) {
         map(function(item) {
             return projectionFunctionThatReturnsArray(item);
         }).
-        // apply the merge function to flatten the two-dimensional array
-        merge();
+        // apply the mergeAll function to flatten the two-dimensional array
+        mergeAll();
 };
 
 /*
@@ -1727,12 +1757,12 @@ Array.prototype.mapMany = function(projectionFunctionThatReturnsArray) {
     
     
         
-    <p class="post">Now, instead of using map().merge() to flatten a tree, we can just use mapMany helper function.</p>
+    <p class="post">Now, instead of using map().mergeAll() to flatten a tree, we can just use mapMany helper function.</p>
     </div>
 
     <div class="lesson">
-        <h3>Exercise 14:  Use mapMany() to retrieve id, title, and a smallest box art url for every video</h3>
-        <p>Let's repeat the exercise we just performed. However this time we'll simplify the code by replacing the map().merge() calls with mapMany().</p>
+        <h4>Exercise 14:  Use mapMany() to retrieve id, title, and a smallest box art url for every video</h4>
+        <p>Let's repeat the exercise we just performed. However this time we'll simplify the code by replacing the map().mergeAll() calls with mapMany().</p>
     <textarea class="code" rows="60" cols="80">
 function() {
     var movieLists = [
@@ -1917,11 +1947,11 @@ function() {
     </div>
     
     
-    <h2>Reducing Arrays</h2>
+    <h3>Reducing Arrays</h3>
     <p>Sometimes we need to perform an operation on more than one item in the array <i>at the same time</i>. For example, let's say we need to find the largest integer in an array. We can't use a filter() operation, because it only examines one item at a time. To find the largest integer we need to the compare items in the array to each other.</p>
     <p>One approach could be to select an item in the array as the <i>assumed</i> largest number (perhaps the first item), and then compare that value to every other item in the array. Each time we come across a number that was larger than our assumed largest number, we'd replace it with the larger value, and continue the process until the entire array was traversed.</p>
     <p>If we replaced the specific size comparison with a closure, we could write a function this handled the array traversal process for us. At each step our function would apply the closure to the last value and the current value and use the result as the last value the next time. Finally we'd be left with only one value. This process is known as <i>reducing</i> because we reduce many values to a single value.</p>
-    <div class="lesson"><h3>Exercise 15: Use forEach to find the largest box art</h3>
+    <div class="lesson"><h4>Exercise 15: Use forEach to find the largest box art</h4>
         <p>In this example we use forEach to find the largest box art. Each time we examine a new boxart we update a variable with the currently known maximumSize.  If the boxart is smaller than the maximum size, we discard it. If it's larger, we keep track of it. Finally we're left with a single boxart which must necessarily be the largest.</p>
     <textarea class="code" rows="15" cols="80">
         
@@ -1989,7 +2019,7 @@ function() {
     </div>
 
 
-<div class="lesson"><h3>Exercise 16: Implement reduce()</h3>
+<div class="lesson"><h4>Exercise 16: Implement reduce()</h4>
     <p>Let's add a reduce() function to the Array type. Like map</p>
     <textarea class="code" rows="40" cols="80">
 // [1,2,3].reduce(function(accumulatedValue, currentValue) { return accumulatedValue + currentValue; }); === [6];
@@ -2091,7 +2121,7 @@ Array.prototype.reduce = function(combiner, initialValue) {
 </div>
 
 
-<div class="lesson"><h3>Exercise 17: Retrieve the largest rating.</h3>
+<div class="lesson"><h4>Exercise 17: Retrieve the largest rating.</h4>
     <p>Let's use our new reduce function to isolate the largest value in an array of ratings.</p>
     <textarea class="code" rows="15" cols="80">
         
@@ -2139,7 +2169,7 @@ function() {
     </pre>
     <p class="post">Nice work. Now let's try combining reduce() with our other functions to build more complex queries.</p>
     </div>
-    <div class="lesson"><h3>Exercise 18: Retrieve url of the largest boxart</h3>
+    <div class="lesson"><h4>Exercise 18: Retrieve url of the largest boxart</h4>
         <p>Let's try combining reduce() with map() to reduce multiple boxart objects to a single value: the url of the largest box art.</p>
     <textarea class="code" rows="15" cols="80">
         
@@ -2202,7 +2232,7 @@ function() {
     
     </div>
     
-<div class="lesson"><h3>Exercise 19: Reducing with an initial value</h3>
+<div class="lesson"><h4>Exercise 19: Reducing with an initial value</h4>
     <p>Sometimes when we reduce an array, we want the reduced value to be a different type than the items stored in the array. Let's say we have an array of videos and we want to reduce them to a single map where the key is the video id and the value is the video's title.</p>
     
     <textarea id="q18" class="code" rows="15" cols="80">
@@ -2352,7 +2382,7 @@ function() {
     </div>
 
     <div class="lesson">
-        <h3>Exercise 20: Retrieve the id, title, and <i>smallest</i> box art url for every video.</h3>
+        <h4>Exercise 20: Retrieve the id, title, and <i>smallest</i> box art url for every video.</h4>
         <p>This is a variation of the problem we solved earlier, where we retrieved the url of the boxart with a width of 150px. This time we'll use reduce() instead of filter() to retrieve the <i>smallest</i> box art in the boxarts array.</p>
     <textarea class="code" rows="60" cols="80">
 function() {
@@ -2549,10 +2579,10 @@ function() {
     </pre>
     </div>
     
-    <h2>Zipping Arrays</h2>
+    <h3>Zipping Arrays</h3>
     <p>Sometimes we need to combine two arrays by progressively taking an item from each and combining the pair. If you visualize a zipper, where each side is an array, and each tooth is an item, you'll have a good idea of how the zip operation works.</p>
     <div class="lesson">
-        <h3>Exercise 21: Combine videos and bookmarks by index</h3>
+        <h4>Exercise 21: Combine videos and bookmarks by index</h4>
         <p>Use a for loop to traverse the videos and bookmarks array at the same time. For each video and bookmark pair, create a {videoId, bookmarkId} pair and add it to the videoIdAndBookmarkIdPairs array.</p>
     <textarea class="code" rows="60" cols="80">
 function() {
@@ -2667,7 +2697,7 @@ function() {
 </pre>
     </div>
     
-<div class="lesson"><h3>Exercise 22: Implement zip</h3>
+<div class="lesson"><h4>Exercise 22: Implement zip</h4>
     <p>Let's add a static zip() function to the Array type. The zip function accepts a combiner function, traverses each array at the same time, and calls the combiner function on the current item on the left-hand-side and right-hand-side. The zip function requires an item from each array in order to call the combiner function, therefore the array returned by zip will only be as large as the smallest input array.<p>
     <textarea class="code" rows="40" cols="80">
 // JSON.stringify(Array.zip([1,2,3],[4,5,6], function(left, right) { return left + right })) === '[5,7,9]' accumulatedValue + currentValue; }); === [6];
@@ -2716,7 +2746,7 @@ Array.zip = function(left, right, combinerFunction) {
 </div>
 
     <div class="lesson">
-        <h3>Exercise 23: Combine videos and bookmarks by index</h3>
+        <h4>Exercise 23: Combine videos and bookmarks by index</h4>
         <p>Let's repeat exercise 19, but this time let's use your new zip() function. For each video and bookmark pair, create a {videoId, bookmarkId} pair.</p>
     <textarea class="code" rows="60" cols="80">
 function() {
@@ -2827,7 +2857,7 @@ function() {
     </div>
     
     <div class="lesson">
-        <h3>Exercise 24: Retrieve each video's id, title, middle interesting moment time, and <i>smallest</i> box art url.</h3>
+        <h4>Exercise 24: Retrieve each video's id, title, middle interesting moment time, and <i>smallest</i> box art url.</h4>
         <p>This is a variation of the problem we solved earlier. This time each video has an interesting moments collection, each representing a time during which a screenshot is interesting or representative of the title as a whole. Notice that both the boxarts and interestingMoments arrays are located at the same depth in the tree. Retrieve the time of the middle interesting moment and the smallest box art url <i>simultaneously</i> with zip(). Return an {id, title, time, boxart} object for each video.</p>
     <textarea class="code" rows="60" cols="80">
 function() {
@@ -3034,11 +3064,11 @@ function() {
 }    
     </pre>
     
-    <h2>Powerful Queries</h2>
+    <h3>Powerful Queries</h3>
     <p>Now that we've learned the five operators let's flex our muscles and write some powerful queries.</p>
     
     <div class="lesson">
-        <h3>Exercise 25: Converting from Arrays to Trees</h3>
+        <h4>Exercise 25: Converting from Arrays to Trees</h4>
         <p>When information is organized in a tree like a JSON expression, relationships point from parent to child. In relational systems like databases, relationships point from children to their parents. Both ways of organizing information are equivalent, and depending on the circumstances, we might get data organized in one way or another. It may surprise you to learn that you can use the 5 query functions you already know to easily convert between these representations. In other words, <b>not only can you query arrays from trees, you can query trees from arrays</b>.</p>
         <p>We have 2 arrays each containing lists, and videos respectively. Each video has a listId field indicating its parent list. We want to build an array of list objects, each with a name and a videos array. The videos array will contain the video's id and title. In other words we want to build the following structure:</p>
         <pre>
@@ -3180,7 +3210,7 @@ function() {
     </div>
     
     <div class="lesson">
-        <h3>Exercise 26: Converting from Arrays to <i>Deeper</i> Trees</h3>
+        <h4>Exercise 26: Converting from Arrays to <i>Deeper</i> Trees</h4>
         <p>Let's try creating a deeper tree structure. This time we have 4 seperate arrays each containing lists, videos, boxarts, and bookmarks respectively. Each object has a parent id, indicating its parent. We want to build an array of list objects, each with a name and a videos array. The videos array will contain the video's id, title, bookmark time, and smallest boxart url. In other words we want to build the following structure:</p>
         <pre>
 [
@@ -3378,7 +3408,7 @@ function() {
     
 <!--  
     <div class="lesson">
-        <h3>Exercise 27: Retrieve the average rating of all of a list's videos.</h3>
+        <h4>Exercise 27: Retrieve the average rating of all of a list's videos.</h4>
         <p>Retrieve the average rating of all the videos in each list. Organize the results into a map where the key is the list id. The following output is expected:</p>
         <pre>
 [
@@ -3504,7 +3534,7 @@ function() {
     </div>    
     -->
     <div class="lesson">
-        <h3>Exercise 28: Stock Ticker</h3>
+        <h4>Exercise 28: Stock Ticker</h4>
         <p>Let's try an easier question. Let's say we have a collection of all of the prices for NASDAQ stocks over time. Every time the price of a stock changes on the NASDAQ ticker an entry is added to this collection. Let's say that ten days ago you bought shares in Microsoft, and now you want to print all of the MSFT share prices since then. Filter the collection for MSFT trades starting from ten days ago and print each price record (including the time stamp) using the print() function. <b>Note: this is not a trick question. It's as easy as it seems.</b></p>
     <pre>
 // The pricesNASDAQ collection looks something like this...
@@ -3607,9 +3637,9 @@ function(pricesNASDAQ, printRecord) {
 
 
     
-    <h2>Introducing Observable</h2>
-    <p>An Observable is a lot like an Event. Like an Event, <b>an Observable is a sequence of values delivered to a listener <i>asynchronously</i></b>. However, unlike an Event, <b>an Observable can signal to a listener that it has completed,</b> and will send no more data.</p>
-    <p>Unlike Array, there's no Javascript literal syntax for creating Observable sequences. However we can build a helper method that visually describes the contents of sequences as well as the times between each item's arrival. The <b>seq</b> function creates an Observable from an array of items, and intersperses a delay for every undefined item encountered. Every ,,, adds up to a second.</p>
+    <h2>Working with Observables</h2>
+    <p>Microsoft's open-source <a href="http://msdn.microsoft.com/en-us/data/gg577609.aspx">Reactive Extensions</a> library introduces a new collection type to Javascript: <b>Observable.</b> An Observable is a lot like an Event. Like an Event, <b>an Observable is a sequence of values that a data producer <i>pushes</i> to the consumer.</b> However unlike an Event, <b>an Observable can signal to a listener that it has completed,</b> and will send no more data.</p>
+    <p>Observables can send data to consumers asynchronously. Unlike Array, there's no Javascript literal syntax for creating Observable sequences. However we can build a helper method that visually describes the contents of sequences as well as the times between each item's arrival. The <b>seq</b> function creates an Observable from an array of items, and adds a delay for every empty item encountered. Every ,,, adds up to a second.</p>
 <pre>
     // An array of numbers 1,2,3
     var numbers123Array =      [1,2,3];
@@ -3634,7 +3664,7 @@ function(pricesNASDAQ, printRecord) {
     <p>Let's start off by constrasting Observable with Events...</p>
     
     <div class="lesson">
-    <h3>Exercise 29: Subscribing to an event</h3>
+    <h4>Exercise 29: Subscribing to an event</h4>
     <p>You're probably used to thinking about events as a list of handlers stored in an object. In this example, we subscribe to a button click event and then unsubscribe the first time the button is clicked.</p> 
     <textarea class="code" rows="60" cols="80">
 function(button) {
@@ -3666,7 +3696,7 @@ function(button) {
     </div>
     
     <div class="lesson">
-        <h3>Exercise 30: Traversing an Event</h3>
+        <h4>Exercise 30: Traversing an Event</h4>
     <p>Subscribing to an Event and traversing an Array are fundamentally the same operation. The only difference is that <b>Array traversal is synchronous and completes, and Event traversal is asynchronous and <u>never completes</u>.</b> If we convert a button click Event to an Observable object, we can use forEach() to traverse the Event.</p>
     <textarea class="code" rows="60" cols="80">
 function(button) {
@@ -3704,7 +3734,7 @@ function(button) {
 
 
     <div class="lesson">
-        <h3>Exercise 31: Completing Sequences with take()</h3>
+        <h4>Exercise 31: Completing Sequences with take()</h4>
     <p><b>Have you ever wished that you could listen for the next occurrence of an event and then immediately unsubscribe?</b> For example, developers will often attach an event handler to window.onload, expecting that their event handler will only be called once.</p>
 <pre>
     window.addEventListener(
@@ -3771,7 +3801,7 @@ function(button) {
     </div>
 
     <div class="lesson">
-        <h3>Exercise 32: Completing sequences with takeUntil()</h3>
+        <h4>Exercise 32: Completing sequences with takeUntil()</h4>
     <p><b>Have you ever wanted to unsubscribe from one Event when another Event fires?</b> Observable's takeUntil() function is a convenient way of completing a  sequence when another Event occurs.</b> Here's how takeUntil() works:</p>
 <pre>
     var numbersUntilStopButtonPressed =
@@ -3856,7 +3886,7 @@ function(pricesNASDAQ, printRecord, stopButton) {
     <li>We can apply take() and takeUntil() to an Observable to create a new sequence which <i>does</i> complete.</li>
 </ul>
 <p>In the next section we'll learn how to combine events to create more complex events. You'll be suprised how easily you can solve complex, asynchronous problems!</p>
-<h2>Querying Observables</h2>
+<h3>Querying Observables</h3>
 <p>What's the difference between these two tasks?</p>
 <ul>
    <li>Creating a flat list of movies with a rating of 5.0 from a bunch of movie lists.</li>
@@ -3879,10 +3909,10 @@ function(pricesNASDAQ, printRecord, stopButton) {
     seq([1,,,2,,,3]).filter(function(x) { return x > 1; })          === seq([2,,,3])
     seq([1,,,2,,,3,,,]).filter(function(x) { return x > 1; })       === seq([2,,,3,,,])
     
-    // <b>merge()</b>
+    // <b>mergeAll()</b>
     
-    [ [1, 2, 3], [4, 5, 6] ].merge()                                === [1,2,3,4,5,6]
-    seq([ seq([1,,,2,,,3]),,,seq([4,,,5,,,6]) ]).merge()            === seq([1,,,2,,,3,,,4,,,5,,,6])
+    [ [1, 2, 3], [4, 5, 6] ].mergeAll()                                === [1,2,3,4,5,6]
+    seq([ seq([1,,,2,,,3]),,,seq([4,,,5,,,6]) ]).mergeAll()            === seq([1,,,2,,,3,,,4,,,5,,,6])
     
     // Depending on when the elements in each
     // sequence arrive, the order of the merged
@@ -3890,7 +3920,7 @@ function(pricesNASDAQ, printRecord, stopButton) {
     seq([
         seq([1,, ,,, ,,,2,,,3])
         ,,,seq([4,,,5,,,,,,,,6]) ]).
-        merge()                                                     === seq([1,,,4,,,5,,,2,,,3,,,6])
+        mergeAll()                                                     === seq([1,,,4,,,5,,,2,,,3,,,6])
     
     // Notice that as long as at least one sequence being
     // merged is incomplete, the merged sequence is also
@@ -3898,7 +3928,7 @@ function(pricesNASDAQ, printRecord, stopButton) {
     seq([
         seq([1,, ,,, ,,,2,,,3])
         ,,,seq([4,,,5,,, ,,, ,,6,,,]) ]).
-        merge()                                                     === seq([1,,,4,,,5,,,2,,,3,,,6,,,])
+        mergeAll()                                                     === seq([1,,,4,,,5,,,2,,,3,,,6,,,])
     
     // <b>reduce()</b>
     
@@ -3932,10 +3962,11 @@ function(pricesNASDAQ, printRecord, stopButton) {
     seq([ ,,, ,,4 , }))                                             === seq([ 1,,,2 ])
 
 </pre>
+    <p>Remember when I <a href="#indexers">prohibited the use of array indexers?</a> The reason for that restriction should now become clearer to you. Whereas the 5 functions can be used on <i>any</i> collection, indexers can only be used on collections that support random-access (like Array). If you avoid indexers and stick to the functions you've learned in this tutorial, you'll have a unified programming model for transforming <i>any</i> collection. Having a unified programming model makes it trivial to convert synchronous code to asynchronous code, a process which would otherwise be very difficult. As we've demonstrated, you don't need indexers to perform complex collection transformations.</p>
     <p>Now that we've seen that we can query asychronous and synchronous data sources using the same programming model, let's use Observable and our query functions to create complex new events.</p>
 
 <div class="lesson">
-        <h3>Exercise 33: Creating a mouse drag event</h3>
+        <h4>Exercise 33: Creating a mouse drag event</h4>
     <p>Remember the exercise we solved earlier? The one in which we retrieved all the movies with a rating of 5.0 from an array of movie lists? If we were to describe the solution in pseudocode it might read something like this...</p>
     <p><b>"For every movie list, retrieve only those videos with a rating of 5.0"</b></p></p>
     <pre>
@@ -4021,7 +4052,7 @@ function(sprite, spriteContainer) {
 
 
 <div class="lesson">
-        <h3>Exercise 34: Improving our mouse drag event</h3>
+        <h4>Exercise 34: Improving our mouse drag event</h4>
     <p>Our mouse drag event is a little <i>too</i> simple. Notice that when we drag around the sprite, it always positions itself at the top-left corner of the mouse. Ideally we'd like our drag event to offset its coordinates, based on where the mouse was when the mouse down event occurred. This will make our mouse drag more closely resemble moving a real object with our finger.</p>
     <p>Let's see if you can adjust the coordinates in the mouse drag event, based on the mousedown location on the sprite. The mouse events are sequences, and they look something like this:</p>
 <pre>
@@ -4121,7 +4152,7 @@ function(sprite, spriteContainer) {
     </div>    
 
 <div class="lesson">
-        <h3>Exercise 35: HTTP requests</h3>
+        <h4>Exercise 35: HTTP requests</h4>
     <p>Events aren't the only source of asynchronous data in an application. There's also HTTP requests. Most of the time HTTP requests are exposed via a <b>callback-based API</b>. To receive data asynchronously from a callback-based API, the client typically passes a success and error handler to the function. When the asynchronous operation completes, the appropriate handler is called with the data. In this exercise we'll use jQuery's getJSON api to asynchronously retrieve data.</p>
     <textarea class="code" rows="60" cols="80">
 function($) {
@@ -4151,7 +4182,7 @@ function($) {
 
 
 <div class="lesson">
-        <h3>Exercise 36: Sequencing HTTP requests with callbacks</h3>
+        <h4>Exercise 36: Sequencing HTTP requests with callbacks</h4>
     <p>Let's say that we're writing the startup flow for a web application. On startup, the application must perform the following operations:</p>
     <ol>
         <li>Download the URL prefix to use for all subsequent AJAX calls. This URL prefix will vary based on what AB test the user is enrolled in.</li>
@@ -4293,7 +4324,7 @@ function(window, $, showMovieLists, showError) {
 
 
 <div class="lesson">
-        <h3>Exercise 37: Traversing callback-based Asynchronous APIs</h3>
+        <h4>Exercise 37: Traversing callback-based Asynchronous APIs</h4>
     <p><b>If a callback API were a sequence, what kind of sequence would it be?</b> We've seen that UI Event sequences can contain anywhere from 0 to infinite items, but will never complete on their own.</p>
 <pre>
     mouseMoves === seq([ {x: 23, y: 55},,,,,,,{x: 44, y: 99},,,{x:55,y:99},,,{x: 54, y:543},,, ]);
@@ -4414,7 +4445,7 @@ function(window, $) {
 
 
 <div class="lesson">
-        <h3>Exercise 38: Sequencing HTTP requests with Observable</h3>
+        <h4>Exercise 38: Sequencing HTTP requests with Observable</h4>
     <p>Let's use the getJSON function that returns Observables, and the Observable.fromEvent() to complete the exercise we completed earlier.</p>
     <textarea class="code" rows="60" cols="80">
 function(window, getJSON, showMovieLists, showError) {
@@ -4513,11 +4544,13 @@ function(window, getJSON, showMovieLists, showError) {
         <p>Almost every workflow in an web application starts with an event, continues with an HTTP request, and results in a state change. Now we know how express the first two tasks elegantly.</p>
     </div>
     </div> 
+<h1>A Work in Progress</h1>
 
-
+<p>Congratulations! You've made it this far, but you're not done. Learning is an on-going process. Go out and start using the functions you've learned in your day-to-day coding. Over time, I'll be adding more exercises to this tutorial. If you have suggestions for more exercises, send me a pull request!</p> 
+    
 <!--
 <div class="lesson">
-        <h3>Exercise 29: Logging User Behavior in the Search Screen</h3>
+        <h4>Exercise 29: Logging User Behavior in the Search Screen</h4>
     <p>Let's say that you're building an application for viewing a catalog of videos on-line. This application has a search feature and you want to better understand how users are interacting with it. To that end, you'd like to log certain interesting sequences of events.</p>
     <p>Every time the user takes any of the following actions, an event is sent on a message bus:</p>
     <ul>
@@ -4646,7 +4679,7 @@ function(messageBus) {
         titlesFinishedPlaying = messageBus.filter(function(ev) { return ev.type === rawEventType.TITLE_FINISHED_PLAYING; }),
         searchTextModifications = messageBus.filter(function(ev) { return ev.type === rawEventType.SEARCH_TEXT_MODIFIED; }),
         searchTextClears = messageBus.filter(function(ev) { return ev.type === rawEventType.SEARCH_TEXT_CLEARED; }),
-        newSearches = searchEntered.merge(searchTextClears);
+        newSearches = searchEntered.mergeAll(searchTextClears);
         
     return newSearches.
         mapMany(function() {
@@ -4667,7 +4700,7 @@ function(messageBus) {
     <!-- 
 
    <div class="lesson">
-        <h3>Exercise 39: Creating an auto-complete search box</h3>
+        <h4>Exercise 39: Creating an auto-complete search box</h4>
     <p>Let's take another problem that involves querying Events and HTTP requests: an auto-complete search box.<p>
     <textarea class="code" rows="60" cols="80">
 function(
