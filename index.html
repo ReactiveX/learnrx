@@ -20,7 +20,7 @@
     <style type="text/css">
         .all {width: 750px; }
         textarea, pre { -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4; }
-        .output { background-color: #CCCCCC; border: 1px black solid; overflow:scroll }
+        .output { background-color: #CCCCCC; border: 1px black solid; }
         .code { font-family:monospace }
         .model { font-family:monospace;width:500px;height:400px }
         .illegal { color:red }
@@ -204,7 +204,7 @@ Array.prototype.mergeAll = function() {
     return results;
 };
 
-Array.prototype.mapMany = function(projection) {
+Array.prototype.flatMap = function(projection) {
     return this.
         map(function(item) {
             return projection(item);
@@ -276,12 +276,6 @@ Array.zip = function(left, right, combinerFunction) {
     return results;
 };
 
-Rx.Observable.prototype.mapMany = Rx.Observable.prototype.selectMany;
-Rx.Observable.prototype.map = Rx.Observable.prototype.select;
-Rx.Observable.prototype.filter = Rx.Observable.prototype.where;
-Rx.Observable.prototype.forEach = function(onNext, onError, onCompleted) {
-    return this.subscribe(onNext,onError,onCompleted);
-};
 Rx.Observable.zip = function(left, right, func) {
     return left.zip(right, func);
 }
@@ -1696,10 +1690,10 @@ function() {
 
 
     <div class="lesson">
-    <h4>Exercise 13: Implement mapMany()</h4>
-    <p>Nearly every time we flatten a tree we chain map() and mergeAll(). Sometimes, if we're dealing with a tree several levels deep, we'll repeat this combination many times in our code. To save on typing, let's create a mapMany function that's just a map operation, followed by a mergeAll.</p>
+    <h4>Exercise 13: Implement flatMap()</h4>
+    <p>Nearly every time we flatten a tree we chain map() and mergeAll(). Sometimes, if we're dealing with a tree several levels deep, we'll repeat this combination many times in our code. To save on typing, let's create a flatMap function that's just a map operation, followed by a mergeAll.</p>
     <textarea class="code" rows="20" cols="80">
-Array.prototype.mapMany = function(projectionFunctionThatReturnsArray) {
+Array.prototype.flatMap = function(projectionFunctionThatReturnsArray) {
     return this.
         map(function(item) {
             // ------------   INSERT CODE HERE!  ----------------------------
@@ -1716,7 +1710,7 @@ Array.prototype.mapMany = function(projectionFunctionThatReturnsArray) {
     var spanishFrenchEnglishWords = [ ["cero","rien","zero"], ["uno","un","one"], ["dos","deux","two"] ];
     // collect all the words for each number, in every language, in a single, flat list
     var allWords = [0,1,2].
-        mapMany(function(index) {
+        flatMap(function(index) {
             return spanishFrenchEnglishWords[index];
         });
         
@@ -1736,7 +1730,7 @@ Array.prototype.mapMany = function(projectionFunctionThatReturnsArray) {
         
 
         var allWords = [0,1,2].
-            mapMany(function(index) {
+            flatMap(function(index) {
                 return spanishFrenchEnglishWords[index];
             });
         
@@ -1746,7 +1740,7 @@ Array.prototype.mapMany = function(projectionFunctionThatReturnsArray) {
     }        
     </pre>
     <pre class="answer">
-Array.prototype.mapMany = function(projectionFunctionThatReturnsArray) {
+Array.prototype.flatMap = function(projectionFunctionThatReturnsArray) {
     return this.
         map(function(item) {
             return projectionFunctionThatReturnsArray(item);
@@ -1759,7 +1753,7 @@ Array.prototype.mapMany = function(projectionFunctionThatReturnsArray) {
     var spanishFrenchEnglishWords = [ ["cero","rien","zero"], ["uno","un","one"], ["dos","deux","two"] ];
     // collect all the words for each number, in every language, in a single, flat list
     var allWords = [0,1,2].
-        mapMany(function(index) {
+        flatMap(function(index) {
             return spanishFrenchEnglishWords[index];
         });
         
@@ -1770,12 +1764,12 @@ Array.prototype.mapMany = function(projectionFunctionThatReturnsArray) {
     
     
         
-    <p class="post">Now, instead of using map().mergeAll() to flatten a tree, we can just use mapMany helper function.</p>
+    <p class="post">Now, instead of using map().mergeAll() to flatten a tree, we can just use flatMap helper function.</p>
     </div>
 
     <div class="lesson">
-        <h4>Exercise 14:  Use mapMany() to retrieve id, title, and 150x200 box art url for every video</h4>
-        <p>Let's repeat the exercise we just performed. However this time we'll simplify the code by replacing the map().mergeAll() calls with mapMany().</p>
+        <h4>Exercise 14:  Use flatMap() to retrieve id, title, and 150x200 box art url for every video</h4>
+        <p>Let's repeat the exercise we just performed. However this time we'll simplify the code by replacing the map().mergeAll() calls with flatMap().</p>
     <textarea class="code" rows="60" cols="80">
 function() {
     var movieLists = [
@@ -1838,7 +1832,7 @@ function() {
         ];
     
     
-    // Use one or more mapMany, map, and filter calls to create an array with the following items
+    // Use one or more flatMap, map, and filter calls to create an array with the following items
     // [
     //     {"id": 675465,"title": "Fracture","boxart":"http://cdn-0.nflximg.com/images/2891/Fracture150.jpg" },
     //     {"id": 65432445,"title": "The Chamber","boxart":"http://cdn-0.nflximg.com/images/2891/TheChamber150.jpg" },                
@@ -1933,7 +1927,7 @@ function() {
         ];
     
     
-    // Use one or more mapMany, map, and filter calls to create an array with the following items
+    // Use one or more flatMap, map, and filter calls to create an array with the following items
     // [
     //     {"id": 675465,"title": "Fracture","boxart":"http://cdn-0.nflximg.com/images/2891/Fracture150.jpg" },
     //     {"id": 65432445,"title": "The Chamber","boxart":"http://cdn-0.nflximg.com/images/2891/TheChamber150.jpg" },                
@@ -1942,9 +1936,9 @@ function() {
     // ];
     
     return movieLists.
-	  mapMany(function(movieList) {
+	  flatMap(function(movieList) {
 		return movieList.videos.
-		  mapMany(function(video) {
+		  flatMap(function(video) {
 			return video.boxarts.
 			  filter(function(boxart) {
 				return boxart.width === 150;
@@ -1956,7 +1950,7 @@ function() {
 	  });   
 }        
     </pre>
-    <p class="post">It's a very common pattern to see several nested mapMany operations, with the last operation being a map. You can think of this pattern as the functional version of a nested forEach.</p>
+    <p class="post">It's a very common pattern to see several nested flatMap operations, with the last operation being a map. You can think of this pattern as the functional version of a nested forEach.</p>
     </div>
     
     
@@ -2459,7 +2453,7 @@ function() {
     ];
     
     
-    // Use one or more mapMany, map, and reduce calls to create an array with the following items (order doesn't matter)
+    // Use one or more flatMap, map, and reduce calls to create an array with the following items (order doesn't matter)
     // [
     //     {"id": 675465,"title": "Fracture","boxart":"http://cdn-0.nflximg.com/images/2891/Fracture120.jpg" },
     //     {"id": 65432445,"title": "The Chamber","boxart":"http://cdn-0.nflximg.com/images/2891/TheChamber130.jpg" },                
@@ -2468,7 +2462,7 @@ function() {
     // ];
     
     return movieLists.
-        mapMany(function(movieList) {
+        flatMap(function(movieList) {
         
         })
     
@@ -2561,7 +2555,7 @@ function() {
     ];
     
     
-    // Use one or more mapMany, map, and reduce calls to create an array with the following items (order doesn't matter)
+    // Use one or more flatMap, map, and reduce calls to create an array with the following items (order doesn't matter)
     // [
     //     {"id": 675465,"title": "Fracture","boxart":"http://cdn-0.nflximg.com/images/2891/Fracture120.jpg" },
     //     {"id": 65432445,"title": "The Chamber","boxart":"http://cdn-0.nflximg.com/images/2891/TheChamber130.jpg" },                
@@ -2570,9 +2564,9 @@ function() {
     // ];
     
     return movieLists.
-        mapMany(function(movieList) {
+        flatMap(function(movieList) {
         	return movieList.videos.
-			  mapMany(function(video) {
+			  flatMap(function(video) {
 				return video.boxarts.
 				  reduce(function(acc,curr) {
 					if (acc.width * acc.height < curr.width * curr.height) {
@@ -2951,7 +2945,7 @@ function() {
     
     //------------ COMPLETE THIS EXPRESSION --------------
     return movieLists.
-        mapMany(function(movieList) {
+        flatMap(function(movieList) {
             
         });
 
@@ -3052,9 +3046,9 @@ function() {
     
     //------------ COMPLETE THIS EXPRESSION --------------
     return movieLists.
-        mapMany(function(movieList) {
+        flatMap(function(movieList) {
             return movieList.videos.
-			  mapMany(function(video) {
+			  flatMap(function(video) {
 			  	return Array.zip(
 				  video.boxarts.
 					  reduce(function(acc,curr) {
@@ -3396,7 +3390,7 @@ function() {
                     filter(function(video) {
                         return video.listId === list.id; 
                     }).
-                    mapMany(function(video) {
+                    flatMap(function(video) {
                         return Array.zip(
                             bookmarks.filter(function(bookmark) {
                                 return bookmark.videoId === video.id;
@@ -3524,7 +3518,7 @@ function() {
     ];
         
     return movieLists.
-        mapMany(function(movieList) {
+        flatMap(function(movieList) {
             return movieList.videos.
                 reduce(
                     function(acc,curr) {
@@ -3580,7 +3574,7 @@ function(pricesNASDAQ, printRecord) {
 }
         </textarea><button class="go">Run</button><button class="showAnswer">Show Answer</button>
         <p>Console</p>
-        <div class="output" style="height:200px">
+        <div class="output" style="height:200px;overflow:scroll">
         </div>
         <pre class="verifier">
         // Combine videos and bookmarks
@@ -3694,7 +3688,7 @@ function(button) {
 }
         </textarea><button class="go">Run</button>
         <div class="output" style="text-align:center">
-            <button class="button">Click this button after running the program</button>
+            <button class="button" id="thisfirstbutton">Click this button after running the program</button>
         </div>
     <pre class="verifier">
         // Combine videos and bookmarks 2
@@ -3839,7 +3833,7 @@ function(pricesNASDAQ, printRecord, stopButton) {
 }
         </textarea><button class="go">Run</button><button class="showAnswer">Show Answer</button><button class="stop">Stop</button>&lt;-Press this button to complete the sequence of microsoft stock prices.
         <p>Console</p>
-        <div class="output" style="height:200px">
+        <div class="output" style="height:200px;overflow:scroll">
         </div>
     <pre class="verifier">
         // Combine videos and bookmarks 2
@@ -3985,7 +3979,7 @@ function(pricesNASDAQ, printRecord, stopButton) {
     <pre>
 var moviesWithHighRatings =
     movieLists.
-        mapMany(function(movieList) {
+        flatMap(function(movieList) {
             return movieList.videos.
                 filter(function(video) {
                     return video.rating === 5.0;
@@ -4046,7 +4040,7 @@ function(sprite, spriteContainer) {
         spriteMouseDrags =
             // For every mouse down event on the sprite...
             spriteMouseDowns.
-                mapMany(function(contactPoint) {
+                flatMap(function(contactPoint) {
                     // ...retrieve all the mouse move events on the sprite container...
                     return spriteContainerMouseMoves.
                         // ...until a mouse up event occurs.
@@ -4087,7 +4081,7 @@ function(sprite, spriteContainer) {
         spriteMouseDrags =
             // For every mouse down event on the sprite...
             spriteMouseDowns.
-                mapMany(function(contactPoint) {
+                flatMap(function(contactPoint) {
                     // ...retrieve all the mouse move events on the sprite container...
                     return spriteContainerMouseMoves.
                         // ...until a mouse up event occurs.
@@ -4142,7 +4136,7 @@ function(sprite, spriteContainer) {
         spriteMouseDrags =
             // For every mouse down event on the sprite...
             spriteMouseDowns.
-                mapMany(function(contactPoint) {
+                flatMap(function(contactPoint) {
                     // ...retrieve all the mouse move events on the sprite container...
                     return spriteContainerMouseMoves.
                         // ...until a mouse up event occurs.
@@ -4439,7 +4433,7 @@ function(window, $) {
         getABTestInfo().
             // If there is no AB test information, an empty sequence is
             // returned. Therefore the code below never gets called!
-            mapMany(function(abTestInfo) {
+            flatMap(function(abTestInfo) {
                 return getConfig(abTestInfo);
             }); 
 </pre> -->
@@ -4465,10 +4459,10 @@ function(window, getJSON, showMovieLists, showError) {
     var movieListsSequence =
         Observable.zip(
             getJSON("http://api-global.netflix.com/abTestInformation").
-                mapMany(function(abTestInformation) {
+                flatMap(function(abTestInformation) {
                     return Observable.zip(
                         getJSON("http://api-global.netflix.com/" + abTestInformation.urlPrefix + "/config").
-                            mapMany(function(config) {
+                            flatMap(function(config) {
                                 if (config.showInstantQueue) {
                                     return getJSON("http://api-global.netflix.com/" + abTestInformation.urlPrefix + "/queue").
                                         map(function(queueMessage) {
@@ -4695,7 +4689,7 @@ function(messageBus) {
         newSearches = searchEntered.mergeAll(searchTextClears);
         
     return newSearches.
-        mapMany(function() {
+        flatMap(function() {
             return searchTextModifications.
                 takeUntil(searchExits).
                 
