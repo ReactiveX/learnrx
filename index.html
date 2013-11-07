@@ -1,452 +1,12 @@
-<html>
+<!DOCTYPE html>
+<html language="en">
 <head>
-    <link rel="stylesheet" href="codemirror.css">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
     <title>Functional Programming in Javascript</title>
-    <script type="text/javascript">
-    
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-37739914-1']);
-      _gaq.push(['_trackPageview']);
-    
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-    
-    </script>
-    <script src="codemirror.js"></script>
-    <script src="javascript.js"></script>
-    <style type="text/css">
-        .all {width: 750px; }
-        textarea, pre { -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4; }
-        .output { background-color: #CCCCCC; border: 1px black solid; }
-        .code { font-family:monospace }
-        .model { font-family:monospace;width:500px;height:400px }
-        .illegal { color:red }
-        .legal {color: green }
-        .question { border: solid 1px black;}
-        .lesson {visibility:hidden; }
-        .post { visibility:hidden}
-        .aside { font-size:smaller }
-        .verifier { display:none }
-        .answer { display:none }
-    </style>
-    <style type="text/css">.CodeMirror {border: 1px solid black;}</style>
-    <script type="text/javascript" src="rx.js"></script>
-    <script type="text/javascript" src="rx.time.js"></script>
-    <script src="jquery.min.js"></script>
-    <script src="knockout-2.2.0rc.js"></script>
-    <script>
-var seq = function(array, interval) {
-    interval = interval || 500;
-    return Rx.Observable.create(function(observer) {
-        var counter = 0,
-            lastValue,
-            timeoutSubscription = null,
-            unsubscribed = false;
-        
-        function doWork() {
-            if (counter === array.length) {
-                if (lastValue !== undefined) {
-                    observer.onCompleted();
-                    return;
-                }
-            }
-            
-            lastValue = array[counter];
-            if (lastValue === undefined) {
-                counter++;
-                timeoutSubscription = window.setTimeout(doWork, interval);
-            }
-            else {
-                counter++;                                
-                observer.onNext(lastValue);
-                if (!unsubscribed) {
-                    doWork();
-                }
-            }
-        }
-        
-        doWork();
-        
-        return function() {
-            unsubscribed = true;
-            if (timeoutSubscription !== null) {
-                testing = window.clearTimeout(timeoutSubscription);
-            }
-        };
-    });
-};
-var jQueryMock = {
-    getJSON: function(url, bag) {
-        if (Math.random() > 0.9) {
-            if (bag.error) {
-                bag.error("There was a connectivity error.");
-            }
-        }
-        else if (url.indexOf("abTestInformation") !== -1) {
-            window.setTimeout(
-                function() {
-                    bag.success({ urlPrefix: "billboardTest" });
-                },
-                500);                    
-        }
-        else if (url.indexOf("config") !== -1) {
-            window.setTimeout(
-                function() {
-                    bag.success({ showInstantQueue: true });
-                },
-                500);
-        }
-        else if (url.indexOf("movieLists") !== -1) {
-            window.setTimeout(
-                function() {
-                    bag.success({
-                        list: [
-                            { name: "Thrillers", videos: [234324,234322314,23,5,435,12,3,234,34,23324] },
-                            { name: "New Releases", videos: [234324,234322314,23,5,435,12,3,234,34,23324] }
-                        ]
-                    });
-                },
-                500);
-        }
-        else if (url.indexOf("queue") !== -1) {
-            window.setTimeout(
-                function() {
-                    bag.success({
-                        list: { name: "Instant Queue", videos: [234324,234322314,23,5,435,12,3,234,34,23324] }
-                    });
-                },
-                500);
-        }
-    }
-};
-
-var Observable = Rx.Observable;
-
-Observable.fromEvent = function(dom, eventName, action) {
-    return Observable.create(function(observer) {
-        var handler = function(ev) {
-            if (action !== undefined) {
-                action(ev);
-            }
-            else {
-                if (ev && ev.preventDefault) {
-                    ev.preventDefault();
-                }
-            }
-            observer.onNext(ev);
-        };
-        dom.addEventListener(eventName, handler, false);
-        
-        return function() {
-            dom.removeEventListener(eventName, handler, false);
-        };
-    });
-};
-
-var oldMerge = Observable.prototype.merge;
-
-Observable.prototype.mergeAll = function() {
-    var args = Array.prototype.slice.call(arguments);
-    if (arguments.length === 0) {
-        return Observable.prototype.mergeObservable.apply(this, args);
-    }
-    else {
-        return oldMerge.apply(this, args);
-    }
-}
-function deepStringify(obj) {
-    return JSON.stringify(deepStringifyRecurse(obj));
-}
-function deepStringifyRecurse(obj) {
-    var ancestors = [obj],
-        ancestor,
-        output = {},
-        prop,
-        counter,
-        value;
-    
-    if (obj === null || obj === undefined || typeof obj !== "object") {
-        return obj;
-    }
-    
-    ancestor = Object.getPrototypeOf(obj);
-    
-    while(ancestor !== undefined) {
-        if (ancestors[ancestors.length-1] === ancestor) {
-            break;
-        }
-        
-        ancestors.push(ancestor);
-        ancestor = Object.getPrototypeOf(obj);
-    }
-    
-    for(counter = ancestors.length-1; counter >= 0; counter--) {
-        ancestor = ancestors[counter];
-        for(prop in ancestor) {
-            output[prop] = deepStringifyRecurse(ancestor[prop]);
-        }
-    }
-    
-    return output;
-}
-
-Array.prototype.mergeAll = function() {
-    var results = [];
-    this.forEach(function(subArray) {
-	  subArray.forEach(function(itemInArray) {
-		results.push(itemInArray);
-	  });
-    });
-    
-    return results;
-};
-
-Array.prototype.flatMap = function(projection) {
-    return this.
-        map(function(item) {
-            return projection(item);
-        }).
-        mergeAll();
-}
-
-Array.prototype.sortBy = function (keySelector) {
-    return this.slice().sort(function(a,b) {
-        var aKey = keySelector(a),
-            bKey = keySelector(b);
-        
-        if (aKey > bKey) {
-            return 1;
-        }
-        else if (bKey > aKey) {
-            return -1;
-        }
-        else {
-            return 0;
-        }
-    });
-};
-
-Array.prototype.reduce = function(combiner, initialValue) {
-    var counter,
-        accumulatedValue;
-        
-    // If the array is empty, do nothing
-    if (this.length === 0) {
-        return this;
-    }
-    else {
-        // If the user didn't pass an initial value, use the first item.
-        if (arguments.length === 1) {
-            counter = 1;
-            accumulatedValue = this[0];
-        }
-        else if (arguments.length >= 2) {
-            counter = 0;
-            accumulatedValue = initialValue;
-        }
-        else {
-            throw "Invalid arguments.";
-        }
-        
-        // Loop through the array, feeding the current value and the result of 
-        // the previous computation back into the combiner function until
-        // we've exhausted the entire array and are left with only one function.
-        while(counter < this.length) {
-            accumulatedValue = combiner(accumulatedValue, this[counter])
-            counter++;
-        }
-        
-        return [accumulatedValue];
-    }
-};
-  
-  // JSON.stringify(Array.zip([1,2,3],[4,5,6], function(left, right) { return left + right })) === '[5,7,9]' accumulatedValue + currentValue; }); === [6];
-
-Array.zip = function(left, right, combinerFunction) {
-    var counter,
-        results = [];
-    
-    for(counter = 0; counter < Math.min(left.length, right.length); counter++) {
-        results.push(combinerFunction(left[counter], right[counter]));
-    }
-    
-    return results;
-};
-
-Rx.Observable.zip = function(left, right, func) {
-    return left.zip(right, func);
-}
-
-var codeMirrors = [];  
-    
-var last = new Date();
-
-    </script>
-    <script>
-    (function($) {
-        function pasteIntoInput(el, text) {
-            el.focus();
-            if (typeof el.selectionStart == "number") {
-                var val = el.value;
-                var selStart = el.selectionStart;
-                el.value = val.slice(0, selStart) + text + val.slice(el.selectionEnd);
-                el.selectionEnd = el.selectionStart = selStart + text.length;
-            } else if (typeof document.selection != "undefined") {
-                var textRange = document.selection.createRange();
-                textRange.text = text;
-                textRange.collapse(false);
-                textRange.select();
-            }
-        }
-    
-        function allowTabChar(el) {
-            $(el).keydown(function(e) {
-                if (e.which == 9) {
-                    pasteIntoInput(this, "\t");
-                    return false;
-                }
-            });
-    
-            // For Opera, which only allows suppression of keypress events, not keydown
-            $(el).keypress(function(e) {
-                if (e.which == 9) {
-                    return false;
-                }
-            });
-        }
-    
-        $.fn.allowTabChar = function() {
-            if (this.jquery) {
-                this.each(function() {
-                    if (this.nodeType == 1) {
-                        var nodeName = this.nodeName.toLowerCase();
-                        if (nodeName == "textarea" || (nodeName == "input" && this.type == "text")) {
-                            allowTabChar(this);
-                        }
-                    }
-                })
-            }
-            return this;
-        }
-    })(jQuery);
-        function cancelTab(e) {
-            if (e.which === 9) {
-                e.preventDefault();
-            }
-        }
-        window.onload = function() {
-            
-            function save() {
-                var answers = [];
-                $(".lesson").each(function(cnt,item) {
-                    var go = $(".go", item)[0],
-                        code = $(".code", item)[0];
-                                        
-                    if (window.getComputedStyle(item).visibility !== "hidden") {
-                        answers.push($(code).val());
-                    }
-                });
-                
-                localStorage.setItem("newState", JSON.stringify({answers: answers}));
-            }
-        
-            // This code adds a reduce question in the middle
-            var state = localStorage.getItem("state");
-            if (state) {
-                state = JSON.parse(state);
-                state.answers.splice(18,0,$("#q18").val());
-                localStorage.setItem("newState", JSON.stringify(state));
-                delete localStorage.state;
-            }
-            
-            var state = localStorage.getItem("newState");
-            if (state) {
-                state = JSON.parse(state);
-                var firstUnfinishedQuestion;
-                
-                $(".lesson").each(function(cnt,item) {
-                    var go = $(".go", item)[0],
-                        code = $(".code", item)[0],
-                        post = $(".post", item)[0];
-                    
-                    if (cnt < state.answers.length) {
-                        $(code).val(state.answers[cnt]);
-                        item.style.visibility = "visible";
-                        if (post !== undefined) {
-                            post.style.visibility = "visible";
-                        }
-                    }
-                    else if (cnt === state.answers.length) {
-                        item.style.visibility = "visible";
-                    }
-                });
-            }
-        
-            //$(function() {
-                //$("textarea").allowTabChar();
-            //});
-            
-            $(function() {
-                var lessons = $(".lesson");
-                
-                lessons.each(function(cnt,item) {
-                    var go = $(".go", item)[0],
-                        code = $(".code", item)[0],
-                        output = $(".output", item)[0],
-                        showAnswer= $(".showAnswer", item)[0],
-                        answer= $(".answer", item)[0],
-                        codeMirror = CodeMirror.fromTextArea(code, {
-                            lineNumbers: true,
-                            matchBrackets: true,
-                            mode: "text/typescript",
-                            tabSize: 4,
-                            indentWithTabs: true
-                        }),
-                        post = $(".post", item)[0],
-                        verifierScript = $(".verifier", item)[0],
-                        controls = $(".control", item);
-                        
-                    codeMirrors.push(codeMirror);
-                    go.onclick = function() {
-                        try {
-                            var verifier = eval("(" + verifierScript.innerText + ")");
-
-                            try {
-                                codeMirror.save();
-                                save();                                
-                                verifier($(code).val(), item);
-
-                                if (post !== undefined) {
-                                    post.style.visibility = "visible";
-                                }
-                                if (cnt < lessons.length-1) {
-                                    lessons[cnt+1].style.visibility = "visible";
-                                }
-                                
-                            }
-                            catch(ex) {
-                                alert(ex);
-                            }
-                        }
-                        catch(ex) {
-                            alert(ex);
-                        }
-                    };
-                    
-                    if (showAnswer) {
-                        showAnswer.onclick = function() {
-                            codeMirror.setValue(answer.innerText);
-                        };
-                    }
-                });
-            });
-        }
-    </script>
+    <link rel="stylesheet" type="text/css" href="assets/css/codemirror/codemirror.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/app/site.css">
 </head>
-<body style="font-family:sans-serif">
+<body>
     <div class="all">
     <h1>Functional Programming in Javascript</h1>
     <p>Functional programming provides developers with the tools to abstract common collection operations into reusable, composable building blocks. You'll be surprised to learn that most of the operations you perform on collections can be accomplished with <b>five simple functions</b>:</p>
@@ -4764,5 +4324,326 @@ function(
 
         
     </div>
+
+    <script type="text/javascript">
+    
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-37739914-1']);
+      _gaq.push(['_trackPageview']);
+    
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    
+    </script>
+    <script src="assets/js/es5shim/es5shim.min.js"></script>
+    <script src="assets/js/app/array.js"></script>
+    <script src="assets/js/jquery/jquery-1.10.2.min.js"></script>
+    <script src="assets/js/codemirror/codemirror.js"></script>
+    <script src="assets/js/app/javascript.js"></script>
+    <script src="assets/js/rx/rx.compat.js"></script>
+    <script src="assets/js/rx/rx.async.compat.js"></script>
+    <script src="assets/js/rx/rx.binding.js"></script>
+    <script src="assets/js/rx/rx.time.js"></script>
+    <script>
+var seq = function(array, interval) {
+    interval = interval || 500;
+    return Rx.Observable.create(function(observer) {
+        var counter = 0,
+            lastValue,
+            timeoutSubscription = null,
+            unsubscribed = false;
+        
+        function doWork() {
+            if (counter === array.length) {
+                if (lastValue !== undefined) {
+                    observer.onCompleted();
+                    return;
+                }
+            }
+            
+            lastValue = array[counter];
+            if (lastValue === undefined) {
+                counter++;
+                timeoutSubscription = window.setTimeout(doWork, interval);
+            }
+            else {
+                counter++;                                
+                observer.onNext(lastValue);
+                if (!unsubscribed) {
+                    doWork();
+                }
+            }
+        }
+        
+        doWork();
+        
+        return function() {
+            unsubscribed = true;
+            if (timeoutSubscription !== null) {
+                testing = window.clearTimeout(timeoutSubscription);
+            }
+        };
+    });
+};
+var jQueryMock = {
+    getJSON: function(url, bag) {
+        if (Math.random() > 0.9) {
+            if (bag.error) {
+                bag.error("There was a connectivity error.");
+            }
+        }
+        else if (url.indexOf("abTestInformation") !== -1) {
+            window.setTimeout(
+                function() {
+                    bag.success({ urlPrefix: "billboardTest" });
+                },
+                500);                    
+        }
+        else if (url.indexOf("config") !== -1) {
+            window.setTimeout(
+                function() {
+                    bag.success({ showInstantQueue: true });
+                },
+                500);
+        }
+        else if (url.indexOf("movieLists") !== -1) {
+            window.setTimeout(
+                function() {
+                    bag.success({
+                        list: [
+                            { name: "Thrillers", videos: [234324,234322314,23,5,435,12,3,234,34,23324] },
+                            { name: "New Releases", videos: [234324,234322314,23,5,435,12,3,234,34,23324] }
+                        ]
+                    });
+                },
+                500);
+        }
+        else if (url.indexOf("queue") !== -1) {
+            window.setTimeout(
+                function() {
+                    bag.success({
+                        list: { name: "Instant Queue", videos: [234324,234322314,23,5,435,12,3,234,34,23324] }
+                    });
+                },
+                500);
+        }
+    }
+};
+
+var Observable = Rx.Observable;
+
+var oldMerge = Observable.prototype.merge;
+
+Observable.prototype.mergeAll = function() {
+    var args = Array.prototype.slice.call(arguments);
+    if (arguments.length === 0) {
+        return Observable.prototype.mergeObservable.apply(this, args);
+    }
+    else {
+        return oldMerge.apply(this, args);
+    }
+}
+function deepStringify(obj) {
+    return JSON.stringify(deepStringifyRecurse(obj));
+}
+function deepStringifyRecurse(obj) {
+    var ancestors = [obj],
+        ancestor,
+        output = {},
+        prop,
+        counter,
+        value;
+    
+    if (obj === null || obj === undefined || typeof obj !== "object") {
+        return obj;
+    }
+    
+    ancestor = Object.getPrototypeOf(obj);
+    
+    while(ancestor !== undefined) {
+        if (ancestors[ancestors.length-1] === ancestor) {
+            break;
+        }
+        
+        ancestors.push(ancestor);
+        ancestor = Object.getPrototypeOf(obj);
+    }
+    
+    for(counter = ancestors.length-1; counter >= 0; counter--) {
+        ancestor = ancestors[counter];
+        for(prop in ancestor) {
+            output[prop] = deepStringifyRecurse(ancestor[prop]);
+        }
+    }
+    
+    return output;
+}
+
+
+
+var codeMirrors = [];  
+    
+var last = new Date();
+
+    </script>
+    <script>
+    (function($) {
+        function pasteIntoInput(el, text) {
+            el.focus();
+            if (typeof el.selectionStart == "number") {
+                var val = el.value;
+                var selStart = el.selectionStart;
+                el.value = val.slice(0, selStart) + text + val.slice(el.selectionEnd);
+                el.selectionEnd = el.selectionStart = selStart + text.length;
+            } else if (typeof document.selection != "undefined") {
+                var textRange = document.selection.createRange();
+                textRange.text = text;
+                textRange.collapse(false);
+                textRange.select();
+            }
+        }
+    
+        function allowTabChar(el) {
+            $(el).keydown(function(e) {
+                if (e.which == 9) {
+                    pasteIntoInput(this, "\t");
+                    return false;
+                }
+            });
+    
+            // For Opera, which only allows suppression of keypress events, not keydown
+            $(el).keypress(function(e) {
+                if (e.which == 9) {
+                    return false;
+                }
+            });
+        }
+    
+        $.fn.allowTabChar = function() {
+            if (this.jquery) {
+                this.each(function() {
+                    if (this.nodeType == 1) {
+                        var nodeName = this.nodeName.toLowerCase();
+                        if (nodeName == "textarea" || (nodeName == "input" && this.type == "text")) {
+                            allowTabChar(this);
+                        }
+                    }
+                })
+            }
+            return this;
+        }
+    })(jQuery);
+        function cancelTab(e) {
+            if (e.which === 9) {
+                e.preventDefault();
+            }
+        }
+        window.onload = function() {
+            
+            function save() {
+                var answers = [];
+                $(".lesson").each(function(cnt,item) {
+                    var go = $(".go", item)[0],
+                        code = $(".code", item)[0];
+                                        
+                    if (window.getComputedStyle(item).visibility !== "hidden") {
+                        answers.push($(code).val());
+                    }
+                });
+                
+                localStorage.setItem("newState", JSON.stringify({answers: answers}));
+            }
+        
+            // This code adds a reduce question in the middle
+            var state = localStorage.getItem("state");
+            if (state) {
+                state = JSON.parse(state);
+                state.answers.splice(18,0,$("#q18").val());
+                localStorage.setItem("newState", JSON.stringify(state));
+                delete localStorage.state;
+            }
+            
+            var state = localStorage.getItem("newState");
+            if (state) {
+                state = JSON.parse(state);
+                var firstUnfinishedQuestion;
+                
+                $(".lesson").each(function(cnt,item) {
+                    var go = $(".go", item)[0],
+                        code = $(".code", item)[0],
+                        post = $(".post", item)[0];
+                    
+                    if (cnt < state.answers.length) {
+                        $(code).val(state.answers[cnt]);
+                        item.style.visibility = "visible";
+                        if (post !== undefined) {
+                            post.style.visibility = "visible";
+                        }
+                    }
+                    else if (cnt === state.answers.length) {
+                        item.style.visibility = "visible";
+                    }
+                });
+            }
+            
+            $(function() {
+                var lessons = $(".lesson");
+                
+                lessons.each(function(cnt,item) {
+                    var go = $(".go", item)[0],
+                        code = $(".code", item)[0],
+                        output = $(".output", item)[0],
+                        showAnswer= $(".showAnswer", item)[0],
+                        answer= $(".answer", item)[0],
+                        codeMirror = CodeMirror.fromTextArea(code, {
+                            lineNumbers: true,
+                            matchBrackets: true,
+                            mode: "text/typescript",
+                            tabSize: 4,
+                            indentWithTabs: true
+                        }),
+                        post = $(".post", item)[0],
+                        verifierScript = $(".verifier", item)[0],
+                        controls = $(".control", item);
+                        
+                    codeMirrors.push(codeMirror);
+                    go.onclick = function() {
+                        try {
+                            var verifier = eval("(" + verifierScript.innerText + ")");
+
+                            try {
+                                codeMirror.save();
+                                save();                                
+                                verifier($(code).val(), item);
+
+                                if (post !== undefined) {
+                                    post.style.visibility = "visible";
+                                }
+                                if (cnt < lessons.length-1) {
+                                    lessons[cnt+1].style.visibility = "visible";
+                                }
+                                
+                            }
+                            catch(ex) {
+                                alert(ex);
+                            }
+                        }
+                        catch(ex) {
+                            alert(ex);
+                        }
+                    };
+                    
+                    if (showAnswer) {
+                        showAnswer.onclick = function() {
+                            codeMirror.setValue(answer.innerText);
+                        };
+                    }
+                });
+            });
+        }
+    </script>    
 </body>
 </html>
