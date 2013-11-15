@@ -422,7 +422,7 @@ var last = new Date();
 
 <p>This tutorial may have bugs, so if you get into a weird state or you're sure you've got the right answer but can't move on, just refresh your browser. If you're using a modern browser, and if you're here I assume you are, the state of your exercises will be saved. If you want, you can also <a href="javascript:delete localStorage.newState; document.location.reload();">restart the lab.</a></p>
 
-<p>This tutorial is on <a href="https://github.com/jhusain/learnrx">GitHub</a>, and is asymptotically approaching completion. If you'd like to add an exercise, clarify a problem description, or fix a bug feel free to <a href="https://github.com/jhusain/learnrx/fork_select">fork</a> and send me a pull request. I'll try and fit user-contributed exercises into a narrative.</p>
+<p>This tutorial is on <a href="https://github.com/reactive-extensions/learnrx">GitHub</a>, and is asymptotically approaching completion. If you'd like to add an exercise, clarify a problem description, or fix a bug feel free to <a href="https://github.com/reactive-extensions/learnrx/fork_select">fork</a> and send us a pull request. We'll try and fit user-contributed exercises into a narrative.</p>
 
     <h2>Working with Arrays</h2>
     <p>The Array is Javascript's only collection type. Arrays are everywhere. We're going to add the five functions to the Array type, and in the process make it much more powerful and useful. As a matter of fact, Array already has the map, filter, and reduce functions! However we're going to to reimplement these functions as a learning exercise.</p>
@@ -4252,22 +4252,7 @@ function(window, $) {
         }
     </pre>
     <div class="post">
-<!-- <p><b>Is it strange to create sequences that only contain one object?</b> Not really. In fact, some programming languages don't even support the concept of scalar values and operate only on collections. It turns out that making arbitrary distinctions between scalar values and collections actually makes our programming model <i>more</i> complicated. In fact, putting data inside of collections like Array or Observable actually prevents null reference errors, because any transformation of an empty list results in another empty list! Let's take a look at an example:</p>
-<pre>
-    var abTestInfo = getABTestInfo();
-    // Throws a null reference error because abTestInfo is null
-    var config = getConfig(abTestInfo);
-</pre>
-<p>Some languages will do null propagation for you, ensuring that operations performed on null values also return nulls rather than throw exceptions. Unfortunately Javascript doesn't natively support this feature so developers must be vigilant, checking for nulls at every step of the computation. By contrast, the problem of null reference exceptions disappears entirely when transforming collections.
-<pre>
-    var configSequence =
-        getABTestInfo().
-            // If there is no AB test information, an empty sequence is
-            // returned. Therefore the code below never gets called!
-            flatMap(function(abTestInfo) {
-                return getConfig(abTestInfo);
-            }); 
-</pre> -->
+
     <p>Understand that <b>the function passed to Observable.create() is the definition of the forEach() function for <i>this</i> Observable.</b> In other words, all we have to do to define an Observable is to define its traversal function. Notice that although we pass three functions to the Observable's forEach() function, the function we pass to Observable.create() accepts only one value: an Observer. An Observer is just a triple containing three handlers:</p>
     <ul>
         <li>The onNext() handler used to send data to the client.</li>
@@ -4411,10 +4396,7 @@ function (clicks, saveData, name) {
 
         <button class="showAnswer">Show Answer</button>
         
-        <div class="output" style="height:200px;overflow:scroll">
-        </div>
         <pre class="verifier">
-        // Combine videos and bookmarks
         function(str, lesson) {
             var $inputName = $('.inputName', lesson),
                 $savedValue = $('.savedValue', lesson);
@@ -4485,8 +4467,6 @@ function (getSearchResultSet, keyPresses, textBox) {
 
         <button class="showAnswer">Show Answer</button>
         
-        <div class="output" style="height:200px;overflow:scroll">
-        </div>
         <pre class="verifier">
         function(str, lesson) {
 
@@ -4574,19 +4554,17 @@ function (keyPresses, isAlpha) {
         <label for="inputName">Enter Keys</label>
         <input type="text" class="inputName">
 
-        <div>Keys filtered by distinctUntilChanged</div>
-        <div class="filteredKeysByDistinct"></div>
+        <div>Keys filtered by distinctUntilChanged: <strong class="filteredKeysByDistinct"></strong></div>
+        
 
         <button class="showAnswer">Show Answer</button>
-        
-        <div class="output" style="height:200px;overflow:scroll">
-        </div>
+
         <pre class="verifier">
         function(str, lesson) {
             var $inputName = $('.inputName', lesson),
                 $filtered = $('.filteredKeysByDistinct', lesson);
                 
-            var keyups = Rx.Observable.fromEvent($inputName, 'keyup');
+            var keyups = Rx.Observable.fromEvent($inputName, 'keypress');
 
             var isAlpha = function (x) {
                 return 'abcdefghijklmnopqrstuvwxyz'.indexOf(x.toLowerCase()) !== -1;
@@ -4614,15 +4592,19 @@ function (keyPresses, isAlpha) {
 }
         </pre>
         <div class="post">
-    <p>Now that we know how to throttle input, let's take a look at another problem where throttling data is important...</p>
+    <p>Now that we know how to get only the distinct input, let's see how it applies to our autocomplete example...</p>
         </div>
     </div>  
 
     <div class="lesson">
         <h4>Exercise 43: Autocomplete Box Part 2: Electric Boogaloo</h4>
-        <p>One of the most common problems in web development is the autocomplete box.  This seems like it should be an easy problem, but is actually quite challenging.  For example, how do we throttle the input?  How do we make sure we're not getting out or order requests coming back?  For example if I type "react" then type "reactive" I want "reactive" to be my result, regardless of which actually returned first from the service.</p>
+        <p>In the previous version of the autocomplete box, there were two bugs</p>
+        <ul>
+        <li>Multiple successive searches are made for the same string</li>
+        <li>Attempts are made to retrieve results for an empty string.</li>
+        </ul>
 
-        <p>In the example below, you will be receiving a sequence of key presses, a textbox, and a function when called returns an array of search results.</p>
+        <p>The example below is the same as above, but this time, fix the bugs!</p>
     <pre>
 
 getSearchResultSet('react') === seq[,,,["reactive", "reaction","reactor"]]
@@ -4638,11 +4620,14 @@ function (getSearchResultSet, keyPresses, textBox) {
             map(function () {
                 return textBox.value;
             }).
-            // TODO: Ensure that we only trigger a maximum of one search request per second
-            flatMap(function (text) { 
+            throttle(1000).
 
-                // TODO: Ensure this sequence ends as soon as another key press arrives
-                return getSearchResultSet(text);
+            // TODO: Make sure we only get distinct values
+
+            // TODO: Make sure the text is not empty
+
+            flatMap(function (text) { 
+                return getSearchResultSet(text).takeUntil(keyPresses);
             });
 
     return getSearchResultSets;
@@ -4658,8 +4643,6 @@ function (getSearchResultSet, keyPresses, textBox) {
 
         <button class="showAnswer">Show Answer</button>
         
-        <div class="output" style="height:200px;overflow:scroll">
-        </div>
         <pre class="verifier">
         function(str, lesson) {
 
@@ -4703,6 +4686,8 @@ function (getSearchResultSet, keyPresses, textBox) {
                 return textBox.value;
             }).
             throttle(1000).
+            distinctUntilChanged().
+            filter(function (s) { return s.length > 0; }).
             flatMap(function (text) { 
                 return getSearchResultSet(text).takeUntil(keyPresses);
             });
@@ -4711,7 +4696,82 @@ function (getSearchResultSet, keyPresses, textBox) {
 }
         </pre>
         <div class="post">
-    <p>Now that we're able to query with our throttled input, you'll still notice one slight problem.  If you hit your arrow keys or any other non character key, the request will still fire.  How do we prevent that?</p>
+    <p>With just this little amount of code, we're able to produce a fully functioning autocomplete scenario.  But there are other outstanding questions, such as error handling.  How can we handle failure and retry if necessary?</p>
+        </div>
+    </div>  
+
+    <div class="lesson">
+        <h4>Exercise 44: Retrying after errors</h4>
+        <p>You'll notice in the previous exercise that if you pressed your arrow keys while inside the textbox, the query will still fire, regardless of whether the text actually changed or not.  How do we prevent that?  The distinctUntilChanged filters out successive repetitive values.</p>
+    <pre>
+
+seq([1,,,1,,,3,,,3,,,5,,,1,,,]).distinctUntilChanged() === 
+seq([1,,,,,,,3,,,,,,,5,,,1,,,]);           
+    </pre>
+
+    <textarea class="code" rows="60" cols="80">
+function (keyPresses, isAlpha) {
+
+    return keyPresses.
+        map(function (e) { return String.fromCharCode(e.keyCode); }).
+
+        // Ensure we only have alphabetic characters
+        filter(function (character) { return isAlpha(character); }).
+
+        // TODO: Filter out successive repetitive keys
+
+        // Building up a string of all the characters typed.
+        scan('', function (stringSoFar, character) {
+            return stringSoFar + character;
+        });
+}
+        </textarea>
+
+        <button class="go">Run</button>
+
+        <label for="inputName">Enter Keys</label>
+        <input type="text" class="inputName">
+
+        <div>Keys filtered by distinctUntilChanged</div>
+        <div class="filteredKeysByDistinct"></div>
+
+        <button class="showAnswer">Show Answer</button>
+
+        </div>
+        <pre class="verifier">
+        function(str, lesson) {
+            var $inputName = $('.inputName', lesson),
+                $filtered = $('.filteredKeysByDistinct', lesson);
+                
+            var keyups = Rx.Observable.fromEvent($inputName, 'keyup');
+
+            var isAlpha = function (x) {
+                return 'abcdefghijklmnopqrstuvwxyz'.indexOf(x.toLowerCase()) !== -1;
+            };
+            
+            var code =  eval("(" + str + ")")
+            var code = code(keyups, isAlpha);
+
+            code
+                .subscribe(function (text) {
+                    $filtered.text(text);
+                });
+        }
+    </pre>
+        <pre class="answer">
+function (keyPresses, isAlpha) {
+
+    return keyPresses.
+        map(function (e) { return String.fromCharCode(e.keyCode); }).
+        filter(function (character) { return isAlpha(character); }).
+        distinctUntilChanged().
+        scan('', function (stringSoFar, character) {
+            return stringSoFar + character;
+        });
+}
+        </pre>
+        <div class="post">
+    <p>Now that we know how to get only the distinct input, let's see how it applies to our autocomplete example...</p>
         </div>
     </div>  
 
