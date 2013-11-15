@@ -1,6 +1,7 @@
 <html>
 <head>
-    <link rel="stylesheet" href="codemirror.css">
+    <link rel="stylesheet" href="assets/codemirror/codemirror.css">
+    <link rel="stylesheet" href="assets/app/site.css">
     <title>Functional Programming in Javascript</title>
     <script type="text/javascript">
     
@@ -15,28 +16,14 @@
       })();
     
     </script>
-    <script src="codemirror.js"></script>
-    <script src="javascript.js"></script>
-    <style type="text/css">
-        .all {width: 750px; }
-        textarea, pre { -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4; }
-        .output { background-color: #CCCCCC; border: 1px black solid; }
-        .code { font-family:monospace }
-        .model { font-family:monospace;width:500px;height:400px }
-        .illegal { color:red }
-        .legal {color: green }
-        .question { border: solid 1px black;}
-        .lesson {visibility:hidden; }
-        .post { visibility:hidden}
-        .aside { font-size:smaller }
-        .verifier { display:none }
-        .answer { display:none }
-    </style>
-    <style type="text/css">.CodeMirror {border: 1px solid black;}</style>
-    <script type="text/javascript" src="rx.js"></script>
-    <script type="text/javascript" src="rx.time.js"></script>
-    <script src="jquery.min.js"></script>
-    <script src="knockout-2.2.0rc.js"></script>
+    <script src="assets/app/wordlist.js"></script>
+    <script src="assets/codemirror/codemirror.js"></script>
+    <script src="assets/app/javascript.js"></script>
+    <script src="assets/rx/rx.compat.js"></script>
+    <script src="assets/rx/rx.binding.js"></script>
+    <script src="assets/rx/rx.async.compat.js"></script>
+    <script src="assets/rx/rx.time.js"></script>
+    <script src="assets/jquery/jquery-1.10.2.min.js"></script>
     <script>
 var seq = function(array, interval) {
     interval = interval || 500;
@@ -125,27 +112,6 @@ var jQueryMock = {
 
 var Observable = Rx.Observable;
 
-Observable.fromEvent = function(dom, eventName, action) {
-    return Observable.create(function(observer) {
-        var handler = function(ev) {
-            if (action !== undefined) {
-                action(ev);
-            }
-            else {
-                if (ev && ev.preventDefault) {
-                    ev.preventDefault();
-                }
-            }
-            observer.onNext(ev);
-        };
-        dom.addEventListener(eventName, handler, false);
-        
-        return function() {
-            dom.removeEventListener(eventName, handler, false);
-        };
-    });
-};
-
 var oldMerge = Observable.prototype.merge;
 
 Observable.prototype.mergeAll = function() {
@@ -196,9 +162,9 @@ function deepStringifyRecurse(obj) {
 Array.prototype.mergeAll = function() {
     var results = [];
     this.forEach(function(subArray) {
-	  subArray.forEach(function(itemInArray) {
-		results.push(itemInArray);
-	  });
+      subArray.forEach(function(itemInArray) {
+        results.push(itemInArray);
+      });
     });
     
     return results;
@@ -275,10 +241,6 @@ Array.zip = function(left, right, combinerFunction) {
     
     return results;
 };
-
-Rx.Observable.zip = function(left, right, func) {
-    return left.zip(right, func);
-}
 
 var codeMirrors = [];  
     
@@ -384,10 +346,6 @@ var last = new Date();
                     }
                 });
             }
-        
-            //$(function() {
-                //$("textarea").allowTabChar();
-            //});
             
             $(function() {
                 var lessons = $(".lesson");
@@ -464,7 +422,7 @@ var last = new Date();
 
 <p>This tutorial may have bugs, so if you get into a weird state or you're sure you've got the right answer but can't move on, just refresh your browser. If you're using a modern browser, and if you're here I assume you are, the state of your exercises will be saved. If you want, you can also <a href="javascript:delete localStorage.newState; document.location.reload();">restart the lab.</a></p>
 
-<p>This tutorial is on <a href="https://github.com/jhusain/learnrx">GitHub</a>, and is asymptotically approaching completion. If you'd like to add an exercise, clarify a problem description, or fix a bug feel free to <a href="https://github.com/jhusain/learnrx/fork_select">fork</a> and send me a pull request. I'll try and fit user-contributed exercises into a narrative.</p>
+<p>This tutorial is on <a href="https://github.com/reactive-extensions/learnrx">GitHub</a>, and is asymptotically approaching completion. If you'd like to add an exercise, clarify a problem description, or fix a bug feel free to <a href="https://github.com/reactive-extensions/learnrx/fork_select">fork</a> and send us a pull request. We'll try and fit user-contributed exercises into a narrative.</p>
 
     <h2>Working with Arrays</h2>
     <p>The Array is Javascript's only collection type. Arrays are everywhere. We're going to add the five functions to the Array type, and in the process make it much more powerful and useful. As a matter of fact, Array already has the map, filter, and reduce functions! However we're going to to reimplement these functions as a learning exercise.</p>
@@ -678,7 +636,7 @@ function() {
         videoAndTitlePairs = [];
     
   newReleases.forEach(function(video) {
-	videoAndTitlePairs.push({id:video.id, title: video.title});
+    videoAndTitlePairs.push({id:video.id, title: video.title});
   });
     
     return videoAndTitlePairs;
@@ -966,9 +924,9 @@ function() {
         videos = [];
     
   newReleases.forEach(function(video) {
-	if (video.rating === 5.0) {
-	  videos.push(video);
-	}
+    if (video.rating === 5.0) {
+      videos.push(video);
+    }
   });
     
     return videos;
@@ -1028,9 +986,9 @@ Array.prototype.filter = function(predicateFunction) {
 Array.prototype.filter = function(predicateFunction) {
     var results = [];
     this.forEach(function(itemInArray) {
-	  if (predicateFunction(itemInArray)) {
-		results.push(itemInArray);
-	  }
+      if (predicateFunction(itemInArray)) {
+        results.push(itemInArray);
+      }
     });
     
     return results;
@@ -1153,7 +1111,7 @@ function() {
         filter(function(video) {
             return video.rating === 5.0;
         }).
-    	map(function(video) {
+        map(function(video) {
             return video.id;
         });
     // ------------   INSERT CODE HERE!  -----------------------------------
@@ -1287,9 +1245,9 @@ function() {
         allVideoIdsInMovieLists = [];
     
   movieLists.forEach(function(movieList) {
-	movieList.videos.forEach(function(video) {
-	  allVideoIdsInMovieLists.push(video.id);
-	});
+    movieList.videos.forEach(function(video) {
+      allVideoIdsInMovieLists.push(video.id);
+    });
   });
     
     return allVideoIdsInMovieLists;
@@ -1475,13 +1433,13 @@ function() {
     // ------------   INSERT CODE HERE!  -----------------------------------
     
     return movieLists.
-	  map(function(movieList) {
-		return movieList.videos.
-		  map(function(video) {
-			return video.id;
-		  });
-	  }).
-	  mergeAll();
+      map(function(movieList) {
+        return movieList.videos.
+          map(function(video) {
+            return video.id;
+          });
+      }).
+      mergeAll();
     
 }        
     </pre>
@@ -1668,20 +1626,20 @@ function() {
     // ];
     
     return movieLists.
-	  map(function(movieList) {
-		return movieList.videos.
-		  map(function(video) {
-			return video.boxarts.
-			  filter(function(boxart) {
-				return boxart.width === 150;
-			  }).
-			  map(function(boxart) {
-				return {id: video.id, title: video.title, boxart: boxart.url};
-			  });
-		  }).
-		  mergeAll();
-	  }).
-	  mergeAll();
+      map(function(movieList) {
+        return movieList.videos.
+          map(function(video) {
+            return video.boxarts.
+              filter(function(boxart) {
+                return boxart.width === 150;
+              }).
+              map(function(boxart) {
+                return {id: video.id, title: video.title, boxart: boxart.url};
+              });
+          }).
+          mergeAll();
+      }).
+      mergeAll();
     
 }        
     </pre>
@@ -1936,18 +1894,18 @@ function() {
     // ];
     
     return movieLists.
-	  flatMap(function(movieList) {
-		return movieList.videos.
-		  flatMap(function(video) {
-			return video.boxarts.
-			  filter(function(boxart) {
-				return boxart.width === 150;
-			  }).
-			  map(function(boxart) {
-				return {id: video.id, title: video.title, boxart: boxart.url};
-			  });
-		  });
-	  });   
+      flatMap(function(movieList) {
+        return movieList.videos.
+          flatMap(function(video) {
+            return video.boxarts.
+              filter(function(boxart) {
+                return boxart.width === 150;
+              }).
+              map(function(boxart) {
+                return {id: video.id, title: video.title, boxart: boxart.url};
+              });
+          });
+      });   
 }        
     </pre>
     <p class="post">It's a very common pattern to see several nested flatMap operations, with the last operation being a map. You can think of this pattern as the functional version of a nested forEach.</p>
@@ -2164,14 +2122,14 @@ function() {
     // You should return an array containing only the largest rating. Remember that reduce always
     // returns an array with one item.
     return ratings.
-	  reduce(function(acc, curr) { 
-		if(acc > curr) {
-		  return acc;
-		}
-		else {
-		  return curr;
-		}
-	  });
+      reduce(function(acc, curr) { 
+        if(acc > curr) {
+          return acc;
+        }
+        else {
+          return curr;
+        }
+      });
 }        
     </pre>
     <p class="post">Nice work. Now let's try combining reduce() with our other functions to build more complex queries.</p>
@@ -2223,17 +2181,17 @@ function() {
     // You should return an array containing only the largest box art. Remember that reduce always
     // returns an array with one item.
     return boxarts.
-	  reduce(function(acc,curr) {
-		if (acc.width * acc.height > curr.width * curr.height) {
-		  return acc;
-		}
-		else { 
-		  return curr;
-		}
-	  }).
-	  map(function(boxart) {
-		return boxart.url;
-	  });
+      reduce(function(acc,curr) {
+        if (acc.width * acc.height > curr.width * curr.height) {
+          return acc;
+        }
+        else { 
+          return curr;
+        }
+      }).
+      map(function(boxart) {
+        return boxart.url;
+      });
 }        
     </pre>
     
@@ -2565,22 +2523,22 @@ function() {
     
     return movieLists.
         flatMap(function(movieList) {
-        	return movieList.videos.
-			  flatMap(function(video) {
-				return video.boxarts.
-				  reduce(function(acc,curr) {
-					if (acc.width * acc.height < curr.width * curr.height) {
-					  return acc;
-					}
-					else {
-					  return curr;
-					}
-				  }).
-				  map(function(boxart) {
-					return {id: video.id, title: video.title, boxart: boxart.url};
-				  });
-			  });
-		});
+            return movieList.videos.
+              flatMap(function(video) {
+                return video.boxarts.
+                  reduce(function(acc,curr) {
+                    if (acc.width * acc.height < curr.width * curr.height) {
+                      return acc;
+                    }
+                    else {
+                      return curr;
+                    }
+                  }).
+                  map(function(boxart) {
+                    return {id: video.id, title: video.title, boxart: boxart.url};
+                  });
+              });
+        });
     
 }        
     </pre>
@@ -2696,7 +2654,7 @@ function() {
     videoIdAndBookmarkIdPairs = [];
         
     for(var counter = 0; counter < Math.min(videos.length, bookmarks.length); counter++) {
-	  videoIdAndBookmarkIdPairs.push({videoId: videos[counter].id, bookmarkId: bookmarks[counter].id});
+      videoIdAndBookmarkIdPairs.push({videoId: videos[counter].id, bookmarkId: bookmarks[counter].id});
     }
     
     return videoIdAndBookmarkIdPairs;
@@ -2854,11 +2812,11 @@ function() {
         
     return Array.
         zip(
-		  videos,
-		  bookmarks,
-		  function(video, bookmark) {
-			return {videoId: video.id, bookmarkId: bookmark.id};
-		  });
+          videos,
+          bookmarks,
+          function(video, bookmark) {
+            return {videoId: video.id, bookmarkId: bookmark.id};
+          });
 }        
         </pre>
     </div>
@@ -3041,32 +2999,32 @@ function() {
                         ]
                     }
                 ]
-			}
+            }
         ];
     
     //------------ COMPLETE THIS EXPRESSION --------------
     return movieLists.
         flatMap(function(movieList) {
             return movieList.videos.
-			  flatMap(function(video) {
-			  	return Array.zip(
-				  video.boxarts.
-					  reduce(function(acc,curr) {
-						if (acc.width * acc.height < curr.width * curr.height) {
-						  return acc;
-						}
-						else {
-						  return curr;
-						}
-					  }),
-	  			  video.interestingMoments.
-					filter(function(interestingMoment) {
-	  					return interestingMoment.type === "Middle";
-					}),
-				  function(boxart, interestingMoment) {
-	  				return {id: video.id, title: video.title, time: interestingMoment.time, url: boxart.url};
-				  })
-	  		  });
+              flatMap(function(video) {
+                return Array.zip(
+                  video.boxarts.
+                      reduce(function(acc,curr) {
+                        if (acc.width * acc.height < curr.width * curr.height) {
+                          return acc;
+                        }
+                        else {
+                          return curr;
+                        }
+                      }),
+                  video.interestingMoments.
+                    filter(function(interestingMoment) {
+                        return interestingMoment.type === "Middle";
+                    }),
+                  function(boxart, interestingMoment) {
+                    return {id: video.id, title: video.title, time: interestingMoment.time, url: boxart.url};
+                  })
+              });
         });
 }    
     </pre>
@@ -3204,7 +3162,7 @@ function() {
             videos: 
                 videos.
                     filter(function(video) {
-            			return video.listId === list.id; 
+                        return video.listId === list.id; 
                     }).
                     map(function(video) {
                         return {id: video.id, title: video.title};
@@ -3385,7 +3343,7 @@ function() {
     return lists.map(function(list) {
         return {
             name: list.name,
-    		videos: 
+            videos: 
                 videos.
                     filter(function(video) {
                         return video.listId === list.id; 
@@ -3413,133 +3371,6 @@ function() {
     <p class="post">Wow! That's a large query, but the code is still small relative to the amount of work it's doing. If we rewrote this query with a series of loops our code would be much less self-describing. Loops don't give the reader any information about the kind of operation being performed. Every time you see a loop, you need to carefully read through the code to find out what's being done. Is it a projection? A filter? A reduction? Why use loops for querying data when we've demonstrated that the 5 functions can be used to create virtually any output we want?</p>
     </div>
     
-<!--  
-    <div class="lesson">
-        <h4>Exercise 27: Retrieve the average rating of all of a list's videos.</h4>
-        <p>Retrieve the average rating of all the videos in each list. Organize the results into a map where the key is the list id. The following output is expected:</p>
-        <pre>
-[
-    {"34534523": {name: "New Releases", averageRating: 3.5}},
-    {"23423432": {name: "Instant Queue", averageRating: 2.0}}
-]
-        </pre>
-    <p><b>Note: please make sure when creating objects (both lists and videos) that you add properties in the same order as above. This doesn't impact the correctness of your code, but the verifier expects properties to be created in this order.</b></p>        
-    <textarea class="code" rows="60" cols="80">
-function() {
-    var movieLists = [
-        {
-            id: 34534523,
-            name: "New Releases",
-            videos: [
-                {
-                    "id": 70111470,
-                    "title": "Die Hard",
-                    "rating": 2.0
-                },
-                {
-                    "id": 654356453,
-                    "title": "Bad Boys",
-                    "rating": 5.0
-                }
-            ]
-        },
-        {
-            id: 23423432,
-            name: "Instant Queue",
-            videos: [
-                {
-                    "id": 65432445,
-                    "title": "The Chamber",
-                    "rating": 1.0
-                },
-                {
-                    "id": 675465,
-                    "title": "Fracture",
-                    "rating": 3.0
-                }
-            ]
-        }
-    ];
-        
-    return movieLists.  // finish this expression
-}
-        </textarea><button class="go">Run</button><button class="showAnswer">Show Answer</button>
-        <div class="output">
-        </div>
-    <pre class="verifier">
-        // Combine videos and bookmarks
-        function(str) {
-            var fun = eval("(" + str + ")"),
-                pairs = fun(),
-                got,
-                expected = '{"23423432":{"name":"Instant Queue","averageRating":2},{"34534523":{"name":"New Releases","averageRating":3.5}}';
-
-            got = deepStringify(pairs[0]);
-            if (got !== expected) {
-                throw "Expected " + JSON.stringify(expected + "\n\nGot " + got);
-            }
-        }
-    </pre>
-    <pre class="answer">
-function() {
-    var movieLists = [
-        {
-            id: 34534523,
-            name: "New Releases",
-            videos: [
-                {
-                    "id": 70111470,
-                    "title": "Die Hard",
-                    "rating": 2.0
-                },
-                {
-                    "id": 654356453,
-                    "title": "Bad Boys",
-                    "rating": 5.0
-                }
-            ]
-        },
-        {
-            id: 23423432,
-            name: "Instant Queue",
-            videos: [
-                {
-                    "id": 65432445,
-                    "title": "The Chamber",
-                    "rating": 1.0
-                },
-                {
-                    "id": 675465,
-                    "title": "Fracture",
-                    "rating": 3.0
-                }
-            ]
-        }
-    ];
-        
-    return movieLists.
-        flatMap(function(movieList) {
-            return movieList.videos.
-                reduce(
-                    function(acc,curr) {
-                        return acc + curr.rating;
-                    },
-                    0).
-                map(function(ratingsSum) {
-                    return {id: movieList.id, value: { name: movieList.name, averageRating: ratingsSum / movieList.videos.length }};
-                });
-        }).
-        reduce(function(acc, movieList) {
-            var newObject = Object.create(acc);
-            newObject[movieList.id] = movieList.value;
-            return newObject;
-        },
-        {});
-}        
-    </pre>
-    
-    </div>    
-    -->
     <div class="lesson">
         <h4>Exercise 28: Stock Ticker</h4>
         <p>Let's try an easier question. Let's say we have a collection of all of the prices for NASDAQ stocks over time. Every time the price of a stock changes on the NASDAQ ticker an entry is added to this collection. Let's say that ten days ago you bought shares in Microsoft, and now you want to print all of the MSFT share prices since then. Filter the collection for MSFT trades starting from ten days ago and print each price record (including the time stamp) using the print() function. <b>Note: this is not a trick question. It's as easy as it seems.</b></p>
@@ -3624,8 +3455,8 @@ function(pricesNASDAQ, printRecord) {
     microsoftPrices =
         pricesNASDAQ.
             filter(function(priceRecord) {
-			  return priceRecord.name === 'MSFT' && priceRecord.timeStamp > tenDaysAgo;
-			});
+              return priceRecord.name === 'MSFT' && priceRecord.timeStamp > tenDaysAgo;
+            });
     
     // Print the trades to the output console
     microsoftPrices.
@@ -4421,22 +4252,7 @@ function(window, $) {
         }
     </pre>
     <div class="post">
-<!-- <p><b>Is it strange to create sequences that only contain one object?</b> Not really. In fact, some programming languages don't even support the concept of scalar values and operate only on collections. It turns out that making arbitrary distinctions between scalar values and collections actually makes our programming model <i>more</i> complicated. In fact, putting data inside of collections like Array or Observable actually prevents null reference errors, because any transformation of an empty list results in another empty list! Let's take a look at an example:</p>
-<pre>
-    var abTestInfo = getABTestInfo();
-    // Throws a null reference error because abTestInfo is null
-    var config = getConfig(abTestInfo);
-</pre>
-<p>Some languages will do null propagation for you, ensuring that operations performed on null values also return nulls rather than throw exceptions. Unfortunately Javascript doesn't natively support this feature so developers must be vigilant, checking for nulls at every step of the computation. By contrast, the problem of null reference exceptions disappears entirely when transforming collections.
-<pre>
-    var configSequence =
-        getABTestInfo().
-            // If there is no AB test information, an empty sequence is
-            // returned. Therefore the code below never gets called!
-            flatMap(function(abTestInfo) {
-                return getConfig(abTestInfo);
-            }); 
-</pre> -->
+
     <p>Understand that <b>the function passed to Observable.create() is the definition of the forEach() function for <i>this</i> Observable.</b> In other words, all we have to do to define an Observable is to define its traversal function. Notice that although we pass three functions to the Observable's forEach() function, the function we pass to Observable.create() accepts only one value: an Observer. An Observer is just a triple containing three handlers:</p>
     <ul>
         <li>The onNext() handler used to send data to the client.</li>
@@ -4551,216 +4367,420 @@ function(window, getJSON, showMovieLists, showError) {
         <p>Almost every workflow in an web application starts with an event, continues with an HTTP request, and results in a state change. Now we know how express the first two tasks elegantly.</p>
     </div>
     </div> 
+
+    <div class="lesson">
+        <h4>Exercise 40: Throttle Input</h4>
+        <p>When dealing with user input, there will be times when the user's input is too noisy, and will potentially clog your servers with extraneous requests.  We want the ability to throttle the users's input so that if they interacting for one second, then we will get the user input.  Let's say for example, the user clicks a button once too many times upon saving and we only want to fire after they've stopped for a second.</p>
+    <pre>
+
+seq([1,,,2,,,3,,,4,,,5,,,6,,,]).throttle(1000 */ms */) === 
+seq([,,,,,,,,3,,,,,,,,,,,6,,,]);           
+    </pre>
+
+    <textarea class="code" rows="60" cols="80">
+function (clicks, saveData, name) {
+    return clicks.
+        // TODO: Throttle the clicks so that it only happens every one second
+        flatMap(function () {
+            return saveData(name);
+        });
+}
+        </textarea>
+
+        <button class="go">Run</button>
+
+        <label for="inputName">Name</label>
+        <input type="text" class="inputName"><strong class="savedValue"></strong>
+        <button class="submitInputName">Save</button> <<-- Click this to save your data
+        
+
+        <button class="showAnswer">Show Answer</button>
+        
+        <pre class="verifier">
+        function(str, lesson) {
+            var $inputName = $('.inputName', lesson),
+                $savedValue = $('.savedValue', lesson);
+                
+            var counter = 0;
+            var clicks = Rx.Observable.fromEvent($('.submitInputName'), 'click');
+            
+            var code =  eval("(" + str + ")")
+            var code = code(clicks, function() { return Rx.Observable.timer(1000) }, $inputName.val());
+
+            code
+                .subscribe(function () {
+                    $savedValue.text('Data Saved!!!');
+                });
+        }
+    </pre>
+        <pre class="answer">
+function (clicks, saveData, input) {
+    return clicks.
+        throttle(1000).
+        flatMap(function () {
+            return saveData(input.value);
+        })
+}
+        </pre>
+        <div class="post">
+    <p>Now that we know how to throttle input, let's take a look at another problem where throttling data is important...</p>
+        </div>
+    </div>  
+
+    <div class="lesson">
+        <h4>Exercise 41: Autocomplete Box</h4>
+        <p>One of the most common problems in web development is the autocomplete box.  This seems like it should be an easy problem, but is actually quite challenging.  For example, how do we throttle the input?  How do we make sure we're not getting out or order requests coming back?  For example if I type "react" then type "reactive" I want "reactive" to be my result, regardless of which actually returned first from the service.</p>
+
+        <p>In the example below, you will be receiving a sequence of key presses, a textbox, and a function when called returns an array of search results.</p>
+    <pre>
+
+getSearchResultSet('react') === seq[,,,["reactive", "reaction","reactor"]]
+keyPresses === seq['r',,,,,'e',,,,,,'a',,,,'c',,,,'t',,,,,]
+         
+    </pre>
+
+    <textarea class="code" rows="60" cols="80">
+function (getSearchResultSet, keyPresses, textBox) {
+
+    var getSearchResultSets = 
+        keyPresses.
+            map(function () {
+                return textBox.value;
+            }).
+            // TODO: Ensure that we only trigger a maximum of one search request per second
+            flatMap(function (text) { 
+
+                // TODO: Ensure this sequence ends as soon as another key press arrives
+                return getSearchResultSet(text);
+            });
+
+    return getSearchResultSets;
+}
+        </textarea>
+
+        <button class="go">Run</button>
+
+        <label for="inputName">Name</label>
+        <input type="text" class="inputName">
+        
+        <ul class="searchResultsForAutoComplete"></ul>
+
+        <button class="showAnswer">Show Answer</button>
+        
+        <pre class="verifier">
+        function(str, lesson) {
+
+            var wordlist = window.wordlist;
+            wordlist.sort();
+
+            var searchText = function (text) {
+
+                var matched = wordlist.filter(function (x) {
+                    return x.indexOf(text) === 0;
+                });
+
+                return Rx.Observable.returnValue(
+                    matched.slice(0, 10)
+                ).delay(1000);
+            };
+
+            var $inputName = $('.inputName', lesson),
+                $searchResults = $('.searchResultsForAutoComplete', lesson);
+                
+            var clicks = Rx.Observable.fromEvent($inputName, 'keyup');
+            
+            var code =  eval("(" + str + ")")
+            var code = code(searchText, clicks, $inputName[0]);
+
+            code
+                .subscribe(function (results) {
+                    var s = results.map(function (r) {
+                        return '&lt;li&gt;' + r + '&lt;/li&gt;';
+                    });
+                    $searchResults.html(s.join(''));
+                });
+        }
+    </pre>
+        <pre class="answer">
+function (getSearchResultSet, keyPresses, textBox) {
+
+    var getSearchResultSets = 
+        keyPresses.
+            map(function () {
+                return textBox.value;
+            }).
+            throttle(1000).
+            flatMap(function (text) { 
+                return getSearchResultSet(text).takeUntil(keyPresses);
+            });
+
+    return getSearchResultSets;
+}
+        </pre>
+        <div class="post">
+    <p>Now that we're able to query with our throttled input, you'll still notice one slight problem.  If you hit your arrow keys or any other non character key, the request will still fire.  How do we prevent that?</p>
+        </div>
+    </div>  
+
+    <div class="lesson">
+        <h4>Exercise 42: Distinct Until Changed Input</h4>
+        <p>You'll notice in the previous exercise that if you pressed your arrow keys while inside the textbox, the query will still fire, regardless of whether the text actually changed or not.  How do we prevent that?  The distinctUntilChanged filters out successive repetitive values.</p>
+    <pre>
+
+seq([1,,,1,,,3,,,3,,,5,,,1,,,]).distinctUntilChanged() === 
+seq([1,,,,,,,3,,,,,,,5,,,1,,,]);           
+    </pre>
+
+    <textarea class="code" rows="60" cols="80">
+function (keyPresses, isAlpha) {
+
+    return keyPresses.
+        map(function (e) { return String.fromCharCode(e.keyCode); }).
+
+        // Ensure we only have alphabetic characters
+        filter(function (character) { return isAlpha(character); }).
+
+        // TODO: Filter out successive repetitive keys
+
+        // Building up a string of all the characters typed.
+        scan('', function (stringSoFar, character) {
+            return stringSoFar + character;
+        });
+}
+        </textarea>
+
+        <button class="go">Run</button>
+
+        <label for="inputName">Enter Keys</label>
+        <input type="text" class="inputName">
+
+        <div>Keys filtered by distinctUntilChanged: <strong class="filteredKeysByDistinct"></strong></div>
+        
+
+        <button class="showAnswer">Show Answer</button>
+
+        <pre class="verifier">
+        function(str, lesson) {
+            var $inputName = $('.inputName', lesson),
+                $filtered = $('.filteredKeysByDistinct', lesson);
+                
+            var keyups = Rx.Observable.fromEvent($inputName, 'keypress');
+
+            var isAlpha = function (x) {
+                return 'abcdefghijklmnopqrstuvwxyz'.indexOf(x.toLowerCase()) !== -1;
+            };
+            
+            var code =  eval("(" + str + ")")
+            var code = code(keyups, isAlpha);
+
+            code
+                .subscribe(function (text) {
+                    $filtered.text(text);
+                });
+        }
+    </pre>
+        <pre class="answer">
+function (keyPresses, isAlpha) {
+
+    return keyPresses.
+        map(function (e) { return String.fromCharCode(e.keyCode); }).
+        filter(function (character) { return isAlpha(character); }).
+        distinctUntilChanged().
+        scan('', function (stringSoFar, character) {
+            return stringSoFar + character;
+        });
+}
+        </pre>
+        <div class="post">
+    <p>Now that we know how to get only the distinct input, let's see how it applies to our autocomplete example...</p>
+        </div>
+    </div>  
+
+    <div class="lesson">
+        <h4>Exercise 43: Autocomplete Box Part 2: Electric Boogaloo</h4>
+        <p>In the previous version of the autocomplete box, there were two bugs</p>
+        <ul>
+        <li>Multiple successive searches are made for the same string</li>
+        <li>Attempts are made to retrieve results for an empty string.</li>
+        </ul>
+
+        <p>The example below is the same as above, but this time, fix the bugs!</p>
+    <pre>
+
+getSearchResultSet('react') === seq[,,,["reactive", "reaction","reactor"]]
+keyPresses === seq['r',,,,,'e',,,,,,'a',,,,'c',,,,'t',,,,,]
+         
+    </pre>
+
+    <textarea class="code" rows="60" cols="80">
+function (getSearchResultSet, keyPresses, textBox) {
+
+    var getSearchResultSets = 
+        keyPresses.
+            map(function () {
+                return textBox.value;
+            }).
+            throttle(1000).
+
+            // TODO: Make sure we only get distinct values
+
+            // TODO: Make sure the text is not empty
+
+            flatMap(function (text) { 
+                return getSearchResultSet(text).takeUntil(keyPresses);
+            });
+
+    return getSearchResultSets;
+}
+        </textarea>
+
+        <button class="go">Run</button>
+
+        <label for="inputName">Name</label>
+        <input type="text" class="inputName">
+        
+        <ul class="searchResultsForAutoComplete"></ul>
+
+        <button class="showAnswer">Show Answer</button>
+        
+        <pre class="verifier">
+        function(str, lesson) {
+
+            var wordlist = window.wordlist;
+            wordlist.sort();
+
+            var searchText = function (text) {
+
+                var matched = wordlist.filter(function (x) {
+                    return x.indexOf(text) === 0;
+                });
+
+                return Rx.Observable.returnValue(
+                    matched.slice(0, 10)
+                ).delay(1000);
+            };
+
+            var $inputName = $('.inputName', lesson),
+                $searchResults = $('.searchResultsForAutoComplete', lesson);
+                
+            var clicks = Rx.Observable.fromEvent($inputName, 'keyup');
+            
+            var code =  eval("(" + str + ")")
+            var code = code(searchText, clicks, $inputName[0]);
+
+            code
+                .subscribe(function (results) {
+                    var s = results.map(function (r) {
+                        return '&lt;li&gt;' + r + '&lt;/li&gt;';
+                    });
+                    $searchResults.html(s.join(''));
+                });
+        }
+    </pre>
+        <pre class="answer">
+function (getSearchResultSet, keyPresses, textBox) {
+
+    var getSearchResultSets = 
+        keyPresses.
+            map(function () {
+                return textBox.value;
+            }).
+            throttle(1000).
+            distinctUntilChanged().
+            filter(function (s) { return s.length > 0; }).
+            flatMap(function (text) { 
+                return getSearchResultSet(text).takeUntil(keyPresses);
+            });
+
+    return getSearchResultSets;
+}
+        </pre>
+        <div class="post">
+    <p>With just this little amount of code, we're able to produce a fully functioning autocomplete scenario.  But there are other outstanding questions, such as error handling.  How can we handle failure and retry if necessary?</p>
+        </div>
+    </div>  
+
+    <div class="lesson">
+        <h4>Exercise 44: Retrying after errors</h4>
+        <p>You'll notice in the previous exercise that if you pressed your arrow keys while inside the textbox, the query will still fire, regardless of whether the text actually changed or not.  How do we prevent that?  The distinctUntilChanged filters out successive repetitive values.</p>
+    <pre>
+
+seq([1,,,1,,,3,,,3,,,5,,,1,,,]).distinctUntilChanged() === 
+seq([1,,,,,,,3,,,,,,,5,,,1,,,]);           
+    </pre>
+
+    <textarea class="code" rows="60" cols="80">
+function (keyPresses, isAlpha) {
+
+    return keyPresses.
+        map(function (e) { return String.fromCharCode(e.keyCode); }).
+
+        // Ensure we only have alphabetic characters
+        filter(function (character) { return isAlpha(character); }).
+
+        // TODO: Filter out successive repetitive keys
+
+        // Building up a string of all the characters typed.
+        scan('', function (stringSoFar, character) {
+            return stringSoFar + character;
+        });
+}
+        </textarea>
+
+        <button class="go">Run</button>
+
+        <label for="inputName">Enter Keys</label>
+        <input type="text" class="inputName">
+
+        <div>Keys filtered by distinctUntilChanged</div>
+        <div class="filteredKeysByDistinct"></div>
+
+        <button class="showAnswer">Show Answer</button>
+
+        </div>
+        <pre class="verifier">
+        function(str, lesson) {
+            var $inputName = $('.inputName', lesson),
+                $filtered = $('.filteredKeysByDistinct', lesson);
+                
+            var keyups = Rx.Observable.fromEvent($inputName, 'keyup');
+
+            var isAlpha = function (x) {
+                return 'abcdefghijklmnopqrstuvwxyz'.indexOf(x.toLowerCase()) !== -1;
+            };
+            
+            var code =  eval("(" + str + ")")
+            var code = code(keyups, isAlpha);
+
+            code
+                .subscribe(function (text) {
+                    $filtered.text(text);
+                });
+        }
+    </pre>
+        <pre class="answer">
+function (keyPresses, isAlpha) {
+
+    return keyPresses.
+        map(function (e) { return String.fromCharCode(e.keyCode); }).
+        filter(function (character) { return isAlpha(character); }).
+        distinctUntilChanged().
+        scan('', function (stringSoFar, character) {
+            return stringSoFar + character;
+        });
+}
+        </pre>
+        <div class="post">
+    <p>Now that we know how to get only the distinct input, let's see how it applies to our autocomplete example...</p>
+        </div>
+    </div>  
+
 <h1>A Work in Progress</h1>
 
 <p>Congratulations! You've made it this far, but you're not done. Learning is an on-going process. Go out and start using the functions you've learned in your day-to-day coding. Over time, I'll be adding more exercises to this tutorial. If you have suggestions for more exercises, send me a pull request!</p> 
     
-<!--
-<div class="lesson">
-        <h4>Exercise 29: Logging User Behavior in the Search Screen</h4>
-    <p>Let's say that you're building an application for viewing a catalog of videos on-line. This application has a search feature and you want to better understand how users are interacting with it. To that end, you'd like to log certain interesting sequences of events.</p>
-    <p>Every time the user takes any of the following actions, an event is sent on a message bus:</p>
-    <ul>
-        <li>Search is Entered</li>
-        <li>Search is Exited</li>
-        <li>A title is played</li>
-        <li>A video is stopped by the user</li>
-        <li>A video finishes playing</li>
-        <li>The Search Text is Modified</li>
-        <li>The Search Text is Cleared</li>
-        <li>The user adds a video to their queue</li>
-        <li>A video is rated</li>
-    </ul>
-    <p>We want to add an entry to the log when the user finds a video in search, watches it <i>fully</i>, and then rates it before watching another video. We want to include the id of the title, the number of search modifications (these can include backspaces), the final search text used to retrieve the results, and the rating. A new search is assumed to have begun when the user enters the search screen or clears the search text.</p>
-    <p>Here's an example of what the messageBus input looks like:</p>
-<pre>
-    var rawEventType = {
-        SEARCH_ENTERED: 0,
-        SEARCH_EXITED: 1,
-        TITLE_PLAYED: 2,
-        TITLE_STOPPED: 3,
-        TITLE_FINISHED_PLAYING: 4,
-        SEARCH_TEXT_MODIFIED: 5,
-        SEARCH_TEXT_CLEARED: 6,
-        TITLE_RATED: 7
-    }
-    // Here's an example of a sequence of raw events you might receive from the messageBus:
-    var messageBus = {
-        { type: rawEventType.SEARCH_ENTERED }...
-        { type: rawEventType.SEARCH_TEXT_MODIFIED, searchText: "e" }...
-        { type: rawEventType.SEARCH_TEXT_MODIFIED, searchText: "et" }...
-        { type: rawEventType.SEARCH_TEXT_MODIFIED, searchText: "ete" }...
-        // Backspaces count as search text modifications
-        { type: rawEventType.SEARCH_TEXT_MODIFIED, searchText: "et" }...
-        { type: rawEventType.TITLE_PLAYED, id: 32423412 }...
-        // TITLE_PLAYED event always immediately followed by TITLE_STOPPED or TITLE_FINISHED_PLAYING
-        { type: rawEventType.TITLE_STOPPED, id: 32423412 }...
-        { type: rawEventType.SEARCH_TEXT_CLEARED }...
-        { type: rawEventType.SEARCH_TEXT_MODIFIED, searchText: "a" }...
-        { type: rawEventType.SEARCH_TEXT_MODIFIED, searchText: "al" }...
-        { type: rawEventType.TITLE_PLAYED, id: 88324233 }...        
-        { type: rawEventType.TITLE_FINISHED_PLAYING, id: 88324233 }...
-        { type: rawEventType.TITLE_RATED, id: 88324233 }...
-        { type: rawEventType.SEARCH_EXITED }...        
-    }
-    
-    var searchLogEventType = {
-        SEARCH_RESULT_PLAYED_FULLY_AND_RATED: 9,
-        SEARCH_RESULT_STOPPED_PREMATURELY: 10
-    };
-    
-    // Here's an example of the output expected given the input above
-    var searchEventLogs = {
-        { type: searchLogEventType.SEARCH_RESULT_STOPPED_PREMATURELY, numSearchModifications: 4, searchText: "et", id: 32423412 }...
-        { type: searchLogEventType.SEARCH_RESULT_PLAYED_FULLY_AND_RATED, numSearchModifications: 2, searchText: "al", rating: 3.0, id: 88324233 }...
-    };
-</pre>
-    <textarea class="code" rows="60" cols="80">
-function(messageBus) {
-    var rawEventType = {
-            SEARCH_ENTERED: 0,
-            SEARCH_EXITED: 1,
-            TITLE_PLAYED: 2,
-            TITLE_STOPPED: 3,
-            TITLE_FINISHED_PLAYING: 4,
-            SEARCH_TEXT_MODIFIED: 5,
-            SEARCH_TEXT_CLEARED: 6,
-            TITLE_RATED: 7
-        },
-        searchLogEventType = {
-            SEARCH_RESULT_PLAYED_FULLY_AND_RATED: 9,
-            SEARCH_RESULT_STOPPED_PREMATURELY: 10
-        };
-        
-    return 
-}       
-        </textarea><button class="go">Run</button><button class="showAnswer">Show Answer</button>
-    <pre class="verifier">
-        // Combine videos and bookmarks 2
-        function(str, lesson) {
-            var fun = eval("(" + str + ")"),
-                output = $(".output", lesson)[0],
-                container = $(".container", lesson)[0],
-                sprite = $(".sprite",lesson)[0],
-                spriteMouseDowns =
-                    Observable.
-                        fromEvent(sprite,"mousedown", function(ev) { ev.preventDefault(); ev.stopPropagation(); }).
-                        map(function(ev) {
-                            return { x: ev.pageX, y: ev.pageY, offsetX: ev.offsetX, offsetY: ev.offsetY };
-                        }),
-                spriteContainerMouseMoves =
-                    Observable.
-                        fromEvent(container, "mousemove", function(ev) { ev.preventDefault(); ev.stopPropagation(); }).
-                        map(function(ev) {
-                            return { x: ev.pageX, y: ev.pageY, offsetX: ev.offsetX, offsetY: ev.offsetY };
-                        }),
-                spriteContainerMouseUps = Observable.fromEvent(container,"mouseup"),
-                moveSprite = function(point) {
-                    sprite.style.left = point.x + "px";
-                    sprite.style.top = point.y + "px";
-                }
-                        
-            fun(spriteMouseDowns, spriteContainerMouseMoves, spriteContainerMouseUps, moveSprite);
-        }
-    </pre>
-    <pre class="answer">
-function(messageBus) {
-    var rawEventType = {
-            SEARCH_ENTERED: 0,
-            SEARCH_EXITED: 1,
-            TITLE_PLAYED: 2,
-            TITLE_STOPPED: 3,
-            TITLE_FINISHED_PLAYING: 4,
-            SEARCH_TEXT_MODIFIED: 5,
-            SEARCH_TEXT_CLEARED: 6,
-            TITLE_RATED: 7
-        },
-        searchLogEventType = {
-            SEARCH_RESULT_PLAYED_FULLY_AND_RATED: 9,
-            SEARCH_RESULT_STOPPED_PREMATURELY: 10
-        },
-        searchEnters = messageBus.filter(function(ev) { return ev.type === rawEventType.SEARCH_ENTERED; }),
-        searchExits = messageBus.filter(function(ev) { return ev.type === rawEventType.SEARCH_EXITED; }),
-        titlePlays = messageBus.filter(function(ev) { return ev.type === rawEventType.TITLE_PLAYED; }),
-        titleStops = messageBus.filter(function(ev) { return ev.type === rawEventType.TITLE_STOPPED; }),
-        titlesFinishedPlaying = messageBus.filter(function(ev) { return ev.type === rawEventType.TITLE_FINISHED_PLAYING; }),
-        searchTextModifications = messageBus.filter(function(ev) { return ev.type === rawEventType.SEARCH_TEXT_MODIFIED; }),
-        searchTextClears = messageBus.filter(function(ev) { return ev.type === rawEventType.SEARCH_TEXT_CLEARED; }),
-        newSearches = searchEntered.mergeAll(searchTextClears);
-        
-    return newSearches.
-        flatMap(function() {
-            return searchTextModifications.
-                takeUntil(searchExits).
-                
-        })
-}       
-        </pre>
-    <p class="post">Now we're really cooking. We just created a complex event with a few lines a code. We didn't have to deal with any subscriptions objects, or write any stateful code whatsoever. Let's try something a little harder.</p>
-    </div>    
--->
 
 
-
-
-    
-    <!-- 
-
-   <div class="lesson">
-        <h4>Exercise 39: Creating an auto-complete search box</h4>
-    <p>Let's take another problem that involves querying Events and HTTP requests: an auto-complete search box.<p>
-    <textarea class="code" rows="60" cols="80">
-function(
-    textBox,
-    getAutocompleteResultSet,
-    updateResultsListBox) {
-    
-    var searches = // Create a sequence of all the searches: {"a"..."ab"..."abc"},
-        autocompleteResultSets = // Finish this sequence
-    
-    // For each mouse drag event, move the sprite to the drag point.
-    autocompleteResultSets.forEach(function(resultSet) {
-        updateResultsListBox(resultSet);
-    });
-};
-        </textarea><button class="go">Run</button><button class="showAnswer">Show Answer</button>
-        <table>
-            <tr><td><input type="text" class="textbox" style="width:100px"></td></tr>
-            <tr><td><select class="completeList" style="width:100px" size=5></select></td></tr>
-        </table>
-    <pre class="verifier">
-        // Combine videos and bookmarks 2
-        function(str, lesson) {
-            var fun = eval("(" + str + ")"),
-                output = $(".output", lesson)[0],
-                textbox = $(".textbox", lesson)[0],
-                completeList = $(".completeList", lesson)[0],
-                getAutocompleteResultSet = function(str) {
-                    var letters = "abcdefghjijklmnopqrstuvwxyz";
-                    var results = [];
-                    for(int cnt = 0; cnt < 5; cnt++) {
-                        results.push(str + letters[Math.floor(Math.random() * 25)]);
-                    }
-                    return Rx.Observable.returnValue(results).delay(200);
-                },
-                updateResultsListBox = function(results) {
-                    while(completeList.options.length > 0) {
-                        completeList.remove(option);
-                    }
-                    results.forEach(function(result) {
-                        var option = new Option();
-                        option.text = result;
-                        completeList.add(option);
-                    })
-                }
-                        
-            fun(textbox, getAutocompleteResultSet, updateResultsListBox);
-        }
-    </pre>
-    <p class="post">Now we can stop traversing our infinite collection by hitting Stop button. If you want to start traversing the latest MSFT stock prices just hit Run again.</p>
-    </div>  
-
--->
 
         
     </div>
