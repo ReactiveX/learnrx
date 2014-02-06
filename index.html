@@ -1653,26 +1653,27 @@ function() {
     <textarea class="code" rows="20" cols="80">
 Array.prototype.flatMap = function(projectionFunctionThatReturnsArray) {
     return this.
-        map(function(item) {
             // ------------   INSERT CODE HERE!  ----------------------------
-            // Apply the projection function to each item. The projection
-            // function will return an new child array. This will create a
-            // two-dimensional array.
+            // Call map to project the array and then chain call to mergeAll
+            // function to flatten the two-dimensional array
             // ------------   INSERT CODE HERE!  ----------------------------
-        }).
         // apply the mergeAll function to flatten the two-dimensional array
-        mergeAll();
+        .mergeAll();
 };
 
 /*
-    var spanishFrenchEnglishWords = [ ["cero","rien","zero"], ["uno","un","one"], ["dos","deux","two"] ];
-    // collect all the words for each number, in every language, in a single, flat list
-    var allWords = [0,1,2].
+    var spanishFrenchEnglishWords = [
+        {'language':'spanish', 'words':["uno","dos","tres"]},
+        {'language':'french',  'words': ["un","deux","trois"]},
+        {'language':'english', 'words':["one","two","three"]}
+    ];
+    // collect spanish and french words in a single, flat list
+    var spanishFrenchWords = [0,1].
         flatMap(function(index) {
-            return spanishFrenchEnglishWords[index];
-        });
-        
-    return JSON.stringify(allWords) === '["cero","rien","zero","uno","un","one","dos","deux","two"]';
+                return (spanishFrenchEnglishWords[index].words);
+                });
+
+    return JSON.stringify(spanishFrenchWords) === '["uno","dos","tres","un","deux","trois"]';
 */
     </textarea><button class="go">Run</button><button class="showAnswer">Show Answer</button>
     <div class="output">
@@ -1700,22 +1701,24 @@ Array.prototype.flatMap = function(projectionFunctionThatReturnsArray) {
     <pre class="answer">
 Array.prototype.flatMap = function(projectionFunctionThatReturnsArray) {
     return this.
-        map(function(item) {
-            return projectionFunctionThatReturnsArray(item);
-        }).
+        map(projectionFunctionThatReturnsArray).
         // apply the mergeAll function to flatten the two-dimensional array
         mergeAll();
 };
 
 /*
-    var spanishFrenchEnglishWords = [ ["cero","rien","zero"], ["uno","un","one"], ["dos","deux","two"] ];
-    // collect all the words for each number, in every language, in a single, flat list
-    var allWords = [0,1,2].
-        flatMap(function(index) {
-            return spanishFrenchEnglishWords[index];
-        });
-        
-    return JSON.stringify(allWords) === '["cero","rien","zero","uno","un","one","dos","deux","two"]';
+ var spanishFrenchEnglishWords = [
+       {'language':'spanish', 'words':["uno","dos","tres"]},
+       {'language':'french',  'words': ["un","deux","trois"]},
+       {'language':'english', 'words':["one","two","three"]}
+       ];
+      // collect spanish and french words in a single, flat list
+       var spanishFrenchWords = [0,1].
+         flatMap(function(index) {
+                 return (spanishFrenchEnglishWords[index].words);
+         });
+
+    return JSON.stringify(spanishFrenchWords) === '["uno","dos","tres","un","deux","trois"]';
 */
     
     </pre>
