@@ -2447,7 +2447,7 @@ function() {
         videos = videos.sortBy(function(v) { return v.id });
         got = JSON.stringify(videos);
         if (got !== expected) {
-            throw "Expected " + JSON.stringify(expected + "\n\nGot " + got);
+            throw "Expected " + (expected + "\n\nGot " + got);
         }
     }
     </pre>
@@ -2609,7 +2609,7 @@ function() {
         pairs = pairs.sortBy(function(v) { return v.videoId });
         got = JSON.stringify(pairs);
         if (got !== expected) {
-            throw "Expected " + JSON.stringify(expected + "\n\nGot " + got);
+            throw "Expected " + (expected + "\n\nGot " + got);
         }
     }
     </pre>
@@ -2768,7 +2768,7 @@ function() {
         pairs = pairs.sortBy(function(v) { return v.videoId });
         got = JSON.stringify(pairs);
         if (got !== expected) {
-            throw "Expected " + JSON.stringify(expected + "\n\nGot " + got);
+            throw "Expected " + (expected + "\n\nGot " + got);
         }
     }
     </pre>
@@ -2921,7 +2921,7 @@ function() {
         videos = videos.sortBy(function(v) { return v.id });
         got = JSON.stringify(videos);
         if (got !== expected) {
-            throw "Expected " + JSON.stringify(expected + "\n\nGot " + got);
+            throw "Expected " + (expected + "\n\nGot " + got);
         }
     }        
     </pre>
@@ -3117,7 +3117,7 @@ function() {
             
             got = JSON.stringify(pairs);
             if (got !== expected) {
-                throw "Expected " + JSON.stringify(expected + "\n\nGot " + got);
+                throw "Expected " + (expected + "\n\nGot " + got);
             }
         }
     </pre>
@@ -3171,12 +3171,12 @@ function() {
     });
 }            
         </pre>
-        <p class="post">Looks like you figured out that you can use map and filter to <i>join</i> two different arrays by a key. Now let's try a more complex example...</p>
     </div>
     
     <div class="lesson">
+        <p>Looks like you figured out that you can use map and filter to <i>join</i> two different arrays by a key. Now let's try a more complex example...</p>
         <h4>Exercise 26: Converting from Arrays to <i>Deeper</i> Trees</h4>
-        <p>Let's try creating a deeper tree structure. This time we have 4 seperate arrays each containing lists, videos, boxarts, and bookmarks respectively. Each object has a parent id, indicating its parent. We want to build an array of list objects, each with a name and a videos array. The videos array will contain the video's id, title, bookmark time, and smallest boxart url. In other words we want to build the following structure:</p>
+        <p>Let's try creating a deeper tree structure. This time we have 4 separate arrays each containing lists, videos, boxarts, and bookmarks respectively. Each object has a parent id, indicating its parent. We want to build an array of list objects, each with a name and a videos array. The videos array will contain the video's id, title, bookmark time, and smallest boxart url. In other words we want to build the following structure:</p>
         <pre>
 [
     {
@@ -3284,7 +3284,7 @@ function() {
             
             got = JSON.stringify(pairs);
             if (got !== expected) {
-                throw "Expected " + JSON.stringify(expected + "\n\nGot " + got);
+                throw "Expected " + (expected + "\n\nGot " + got);
             }
         }
     </pre>
