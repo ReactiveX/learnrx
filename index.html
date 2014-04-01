@@ -370,7 +370,7 @@ var last = new Date();
                     codeMirrors.push(codeMirror);
                     go.onclick = function() {
                         try {
-                            var verifier = eval("(" + verifierScript.innerText + ")");
+                            var verifier = eval("(" + verifierScript.innerHTML + ")");
 
                             try {
                                 codeMirror.save();
