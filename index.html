@@ -111,6 +111,19 @@ var jQueryMock = {
 };
 
 var Observable = Rx.Observable;
+Observable.fromEvent = function(dom, name) {
+    return Observable.create(function(observer) {
+        var handler = function(e) {
+            e.preventDefault();
+            observer.onNext(e);
+        };
+        dom.addEventListener(name,handler, false);
+        
+        return function() {
+            dom.removeEventListener(name, handler);
+        };
+    });
+};
 
 var oldMerge = Observable.prototype.merge;
 
@@ -294,6 +307,8 @@ var last = new Date();
             return this;
         }
     })(jQuery);
+
+
         function cancelTab(e) {
             if (e.which === 9) {
                 e.preventDefault();
@@ -401,6 +416,52 @@ var last = new Date();
                     }
                 });
             });
+
+            window.showAllAnswers = function() {
+                var lessons = $(".lesson");
+                    
+                    lessons.each(function(cnt,item) {
+                        var go = $(".go", item)[0],
+                            code = $(".code", item)[0],
+                            output = $(".output", item)[0],
+                            showAnswer= $(".showAnswer", item)[0],
+                            answer= $(".answer", item)[0],
+                            codeMirror = codeMirrors[cnt],
+                            post = $(".post", item)[0],
+                            verifierScript = $(".verifier", item)[0],
+                            controls = $(".control", item);
+                            
+                            if (!answer || answer.innerText.length === 0){
+                                return;
+                            }
+                            
+                            codeMirror.setValue(answer.innerText);
+                        
+                            try {
+                                var verifier = eval("(" + verifierScript.innerText + ")");
+
+                                try {
+                                    codeMirror.save();
+                                    save();                                
+                                    verifier($(code).val(), item);
+
+                                    if (post !== undefined) {
+                                        post.style.visibility = "visible";
+                                    }
+                                    if (cnt < lessons.length-1) {
+                                        lessons[cnt+1].style.visibility = "visible";
+                                    }
+                                    
+                                }
+                                catch(ex) {
+                                    alert(ex);
+                                }
+                            }
+                            catch(ex) {
+                                alert(ex);
+                            }
+                        });            
+            };
         }
     </script>
 </head>
