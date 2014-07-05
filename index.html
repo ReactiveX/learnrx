@@ -1976,7 +1976,7 @@ function() {
     <h3>Reducing Arrays</h3>
     <p>Sometimes we need to perform an operation on more than one item in the array <i>at the same time</i>. For example, let's say we need to find the largest integer in an array. We can't use a filter() operation, because it only examines one item at a time. To find the largest integer we need to the compare items in the array to each other.</p>
     <p>One approach could be to select an item in the array as the <i>assumed</i> largest number (perhaps the first item), and then compare that value to every other item in the array. Each time we come across a number that was larger than our assumed largest number, we'd replace it with the larger value, and continue the process until the entire array was traversed.</p>
-    <p>If we replaced the specific size comparison with a closure, we could write a function this handled the array traversal process for us. At each step our function would apply the closure to the last value and the current value and use the result as the last value the next time. Finally we'd be left with only one value. This process is known as <i>reducing</i> because we reduce many values to a single value.</p>
+    <p>If we replaced the specific size comparison with a closure, we could write a function that handled the array traversal process for us. At each step our function would apply the closure to the last value and the current value and use the result as the last value the next time. Finally we'd be left with only one value. This process is known as <i>reducing</i> because we reduce many values to a single value.</p>
     <div class="lesson"><h4>Exercise 15: Use forEach to find the largest box art</h4>
         <p>In this example we use forEach to find the largest box art. Each time we examine a new boxart we update a variable with the currently known maximumSize.  If the boxart is smaller than the maximum size, we discard it. If it's larger, we keep track of it. Finally we're left with a single boxart which must necessarily be the largest.</p>
     <textarea class="code" rows="15" cols="80">
@@ -2884,7 +2884,7 @@ function() {
     
     <div class="lesson">
         <h4>Exercise 24: Retrieve each video's id, title, middle interesting moment time, and <i>smallest</i> box art url.</h4>
-        <p>This is a variation of the problem we solved earlier. This time each video has an interesting moments collection, each representing a time during which a screenshot is interesting or representative of the title as a whole. Notice that both the boxarts and interestingMoments arrays are located at the same depth in the tree. Retrieve the time of the middle interesting moment and the smallest box art url <i>simultaneously</i> with zip(). Return an {id, title, time, boxart} object for each video.</p>
+        <p>This is a variation of the problem we solved earlier. This time each video has an interesting moments collection, each representing a time during which a screenshot is interesting or representative of the title as a whole. Notice that both the boxarts and interestingMoments arrays are located at the same depth in the tree. Retrieve the time of the middle interesting moment and the smallest box art url <i>simultaneously</i> with zip(). Return an {id, title, time, url} object for each video.</p>
     <textarea class="code" rows="60" cols="80">
 function() {
     var movieLists = [
@@ -3560,6 +3560,7 @@ function(pricesNASDAQ, printRecord) {
     var numbers123Observable = seq([1,,,2,,,3]);
 </pre>
     <p>Querying Arrays only gives us a snapshot. By contrast, querying Observables allows us to create data sets that react and update as the system changes over time. This enables a very powerful type of programming known as <i>reactive programming</i>.</p>
+
     <p>Let's start off by contrasting Observable with Events...</p>
     
     <div class="lesson">
@@ -4763,78 +4764,100 @@ function (getSearchResultSet, keyPresses, textBox) {
 
     <div class="lesson">
         <h4>Exercise 44: Retrying after errors</h4>
-        <p>You'll notice in the previous exercise that if you pressed your arrow keys while inside the textbox, the query will still fire, regardless of whether the text actually changed or not.  How do we prevent that?  The distinctUntilChanged filters out successive repetitive values.</p>
-    <pre>
-
-seq([1,,,1,,,3,,,3,,,5,,,1,,,]).distinctUntilChanged() === 
-seq([1,,,,,,,3,,,,,,,5,,,1,,,]);           
-    </pre>
+        <p></p>
 
     <textarea class="code" rows="60" cols="80">
-function (keyPresses, isAlpha) {
-
-    return keyPresses.
-        map(function (e) { return String.fromCharCode(e.keyCode); }).
-
-        // Ensure we only have alphabetic characters
-        filter(function (character) { return isAlpha(character); }).
-
-        // TODO: Filter out successive repetitive keys
-
-        // Building up a string of all the characters typed.
-        scan('', function (stringSoFar, character) {
-            return stringSoFar + character;
-        });
+function (erroredSequence) {
+    // TODO: Retry three times to ensure success
+    return erroredSequence;
 }
         </textarea>
 
         <button class="go">Run</button>
 
-        <label for="inputName">Enter Keys</label>
-        <input type="text" class="inputName">
-
-        <div>Keys filtered by distinctUntilChanged</div>
-        <div class="filteredKeysByDistinct"></div>
+        <div class="retrySuccess"></div>
 
         <button class="showAnswer">Show Answer</button>
 
-        </div>
         <pre class="verifier">
         function(str, lesson) {
-            var $inputName = $('.inputName', lesson),
-                $filtered = $('.filteredKeysByDistinct', lesson);
+            var $retrySuccess = $('.retrySuccess', lesson);
                 
-            var keyups = Rx.Observable.fromEvent($inputName, 'keyup');
+            var x = 2;
+            var xs = Rx.Observable.create(function (obs) {
+                if (x-- === 0) {
+                    obs.onNext(42);
+                    obs.onCompleted();
+                } else {
+                    obs.onError(new Error('woops!'));
+                }
+            });
 
-            var isAlpha = function (x) {
-                return 'abcdefghijklmnopqrstuvwxyz'.indexOf(x.toLowerCase()) !== -1;
-            };
-            
+
             var code =  eval("(" + str + ")")
-            var code = code(keyups, isAlpha);
+            var code = code(xs);
 
             code
                 .subscribe(function (text) {
-                    $filtered.text(text);
+                    $retrySuccess.text('Success!');
                 });
         }
     </pre>
         <pre class="answer">
-function (keyPresses, isAlpha) {
-
-    return keyPresses.
-        map(function (e) { return String.fromCharCode(e.keyCode); }).
-        filter(function (character) { return isAlpha(character); }).
-        distinctUntilChanged().
-        scan('', function (stringSoFar, character) {
-            return stringSoFar + character;
-        });
+function (erroredSequence) {
+    return erroredSequence.retry(3);
 }
         </pre>
         <div class="post">
     <p>Now that we know how to get only the distinct input, let's see how it applies to our autocomplete example...</p>
         </div>
     </div>  
+
+    <div class="lesson">
+        <h4>Exercise 44: Catching Exceptions</h4>
+        <p>TODO: Mention fromArray and return</p>
+
+    <textarea class="code" rows="60" cols="80">
+function (erroredSequence) {
+    // TODO: Catch exception from remote service and return an empty array
+    return erroredSequence;
+}
+        </textarea>
+
+        <button class="go">Run</button>
+
+        <div class="retrySuccess"></div>
+
+        <button class="showAnswer">Show Answer</button>
+
+        <pre class="verifier">
+        function(str, lesson) {
+            var $retrySuccess = $('.retrySuccess', lesson);
+                
+            var x = 2;
+            var xs = Rx.Observable.throw(new Error('woops!'));
+
+            var code =  eval("(" + str + ")")
+            var code = code(xs);
+
+            code
+                .subscribe(function (text) {
+                    $retrySuccess.text('Default value returned');
+                });
+        }
+    </pre>
+        <pre class="answer">
+function (erroredSequence) {
+    return erroredSequence.
+        catch(Rx.Observable.return([]));
+}
+        </pre>
+        <div class="post">
+    <p></p>
+        </div>
+    </div>  
+
+
 
 <h1>A Work in Progress</h1>
 
