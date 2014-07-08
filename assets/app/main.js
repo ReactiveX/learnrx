@@ -63,7 +63,15 @@ window.onload = function() {
 				matchBrackets: true,
 				mode: "text/typescript",
 				tabSize: 4,
-				indentWithTabs: true
+				indentWithTabs: true,
+				extraKeys: {
+					"F4": function(cm) {
+					  cm.setOption("fullScreen", !cm.getOption("fullScreen"));
+					},
+					"Esc": function(cm) {
+					  if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
+					}
+				  }
 			}),
 			post = $(".post", item)[0],
 			verifierScript = $(".verifier", item)[0],

@@ -230,9 +230,14 @@ Array.zip = function(left, right, combinerFunction) {
 	return results;
 };
 
+/**
+ * Remove all indentation tabs used to format the HTML to make the code look nice in the editor
+ * @param {HTMLElement} element
+ * @returns {HTMLElement}
+ */
 function preformatCode(element) {
-	var tabRegex = element.innerHTML.match(/(\t*)function/)[1];
-	element.innerHTML = element.innerHTML.replace(new RegExp(tabRegex, 'g'), '');
+	var tabsRegex = element.innerHTML.match(/(\t*)[^\t]/)[1];
+	element.innerHTML = element.innerHTML.replace(new RegExp('(^' + tabsRegex + '|\\n' + tabsRegex + ')', 'g'), '\n').substr(1);
 	return element;
 }
 
