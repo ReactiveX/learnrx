@@ -57,7 +57,7 @@ window.onload = function() {
 			output = $(".output", item)[0],
 			code = preformatCode($(".code", item)[0]),
 			showAnswer = $(".showAnswer", item)[0],
-			answer = $(".answer", item)[0],
+			answer = preformatCode($(".answer", item)[0]),
 			codeMirror = CodeMirror.fromTextArea(code, {
 				lineNumbers: true,
 				matchBrackets: true,
@@ -118,7 +118,7 @@ window.onload = function() {
 				code = $(".code", item)[0],
 				output = $(".output", item)[0],
 				showAnswer= $(".showAnswer", item)[0],
-				answer= $(".answer", item)[0],
+				answer= preformatCode($(".answer", item)[0]),
 				codeMirror = codeMirrors[cnt],
 				post = $(".post", item)[0],
 				verifierScript = $(".verifier", item)[0],

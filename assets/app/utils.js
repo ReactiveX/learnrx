@@ -236,6 +236,7 @@ Array.zip = function(left, right, combinerFunction) {
  * @returns {HTMLElement}
  */
 function preformatCode(element) {
+	if (!element || !element.innerHTML) return null;
 	var tabsRegex = element.innerHTML.match(/(\t*)[^\t]/)[1];
 	element.innerHTML = element.innerHTML.replace(new RegExp('(^' + tabsRegex + '|\\n' + tabsRegex + ')', 'g'), '\n').substr(1);
 	return element;
