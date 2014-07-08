@@ -1161,7 +1161,7 @@
 
 				videos = videos.sortBy(function(v) { return v });
 				if (JSON.stringify(videos) !== expected) {
-					throw "Expected " + expected;
+					throw "Expected " + expected + "\n\nReceived " + JSON.stringify(videos);
 				}
 			}
 		</pre>
@@ -1356,7 +1356,7 @@
 				videos = videos.sortBy(function(v) { return v.id });
 				got = JSON.stringify(videos);
 				if (got !== expected) {
-					throw "Expected " + JSON.stringify(expected + "    Got " + got);
+					throw "Expected " + JSON.stringify(expected + "\n\nGot " + got);
 				}
 			}
 		</pre>
@@ -1946,17 +1946,13 @@
 
 		<p>Let's use our new reduce function to isolate the largest value in an array of ratings.</p>
 		<textarea class="code" rows="15" cols="80">
-			 // Find largest rating
-			function(str){
-				var fun = eval("(" + str + ")"),
-					boxarts = fun(),
-					got = JSON.stringify(boxarts),
-					expected = JSON.stringify([5]);
+			function() {
+				var ratings = [2,3,1,4,5];
 
-
-				if (got !== expected) {
-					throw "Expected " + JSON.stringify(expected) + "\n\nGot " + got;
-				}
+				// You should return an array containing only the largest rating. Remember that reduce always
+				// returns an array with one item.
+				return ratings.
+					reduce   // Complete this expression
 			}
 		</textarea>
 		<button class="go">Run</button>

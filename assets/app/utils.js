@@ -242,6 +242,86 @@ function preformatCode(element) {
 	return element;
 }
 
+
+/**
+ * Save all lesson answers
+ */
+function saveAllAnswers() {
+	var answers = [];
+	$(".lesson").each(function(cnt,item) {
+		var go = $(".go", item)[0],
+			code = $(".code", item)[0];
+
+		if (window.getComputedStyle(item).visibility !== "hidden") {
+			answers.push($(code).val());
+		}
+	});
+
+	localStorage.setItem("newState", JSON.stringify({answers: answers}));
+}
+
+
+/**
+ * Clear out a lesson
+ * @param num - the lesson number to clear
+ */
+resetLesson = function(num) {
+	state = localStorage.getItem("newState");
+	state = JSON.parse(state);
+	state.answers.splice(num - 1,1);
+	localStorage.setItem("newState", JSON.stringify(state));
+	document.location.reload();
+}
+
+/**
+ * Convenience method for testing
+ */
+showAllAnswers = function() {
+	var lessons = $(".lesson");
+
+	lessons.each(function(cnt,item) {
+		var go = $(".go", item)[0],
+			code = $(".code", item)[0],
+			output = $(".output", item)[0],
+			showAnswer= $(".showAnswer", item)[0],
+			answer= preformatCode($(".answer", item)[0]),
+			codeMirror = codeMirrors[cnt],
+			post = $(".post", item)[0],
+			verifierScript = $(".verifier", item)[0],
+			controls = $(".control", item);
+
+		if (!answer || answer.innerText.length === 0){
+			return;
+		}
+
+		codeMirror.setValue(answer.innerText);
+
+		try {
+			var verifier = eval("(" + verifierScript.innerText + ")");
+
+			try {
+				codeMirror.save();
+				saveAllAnswers();
+				verifier($(code).val(), item);
+
+				if (post !== undefined) {
+					post.style.visibility = "visible";
+				}
+				if (cnt < lessons.length-1) {
+					lessons[cnt+1].style.visibility = "visible";
+				}
+
+			}
+			catch(ex) {
+				alert(ex);
+			}
+		}
+		catch(ex) {
+			alert(ex);
+		}
+	});
+};
+
 (function($) {
 	function pasteIntoInput(el, text) {
 		el.focus();
@@ -288,3 +368,4 @@ function preformatCode(element) {
 		return this;
 	}
 })(jQuery);
+
