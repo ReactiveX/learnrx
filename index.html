@@ -102,18 +102,22 @@
 			// Traverse array with for loop
 			function(str) {
 				var fun = eval("(" + str + ")");
-				var items =[];
+				var items = [];
+				var got;
+				var expected = '["Ben","Brian","Jafar","Matt","Priya"]';
 				fun({
 					log:function(name) {
 						items.push(name);
 						console.log(name);
 					}
 				});
-				if(JSON.stringify(items.sort()) === '["Ben","Brian","Jafar","Matt","Priya"]') {
+
+				got = JSON.stringify(items.sort());
+				if(got === expected) {
 					return "Success!"
 				}
 				else {
-					throw 'console.log did not receive all of these values: "Ben","Brian","Jafar","Matt","Priya" (note: order does not matter)'
+					showErrorMessage(expected, got, 'Note: order does not matter');
 				}
 			}
 		</pre>
@@ -274,7 +278,7 @@
 					return true;
 				}
 				else {
-					throw 'Expected: ' + expected;
+					showErrorMessage(expected, JSON.stringify(videoAndTitlePairs));
 				}
 			}
     	</pre>
@@ -1356,7 +1360,7 @@
 				videos = videos.sortBy(function(v) { return v.id });
 				got = JSON.stringify(videos);
 				if (got !== expected) {
-					throw "Expected " + JSON.stringify(expected + "\n\nGot " + got);
+					showErrorMessage(expected, got);
 				}
 			}
 		</pre>
@@ -1642,7 +1646,7 @@
 				videos = videos.sortBy(function(v) { return v.id });
 				got = JSON.stringify(videos);
 				if (got !== expected) {
-					throw "Expected " + JSON.stringify(expected + "\n\nGot " + got);
+					showErrorMessage(expected, got);
 				}
 			}
 		</pre>
@@ -1796,7 +1800,7 @@
 					expected = JSON.stringify({ width: 425, height:150, url:"http://cdn-0.nflximg.com/images/2891/Fracture425.jpg" });
 
 				if (got !== expected) {
-					throw "Expected " + JSON.stringify(expected) + "\n\nGot " + got;
+					showErrorMessage(expected, got);
 				}
 			}
 		</pre>
@@ -1968,7 +1972,7 @@
 
 
 				if (got !== expected) {
-					throw "Expected " + JSON.stringify(expected) + "\n\nGot " + got;
+					showErrorMessage(expected, got);
 				}
 			}
 		</pre>
@@ -2031,7 +2035,7 @@
 
 
 				if (got !== expected) {
-					throw "Expected " + JSON.stringify(expected) + "\n\nGot " + got;
+					showErrorMessage(expected, got);
 				}
 			}
 		</pre>
@@ -2333,7 +2337,7 @@
 				videos = videos.sortBy(function(v) { return v.id });
 				got = JSON.stringify(videos);
 				if (got !== expected) {
-					throw "Expected " + JSON.stringify(expected + "\n\nGot " + got);
+					showErrorMessage(expected, got);
 				}
 			}
 		</pre>
@@ -2496,18 +2500,18 @@
 		<div class="output"></div>
 		<pre class="verifier">
 			// Zip imperatively
-				function(str) {
-					var fun = eval("(" + str + ")"),
-						pairs = fun(),
-						got,
-						expected = '[{"videoId":65432445,"bookmarkId":445},{"videoId":70111470,"bookmarkId":470},{"videoId":654356453,"bookmarkId":453}]';
+			function(str) {
+				var fun = eval("(" + str + ")"),
+					pairs = fun(),
+					got,
+					expected = '[{"videoId":65432445,"bookmarkId":445},{"videoId":70111470,"bookmarkId":470},{"videoId":654356453,"bookmarkId":453}]';
 
-					pairs = pairs.sortBy(function(v) { return v.videoId });
-					got = JSON.stringify(pairs);
-					if (got !== expected) {
-						throw "Expected " + JSON.stringify(expected + "\n\nGot " + got);
-					}
+				pairs = pairs.sortBy(function(v) { return v.videoId });
+				got = JSON.stringify(pairs);
+				if (got !== expected) {
+					showErrorMessage(expected, got);
 				}
+			}
 		</pre>
 		<pre class="answer">
 			function() {
@@ -2599,7 +2603,7 @@
 					expected = '[5,7,9]';
 
 				if (JSON.stringify(sum) !== expected) {
-					throw "Expected that [1,2,3].reduce(function(accumulated,current) { return accumulated + current; }) === [6]. Instead got " + JSON.stringify(sum);
+					showErrorMessage(expected, JSON.stringify(sum));
 				}
 			}
 		</pre>
@@ -2685,7 +2689,7 @@
 				pairs = pairs.sortBy(function(v) { return v.videoId });
 				got = JSON.stringify(pairs);
 				if (got !== expected) {
-					throw "Expected " + JSON.stringify(expected + "\n\nGot " + got);
+					showErrorMessage(expected, got);
 				}
 			}
 		</pre>
@@ -2849,7 +2853,7 @@
 				videos = videos.sortBy(function(v) { return v.id });
 				got = JSON.stringify(videos);
 				if (got !== expected) {
-					throw "Expected " + JSON.stringify(expected + "\n\nGot " + got);
+					showErrorMessage(expected, got);
 				}
 			}
 		</pre>
@@ -3064,7 +3068,7 @@
 
 				got = JSON.stringify(pairs);
 				if (got !== expected) {
-					throw "Expected " + JSON.stringify(expected + "\n\nGot " + got);
+					showErrorMessage(expected, got);
 				}
 			}
 		</pre>
@@ -3246,7 +3250,7 @@
 
 				got = JSON.stringify(pairs);
 				if (got !== expected) {
-					throw "Expected " + JSON.stringify(expected + "\n\nGot " + got);
+					showErrorMessage(expected, got);
 				}
 			}
 		</pre>

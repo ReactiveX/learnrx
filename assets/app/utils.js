@@ -230,6 +230,12 @@ Array.zip = function(left, right, combinerFunction) {
 	return results;
 };
 
+function showErrorMessage(expected, received, notes){
+	var errorString = "Expected Output\n" + expected + "\n\nReceived Output\n" + received;
+	if (notes) errorString += "\n\n" + notes;
+	throw errorString;
+}
+
 /**
  * Remove all indentation tabs used to format the HTML to make the code look nice in the editor
  * @param {HTMLElement} element
@@ -276,10 +282,12 @@ resetLesson = function(num) {
 /**
  * Convenience method for testing
  */
-showAllAnswers = function() {
+showAllAnswers = function(upTo) {
 	var lessons = $(".lesson");
-
+	var lessonCount = 1;
 	lessons.each(function(cnt,item) {
+		if (upTo && lessonCount++ > (upTo - 1)) return;
+
 		var go = $(".go", item)[0],
 			code = $(".code", item)[0],
 			output = $(".output", item)[0],
