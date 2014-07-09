@@ -6,6 +6,14 @@ var codeMirrors = [],
 window.onload = function() {
 
 	/**
+	 * Fix indentation of formatted code to not have any indentation
+	 */
+	$.each($('pre,textarea'), function(i, item) {
+		removeIndentation(item);
+	});
+
+
+	/**
 	 * Initialize lessons from previous session
 	 */
 	state = localStorage.getItem("newState");
@@ -39,9 +47,9 @@ window.onload = function() {
 	lessons.each(function(cnt, item) {
 		var go = $(".go", item)[0],
 			output = $(".output", item)[0],
-			code = preformatCode($(".code", item)[0]),
+			code = $(".code", item)[0],
 			showAnswer = $(".showAnswer", item)[0],
-			answer = preformatCode($(".answer", item)[0]),
+			answer = $(".answer", item)[0],
 			codeMirror = CodeMirror.fromTextArea(code, {
 				lineNumbers: true,
 				matchBrackets: true,

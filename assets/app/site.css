@@ -1,6 +1,8 @@
-body {font-family: sans-serif}
-.content {width: 750px; margin: 0 auto}
+body {font-family: sans-serif;}
 textarea, pre { -moz-tab-size: 4; -o-tab-size: 4; -webkit-tab-size: 4; tab-size: 4; }
+
+pre {background-color: #F3F3F3; padding: 10px 10px 0 10px; font-family: 'courier new'; font-size: 14px;}
+.content {width: 850px; margin: 0 auto}
 .output { background-color: #CCCCCC; border: 1px black solid; }
 .code { font-family: monospace }
 .model { font-family: monospace; width: 500px; height: 400px }
@@ -17,9 +19,4 @@ textarea, pre { -moz-tab-size: 4; -o-tab-size: 4; -webkit-tab-size: 4; tab-size:
 /* Override CodeMirror */
 .CodeMirror {border: 1px solid #ccc; height: 450px;}
 .CodeMirror-scroll {}
-.CodeMirror-fullscreen {
-  position: fixed;
-  top: 20px; left: 20px; right: 20px; bottom: 20px;
-  height: auto;
-  z-index: 9;
-}
+.CodeMirror-fullscreen {position: fixed; top: 20px; left: 20px; right: 20px; bottom: 20px; height: auto; z-index: 9;}

@@ -230,9 +230,19 @@ Array.zip = function(left, right, combinerFunction) {
 	return results;
 };
 
-function showErrorMessage(expected, received, notes){
+/**
+ * Show an error message to the user with the given expected and actual results
+ * @param {string} expected
+ * @param {string} received
+ * @param {string} notes
+ */
+function showLessonErrorMessage(expected, received, notes){
 	var errorString = "Expected Output\n" + expected + "\n\nReceived Output\n" + received;
-	if (notes) errorString += "\n\n" + notes;
+
+	if (notes) {
+		errorString += "\n\n" + notes;
+	}
+
 	throw errorString;
 }
 
@@ -241,10 +251,14 @@ function showErrorMessage(expected, received, notes){
  * @param {HTMLElement} element
  * @returns {HTMLElement}
  */
-function preformatCode(element) {
-	if (!element || !element.innerHTML) return null;
+function removeIndentation(element) {
+	if (!element || !element.innerHTML) {
+		return null;
+	}
+
 	var tabsRegex = element.innerHTML.match(/(\t*)[^\t]/)[1];
 	element.innerHTML = element.innerHTML.replace(new RegExp('(^' + tabsRegex + '|\\n' + tabsRegex + ')', 'g'), '\n').substr(1);
+
 	return element;
 }
 
@@ -254,6 +268,7 @@ function preformatCode(element) {
  */
 function saveAllAnswers() {
 	var answers = [];
+
 	$(".lesson").each(function(cnt,item) {
 		var go = $(".go", item)[0],
 			code = $(".code", item)[0];
@@ -271,8 +286,8 @@ function saveAllAnswers() {
  * Clear out a lesson
  * @param num - the lesson number to clear
  */
-resetLesson = function(num) {
-	state = localStorage.getItem("newState");
+window.resetLesson = function(num) {
+	var state = localStorage.getItem("newState");
 	state = JSON.parse(state);
 	state.answers.splice(num - 1,1);
 	localStorage.setItem("newState", JSON.stringify(state));
@@ -282,7 +297,7 @@ resetLesson = function(num) {
 /**
  * Convenience method for testing
  */
-showAllAnswers = function(upTo) {
+window.showAllAnswers = function(upTo) {
 	var lessons = $(".lesson");
 	var lessonCount = 1;
 	lessons.each(function(cnt,item) {
@@ -292,7 +307,7 @@ showAllAnswers = function(upTo) {
 			code = $(".code", item)[0],
 			output = $(".output", item)[0],
 			showAnswer= $(".showAnswer", item)[0],
-			answer= preformatCode($(".answer", item)[0]),
+			answer= $(".answer", item)[0],
 			codeMirror = codeMirrors[cnt],
 			post = $(".post", item)[0],
 			verifierScript = $(".verifier", item)[0],

@@ -6,11 +6,14 @@
 	<script src="assets/app/wordlist.js"></script>
 	<script src="assets/codemirror/codemirror.js"></script>
 	<script src="assets/app/javascript.js"></script>
+
 	<script src="assets/rx/rx.compat.js"></script>
 	<script src="assets/rx/rx.binding.js"></script>
 	<script src="assets/rx/rx.async.compat.js"></script>
 	<script src="assets/rx/rx.time.js"></script>
+
 	<script src="assets/jquery/jquery-1.10.2.min.js"></script>
+
 	<script src="assets/app/utils.js"></script>
 	<script src="assets/app/main.js"></script>
 </head>
@@ -76,11 +79,10 @@
 
 	<h3>Traversing an Array</h3>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson" style="visibility: visible">
 		<h4>Exercise 1: Print all the names in an array</h4>
 		<textarea class="code" rows="8" cols="80">
@@ -117,7 +119,7 @@
 					return "Success!"
 				}
 				else {
-					showErrorMessage(expected, got, 'Note: order does not matter');
+					showLessonErrorMessage(expected, got, 'Note: order does not matter');
 				}
 			}
 		</pre>
@@ -136,11 +138,10 @@
 		</p>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h4>Exercise 2: Use forEach to print all the names in an array</h4>
 		<p>Let's repeat the previous exercise using the forEach function.</p>
@@ -201,11 +202,10 @@
 		</div>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h4>Exercise 3: Project an array of videos into an array of {id,title} pairs using forEach()</h4>
 
@@ -278,7 +278,7 @@
 					return true;
 				}
 				else {
-					showErrorMessage(expected, JSON.stringify(videoAndTitlePairs));
+					showLessonErrorMessage(expected, JSON.stringify(videoAndTitlePairs));
 				}
 			}
     	</pre>
@@ -337,11 +337,10 @@
 		</div>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h4>Exercise 4: Implement map()</h4>
 
@@ -405,11 +404,10 @@
 		</pre>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h4>Exercise 5: Use map() to project an array of videos into an array of {id,title} pairs</h4>
 
@@ -534,11 +532,10 @@
 		</div>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h4>Exercise 6: Use forEach() to collect only those videos with a rating of 5.0</h4>
 
@@ -670,11 +667,10 @@
 		</div>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h4>Exercise 7: Implement filter()</h4>
 
@@ -739,11 +735,10 @@
 			we want to collect the data.</p>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h3>Query Data by Chaining Method Calls</h3>
 		<h4>Exercise 8: Chain filter and map to collect the ids of videos that have a rating of 5.0</h4>
@@ -870,11 +865,10 @@
 			of <i>how</i> our queries are executed.</p>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h3>Querying Trees</h3>
 		<p>Sometimes, in addition to flat arrays, we need to query trees. Trees pose a challenge because we need to flatten them
@@ -1025,11 +1019,10 @@
 			to flatten a tree, without specifying too much information about <i>how</i> to carry out the operation?</p>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h4>Exercise 10: Implement mergeAll()</h4>
 
@@ -1089,11 +1082,10 @@
 			with map() to query a tree. Let's try an example...</p>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h4>Exercise 11: Use map() and mergeAll() to project and flatten the movieLists into an array of video ids</h4>
 
@@ -1236,11 +1228,10 @@
 			functional programming. You're half way there! Let's try a more complicated example...</p>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h4>Exercise 12: Retrieve id, title, and a 150x200 box art url for every video</h4>
 
@@ -1360,7 +1351,7 @@
 				videos = videos.sortBy(function(v) { return v.id });
 				got = JSON.stringify(videos);
 				if (got !== expected) {
-					showErrorMessage(expected, got);
+					showLessonErrorMessage(expected, got);
 				}
 			}
 		</pre>
@@ -1457,11 +1448,10 @@
 			to help us with this common pattern.</p>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h4>Exercise 13: Implement flatMap()</h4>
 
@@ -1543,11 +1533,10 @@
 			function.</p>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h4>Exercise 14: Use flatMap() to retrieve id, title, and 150x200 box art url for every video</h4>
 
@@ -1646,7 +1635,7 @@
 				videos = videos.sortBy(function(v) { return v.id });
 				got = JSON.stringify(videos);
 				if (got !== expected) {
-					showErrorMessage(expected, got);
+					showLessonErrorMessage(expected, got);
 				}
 			}
 		</pre>
@@ -1739,11 +1728,10 @@
 			map. You can think of this pattern as the functional version of a nested forEach.</p>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h3>Reducing Arrays</h3>
 		<p>Sometimes we need to perform an operation on more than one item in the array <i>at the same time</i>. For example,
@@ -1800,7 +1788,7 @@
 					expected = JSON.stringify({ width: 425, height:150, url:"http://cdn-0.nflximg.com/images/2891/Fracture425.jpg" });
 
 				if (got !== expected) {
-					showErrorMessage(expected, got);
+					showLessonErrorMessage(expected, got);
 				}
 			}
 		</pre>
@@ -1833,11 +1821,10 @@
 			Let's create a helper function to perform reductions on arrays.</p>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h4>Exercise 16: Implement reduce()</h4>
 
@@ -1941,11 +1928,10 @@
 		</pre>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson"><h4>Exercise 17: Retrieve the largest rating.</h4>
 
 		<p>Let's use our new reduce function to isolate the largest value in an array of ratings.</p>
@@ -1972,7 +1958,7 @@
 
 
 				if (got !== expected) {
-					showErrorMessage(expected, got);
+					showLessonErrorMessage(expected, got);
 				}
 			}
 		</pre>
@@ -1997,11 +1983,10 @@
 			queries.</p>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h4>Exercise 18: Retrieve url of the largest boxart</h4>
 
@@ -2035,7 +2020,7 @@
 
 
 				if (got !== expected) {
-					showErrorMessage(expected, got);
+					showLessonErrorMessage(expected, got);
 				}
 			}
 		</pre>
@@ -2066,11 +2051,10 @@
 		</pre>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h4>Exercise 19: Reducing with an initial value</h4>
 
@@ -2226,11 +2210,10 @@
 			queries.</p>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h4>Exercise 20: Retrieve the id, title, and <i>smallest</i> box art url for every video.</h4>
 
@@ -2337,7 +2320,7 @@
 				videos = videos.sortBy(function(v) { return v.id });
 				got = JSON.stringify(videos);
 				if (got !== expected) {
-					showErrorMessage(expected, got);
+					showLessonErrorMessage(expected, got);
 				}
 			}
 		</pre>
@@ -2434,11 +2417,10 @@
 		</pre>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h3>Zipping Arrays</h3>
 		<p>Sometimes we need to combine two arrays by progressively taking an item from each and combining the pair. If you
@@ -2509,7 +2491,7 @@
 				pairs = pairs.sortBy(function(v) { return v.videoId });
 				got = JSON.stringify(pairs);
 				if (got !== expected) {
-					showErrorMessage(expected, got);
+					showLessonErrorMessage(expected, got);
 				}
 			}
 		</pre>
@@ -2562,11 +2544,10 @@
 		</pre>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h4>Exercise 22: Implement zip</h4>
 
@@ -2603,7 +2584,7 @@
 					expected = '[5,7,9]';
 
 				if (JSON.stringify(sum) !== expected) {
-					showErrorMessage(expected, JSON.stringify(sum));
+					showLessonErrorMessage(expected, JSON.stringify(sum));
 				}
 			}
 		</pre>
@@ -2623,11 +2604,10 @@
         </pre>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h4>Exercise 23: Combine videos and bookmarks by index</h4>
 
@@ -2689,7 +2669,7 @@
 				pairs = pairs.sortBy(function(v) { return v.videoId });
 				got = JSON.stringify(pairs);
 				if (got !== expected) {
-					showErrorMessage(expected, got);
+					showLessonErrorMessage(expected, got);
 				}
 			}
 		</pre>
@@ -2742,11 +2722,10 @@
         </pre>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h4>Exercise 24: Retrieve each video's id, title, middle interesting moment time, and <i>smallest</i> box art url.</h4>
 
@@ -2853,7 +2832,7 @@
 				videos = videos.sortBy(function(v) { return v.id });
 				got = JSON.stringify(videos);
 				if (got !== expected) {
-					showErrorMessage(expected, got);
+					showLessonErrorMessage(expected, got);
 				}
 			}
 		</pre>
@@ -2962,11 +2941,10 @@
 		</pre>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h3>Powerful Queries</h3>
 
@@ -3068,7 +3046,7 @@
 
 				got = JSON.stringify(pairs);
 				if (got !== expected) {
-					showErrorMessage(expected, got);
+					showLessonErrorMessage(expected, got);
 				}
 			}
 		</pre>
@@ -3126,11 +3104,10 @@
 			key. Now let's try a more complex example...</p>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h4>Exercise 26: Converting from Arrays to <i>Deeper</i> Trees</h4>
 
@@ -3250,7 +3227,7 @@
 
 				got = JSON.stringify(pairs);
 				if (got !== expected) {
-					showErrorMessage(expected, got);
+					showLessonErrorMessage(expected, got);
 				}
 			}
 		</pre>
@@ -3342,11 +3319,10 @@
 			output we want?</p>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h4>Exercise 28: Stock Ticker</h4>
 
@@ -3504,11 +3480,10 @@
 		</div>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h4>Exercise 29: Subscribing to an event</h4>
 
@@ -3546,11 +3521,10 @@
 			why can't we traverse Arrays and Events the same way?</p>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h4>Exercise 30: Traversing an Event</h4>
 
@@ -3598,11 +3572,10 @@
 		</div>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h4>Exercise 31: Completing Sequences with take()</h4>
 
@@ -3688,11 +3661,10 @@
 		</div>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h4>Exercise 32: Completing sequences with takeUntil()</h4>
 
@@ -3834,8 +3806,8 @@
 
 				// <b>mergeAll()</b>
 
-				[ [1, 2, 3], [4, 5, 6] ].mergeAll()                                === [1,2,3,4,5,6]
-				seq([ seq([1,,,2,,,3]),,,seq([4,,,5,,,6]) ]).mergeAll()            === seq([1,,,2,,,3,,,4,,,5,,,6])
+				[ [1, 2, 3], [4, 5, 6] ].mergeAll()                             === [1,2,3,4,5,6]
+				seq([ seq([1,,,2,,,3]),,,seq([4,,,5,,,6]) ]).mergeAll()         === seq([1,,,2,,,3,,,4,,,5,,,6])
 
 				// Depending on when the elements in each
 				// sequence arrive, the order of the merged
@@ -3843,7 +3815,7 @@
 				seq([
 					seq([1,, ,,, ,,,2,,,3])
 					,,,seq([4,,,5,,,,,,,,6]) ]).
-					mergeAll()                                                     === seq([1,,,4,,,5,,,2,,,3,,,6])
+					mergeAll()                                                  === seq([1,,,4,,,5,,,2,,,3,,,6])
 
 				// Notice that as long as at least one sequence being
 				// merged is incomplete, the merged sequence is also
@@ -3851,7 +3823,7 @@
 				seq([
 					seq([1,, ,,, ,,,2,,,3])
 					,,,seq([4,,,5,,, ,,, ,,6,,,]) ]).
-					mergeAll()                                                     === seq([1,,,4,,,5,,,2,,,3,,,6,,,])
+					mergeAll()                                                  === seq([1,,,4,,,5,,,2,,,3,,,6,,,])
 
 				// <b>reduce()</b>
 
@@ -3898,11 +3870,10 @@
 		</div>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h4>Exercise 33: Creating a mouse drag event</h4>
 
@@ -4006,11 +3977,10 @@
 			harder.</p>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h4>Exercise 34: Improving our mouse drag event</h4>
 
@@ -4070,7 +4040,7 @@
 			}
 		</textarea>
 		<button class="go">Run</button>
-		<!-- <button class="showAnswer">Show Answer</button> -->
+		<button class="showAnswer">Show Answer</button>
 		<div class="control output container" style="height:200px;text-align:center">
             <span class="control sprite" style="position:absolute; border: solid 1px black; background-color: white;z-index:23">
                 Sprite
@@ -4126,11 +4096,10 @@
         </pre>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h4>Exercise 35: HTTP requests</h4>
 
@@ -4166,11 +4135,10 @@
 		</div>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h4>Exercise 36: Sequencing HTTP requests with callbacks</h4>
 
@@ -4340,11 +4308,10 @@
 		</div>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h4>Exercise 37: Traversing callback-based Asynchronous APIs</h4>
 
@@ -4474,11 +4441,10 @@
 		</div>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h4>Exercise 38: Sequencing HTTP requests with Observable</h4>
 
@@ -4584,11 +4550,10 @@
 		</div>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h4>Exercise 40: Throttle Input</h4>
 
@@ -4597,8 +4562,7 @@
 			interacting for one second, then we will get the user input. Let's say for example, the user clicks a button
 			once too many times upon saving and we only want to fire after they've stopped for a second.</p>
 		<pre>
-			seq([1,,,2,,,3,,,4,,,5,,,6,,,]).throttle(1000 */ms */) ===
-			seq([,,,,,,,,3,,,,,,,,,,,6,,,]);
+			seq([1,,,2,,,3,,,4,,,5,,,6,,,]).throttle(1000 */ms */) === seq([,,,,,,,,3,,,,,,,,,,,6,,,]);
 		</pre>
 
 		<textarea class="code" rows="60" cols="80">
@@ -4624,23 +4588,24 @@
 					$savedValue = $('.savedValue', lesson);
 
 				var counter = 0;
-				var clicks = Rx.Observable.fromEvent($('.submitInputName'), 'click');
+				var data = null;
+				var clicks = Observable.fromEvent($('.submitInputName', lesson)[0], 'click');
 
 				var code =  eval("(" + str + ")")
-				var code = code(clicks, function() { return Rx.Observable.timer(1000) }, $inputName.val());
+				var code = code(clicks, function(name) { return Rx.Observable.returnValue(name.val()); }, $inputName);
 
 				code
-					.subscribe(function () {
-						$savedValue.text('Data Saved!!!');
+					.subscribe(function (data) {
+						$savedValue.text('Name Saved: ' + data);
 					});
 			}
 		</pre>
         <pre class="answer">
-			function (clicks, saveData, input) {
+			function (clicks, saveData, name) {
 				return clicks.
 					throttle(1000).
 					flatMap(function () {
-						return saveData(input.value);
+						return saveData(name);
 					})
 			}
         </pre>
@@ -4650,11 +4615,10 @@
 		</div>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h4>Exercise 41: Autocomplete Box</h4>
 
@@ -4673,19 +4637,19 @@
 		<textarea class="code" rows="60" cols="80">
 			function (getSearchResultSet, keyPresses, textBox) {
 
-			var getSearchResultSets =
-			keyPresses.
-			map(function () {
-			return textBox.value;
-			}).
-			// TODO: Ensure that we only trigger a maximum of one search request per second
-			flatMap(function (text) {
+				var getSearchResultSets =
+					keyPresses.
+					map(function () {
+						return textBox.value;
+					}).
+					// TODO: Ensure that we only trigger a maximum of one search request per second
+					flatMap(function (text) {
 
-			// TODO: Ensure this sequence ends as soon as another key press arrives
-			return getSearchResultSet(text);
-			});
+					// TODO: Ensure this sequence ends as soon as another key press arrives
+					return getSearchResultSet(text);
+				});
 
-			return getSearchResultSets;
+				return getSearchResultSets;
 			}
 		</textarea>
 
@@ -4754,11 +4718,10 @@
 		</div>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h4>Exercise 42: Distinct Until Changed Input</h4>
 
@@ -4833,11 +4796,10 @@
 		</div>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h4>Exercise 43: Autocomplete Box Part 2: Electric Boogaloo</h4>
 
@@ -4941,11 +4903,10 @@
 		</div>
 	</div>
 
-	<!--
-		**********************************************************
-		************************* LESSON *************************
-		**********************************************************
-	-->
+
+
+
+	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
 		<h4>Exercise 44: Retrying after errors</h4>
 
@@ -5029,6 +4990,8 @@
 		</div>
 	</div>
 </div>
+
+
 <script type="text/javascript">
 
 	var _gaq = _gaq || [];
