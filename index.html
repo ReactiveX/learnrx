@@ -4938,7 +4938,7 @@
 				var $inputName = $('.inputName', lesson),
 					$filtered = $('.filteredKeysByDistinct', lesson);
 
-				var keyups = Rx.Observable.fromEvent($inputName, 'keyup');
+				var keyups = Rx.Observable.fromEvent($inputName[0], 'keyup');
 
 				var isAlpha = function (x) {
 					return 'abcdefghijklmnopqrstuvwxyz'.indexOf(x.toLowerCase()) !== -1;
