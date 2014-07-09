@@ -4750,7 +4750,7 @@
 				var $inputName = $('.inputName', lesson),
 					$filtered = $('.filteredKeysByDistinct', lesson);
 
-				var keyups = Rx.Observable.fromEvent($inputName, 'keypress');
+				var keyups = Rx.Observable.fromEvent($inputName[0], 'keypress');
 
 				var isAlpha = function (x) {
 					return 'abcdefghijklmnopqrstuvwxyz'.indexOf(x.toLowerCase()) !== -1;
@@ -4845,13 +4845,13 @@
 
 					return Rx.Observable.returnValue(
 						matched.slice(0, 10)
-					).delay(1000);
+					);
 				};
 
 				var $inputName = $('.inputName', lesson),
 					$searchResults = $('.searchResultsForAutoComplete', lesson);
 
-				var clicks = Rx.Observable.fromEvent($inputName, 'keyup');
+				var clicks = Rx.Observable.fromEvent($inputName[0], 'keyup');
 
 				var code =  eval("(" + str + ")")
 				var code = code(searchText, clicks, $inputName[0]);
