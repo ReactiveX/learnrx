@@ -3,19 +3,6 @@
 	<link rel="stylesheet" href="assets/codemirror/codemirror.css">
 	<link rel="stylesheet" href="assets/app/site.css">
 	<title>Functional Programming in Javascript</title>
-	<script src="assets/app/wordlist.js"></script>
-	<script src="assets/codemirror/codemirror.js"></script>
-	<script src="assets/app/javascript.js"></script>
-
-	<script src="assets/rx/rx.compat.js"></script>
-	<script src="assets/rx/rx.binding.js"></script>
-	<script src="assets/rx/rx.async.compat.js"></script>
-	<script src="assets/rx/rx.time.js"></script>
-
-	<script src="assets/jquery/jquery-1.10.2.min.js"></script>
-
-	<script src="assets/app/utils.js"></script>
-	<script src="assets/app/main.js"></script>
 </head>
 <body>
 <div class="content">
@@ -4676,16 +4663,16 @@
 
 					return Rx.Observable.returnValue(
 						matched.slice(0, 10)
-					).delay(1000);
+					);
 				};
 
-				var $inputName = $('.inputName', lesson),
+				var $inputName = $('.inputName', lesson)[0],
 					$searchResults = $('.searchResultsForAutoComplete', lesson);
 
 				var clicks = Rx.Observable.fromEvent($inputName, 'keyup');
 
 				var code =  eval("(" + str + ")")
-				var code = code(searchText, clicks, $inputName[0]);
+				var code = code(searchText, clicks, $inputName);
 
 				code
 					.subscribe(function (results) {
@@ -4991,7 +4978,19 @@
 	</div>
 </div>
 
+<script src="assets/app/wordlist.js"></script>
+<script src="assets/codemirror/codemirror.js"></script>
+<script src="assets/app/javascript.js"></script>
 
+<script src="assets/rx/rx.compat.js"></script>
+<script src="assets/rx/rx.binding.js"></script>
+<script src="assets/rx/rx.async.compat.js"></script>
+<script src="assets/rx/rx.time.js"></script>
+
+<script src="assets/jquery/jquery-1.10.2.min.js"></script>
+
+<script src="assets/app/utils.js"></script>
+<script src="assets/app/main.js"></script>
 <script type="text/javascript">
 
 	var _gaq = _gaq || [];
