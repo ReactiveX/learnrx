@@ -50,6 +50,8 @@ window.onload = function() {
 			code = $(".code", item)[0],
 			showAnswer = $(".showAnswer", item)[0],
 			answer = $(".answer", item)[0],
+			resetSprite = $(".resetSprite", item)[0],
+			sprite = $(".sprite", item)[0],
 			codeMirror = CodeMirror.fromTextArea(code, {
 				lineNumbers: true,
 				matchBrackets: true,
@@ -99,5 +101,14 @@ window.onload = function() {
 				codeMirror.setValue(answer.innerText);
 			};
 		}
+
+		if (resetSprite) {
+			resetSprite.onclick = function() {
+				if (sprite) {
+					sprite.style.top = sprite.style.left = "";
+				}
+			};
+		}
+
 	});
 }
