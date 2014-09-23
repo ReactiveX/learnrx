@@ -5,5 +5,6 @@ $('.get-answer').on('click', function(){
 $('.set-answer').on('click', function(){
   var text = '';
   text = window.prompt("Enter your answer json bellow");
-  localStorage.setItem('newState', text)
+  localStorage.setItem('newState', text);
+  window.location.reload();
 });
