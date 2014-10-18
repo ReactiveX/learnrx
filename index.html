@@ -6,11 +6,7 @@
 </head>
 <body>
 <div class="content">
-	<div class="grab-answers">
-		All your answer will be saved in your local browser. You can grab your answers and load it in another browser using the following buttons:
-		<button class="green-button get-answer">Get Answers</button>
-		<button class="blue-button set-answer">Set Answers</button>
-	</div>
+
 	<h1 class="center">Functional Programming in Javascript</h1>
 
 	<p>Functional programming provides developers with the tools to abstract common collection operations into reusable,
@@ -46,14 +42,19 @@
 	<p>This tutorial may have bugs, so if you get into a weird state or you're sure you've got the right answer but
 		can't move on, just refresh your browser. If you're using a modern browser, and if you're here I assume you are,
 		the state of your exercises will be saved. If you want, you can also
-		<a href="javascript:delete localStorage.newState; document.location.reload();">restart the lab.</a></p>
+		<a href="javascript:localStorage.newState = ''; document.location.reload();">restart the lab.</a></p>
 
 	<p>This tutorial is on
-		<a href="https://github.com/reactive-extensions/learnrx">GitHub</a>, and is asymptotically approaching
+		<a href="http://jhusain.github.com/learnrx">GitHub</a>, and is asymptotically approaching
 		completion. If you'd like to add an exercise, clarify a problem description, or fix a bug feel free to
-		<a href="https://github.com/reactive-extensions/learnrx/fork_select">fork</a> and send us a pull request. We'll
+		<a href="https://github.com/jhusain/learnrx/fork">fork</a> and send us a pull request. We'll
 		try and fit user-contributed exercises into a narrative.
 	</p>
+	<div class="grab-answers">
+		<p>Your answers will be saved in local storage. Use the buttons below if you want to transfer them to another machine:</p>
+		<button class="green-button get-answer">Get Answers as JSON</button>
+		<button class="blue-button set-answer">Set JSON Answers</button>
+	</div>
 
 	<h2>Working with Arrays</h2>
 

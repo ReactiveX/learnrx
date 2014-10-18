@@ -49,7 +49,7 @@ window.onload = function() {
 			output = $(".output", item)[0],
 			code = $(".code", item)[0],
 			showAnswer = $(".showAnswer", item)[0],
-			answer = $(".answer", item)[0],
+			answer = $(".answer", item).text(),
 			resetSprite = $(".resetSprite", item)[0],
 			sprite = $(".sprite", item)[0],
 			codeMirror = CodeMirror.fromTextArea(code, {
@@ -68,13 +68,13 @@ window.onload = function() {
 				  }
 			}),
 			post = $(".post", item)[0],
-			verifierScript = $(".verifier", item)[0],
+			verifierScript = $(".verifier", item).text(),
 			controls = $(".control", item);
 
 		codeMirrors.push(codeMirror);
 		go.onclick = function() {
 			try {
-				var verifier = eval("(" + verifierScript.innerText + ")");
+				var verifier = eval("(" + verifierScript + ")");
 
 				try {
 					codeMirror.save();
@@ -98,7 +98,7 @@ window.onload = function() {
 
 		if (showAnswer) {
 			showAnswer.onclick = function() {
-				codeMirror.setValue(answer.innerText);
+				codeMirror.setValue(answer);
 			};
 		}
 

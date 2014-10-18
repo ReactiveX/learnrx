@@ -307,20 +307,20 @@ window.showAllAnswers = function(upTo) {
 			code = $(".code", item)[0],
 			output = $(".output", item)[0],
 			showAnswer= $(".showAnswer", item)[0],
-			answer= $(".answer", item)[0],
+			answer= $(".answer", item).text(),
 			codeMirror = codeMirrors[cnt],
 			post = $(".post", item)[0],
-			verifierScript = $(".verifier", item)[0],
+			verifierScript = $(".verifier", item).text(),
 			controls = $(".control", item);
 
-		if (!answer || answer.innerText.length === 0){
+		if (answer.length === 0){
 			return;
 		}
 
-		codeMirror.setValue(answer.innerText);
+		codeMirror.setValue(answer);
 
 		try {
-			var verifier = eval("(" + verifierScript.innerText + ")");
+			var verifier = eval("(" + verifierScript + ")");
 
 			try {
 				codeMirror.save();
