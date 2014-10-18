@@ -30,4 +30,6 @@ pre {background-color: #F3F3F3; padding: 10px 10px 0 10px; font-family: 'courier
 .green-button:active, .go:active{position:relative;top:1px;}
 
 .set-answer, .get-answer { width: 200px; height:19px; font-size: 13px; }
+.show-answers { width: 450px; height:25px; font-size: 15px; }
 .grab-answers { font-size: 12px; padding: 10px; background-color: #ccc; text-align: center; }
+
