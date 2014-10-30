@@ -3320,7 +3320,7 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 28: Stock Ticker</h4>
+		<h4>Exercise 27: Stock Ticker</h4>
 
 		<p>Let's try an easier question. Let's say we have a collection of all of the prices for NASDAQ stocks over time.
 			Every time the price of a stock changes on the NASDAQ ticker an entry is added to this collection. Let's say
@@ -3481,7 +3481,7 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 29: Subscribing to an event</h4>
+		<h4>Exercise 28: Subscribing to an event</h4>
 
 		<p>You're probably used to thinking about events as a list of handlers stored in an object. In this example, we
 			subscribe to a button click event and then unsubscribe the first time the button is clicked.</p>
@@ -3522,7 +3522,7 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 30: Traversing an Event</h4>
+		<h4>Exercise 29: Traversing an Event</h4>
 
 		<p>Subscribing to an Event and traversing an Array are fundamentally the same operation. The only difference is that
 			<b>Array traversal is synchronous and completes, and Event traversal is asynchronous and <u>never completes</u>.</b>
@@ -3573,7 +3573,7 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 31: Completing Sequences with take()</h4>
+		<h4>Exercise 30: Completing Sequences with take()</h4>
 
 		<p><b>Have you ever wished that you could listen for the next occurrence of an event and then immediately
 			unsubscribe?</b> For example, developers will often attach an event handler to window.onload, expecting that
@@ -3662,7 +3662,7 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 32: Completing sequences with takeUntil()</h4>
+		<h4>Exercise 31: Completing sequences with takeUntil()</h4>
 
 		<p><b>Have you ever wanted to unsubscribe from one Event when another Event fires?</b> Observable's takeUntil() function
 		is a convenient way of completing a sequence when another Event occurs.</b> Here's how takeUntil() works:
@@ -3871,7 +3871,7 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 33: Creating a mouse drag event</h4>
+		<h4>Exercise 32: Creating a mouse drag event</h4>
 
 		<p>Remember the exercise we solved earlier? The one in which we retrieved all the movies with a rating of 5.0 from
 			an array of movie lists? If we were to describe the solution in pseudocode it might read something like
@@ -3979,7 +3979,7 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 34: Improving our mouse drag event</h4>
+		<h4>Exercise 33: Improving our mouse drag event</h4>
 
 		<p>Our mouse drag event is a little <i>too</i> simple. Notice that when we drag around the sprite, it always
 			positions itself at the top-left corner of the mouse. Ideally we'd like our drag event to offset its
@@ -4099,7 +4099,7 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 35: HTTP requests</h4>
+		<h4>Exercise 34: HTTP requests</h4>
 
 		<p>Events aren't the only source of asynchronous data in an application. There's also HTTP requests. Most of the
 			time HTTP requests are exposed via a <b>callback-based API</b>. To receive data asynchronously from a
@@ -4138,7 +4138,7 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 36: Sequencing HTTP requests with callbacks</h4>
+		<h4>Exercise 35: Sequencing HTTP requests with callbacks</h4>
 
 		<p>Let's say that we're writing the startup flow for a web application. On startup, the application must perform the
 			following operations:</p>
@@ -4311,7 +4311,7 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 37: Traversing callback-based Asynchronous APIs</h4>
+		<h4>Exercise 36: Traversing callback-based Asynchronous APIs</h4>
 
 		<p><b>If a callback API were a sequence, what kind of sequence would it be?</b> We've seen that UI Event sequences
 			can contain anywhere from 0 to infinite items, but will never complete on their own.
@@ -4444,7 +4444,7 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 38: Sequencing HTTP requests with Observable</h4>
+		<h4>Exercise 37: Sequencing HTTP requests with Observable</h4>
 
 		<p>Let's use the getJSON function that returns Observables, and the Observable.fromEvent() to complete the exercise
 			we completed earlier.</p>
@@ -4553,7 +4553,7 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 40: Throttle Input</h4>
+		<h4>Exercise 38: Throttle Input</h4>
 
 		<p>When dealing with user input, there will be times when the user's input is too noisy, and will potentially clog
 			your servers with extraneous requests. We want the ability to throttle the users's input so that if they
@@ -4618,7 +4618,7 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 41: Autocomplete Box</h4>
+		<h4>Exercise 39: Autocomplete Box</h4>
 
 		<p>One of the most common problems in web development is the autocomplete box. This seems like it should be an easy
 			problem, but is actually quite challenging. For example, how do we throttle the input? How do we make sure we're
@@ -4721,7 +4721,7 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 42: Distinct Until Changed Input</h4>
+		<h4>Exercise 40: Distinct Until Changed Input</h4>
 
 		<p>You'll notice in the previous exercise that if you pressed your arrow keys while inside the textbox, the query
 			will still fire, regardless of whether the text actually changed or not. How do we prevent that? The
@@ -4799,7 +4799,7 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 43: Autocomplete Box Part 2: Electric Boogaloo</h4>
+		<h4>Exercise 41: Autocomplete Box Part 2: Electric Boogaloo</h4>
 
 		<p>In the previous version of the autocomplete box, there were two bugs</p>
 		<ul>
@@ -4906,7 +4906,7 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 44: Retrying after errors</h4>
+		<h4>Exercise 42: Retrying after errors</h4>
 
 		<p>You'll notice in the previous exercise that if you pressed your arrow keys while inside the textbox, the query
 			will still fire, regardless of whether the text actually changed or not. How do we prevent that? The

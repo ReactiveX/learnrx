@@ -56,8 +56,8 @@ window.onload = function() {
 				lineNumbers: true,
 				matchBrackets: true,
 				mode: "text/typescript",
-				tabSize: 4,
-				indentWithTabs: true,
+				tabSize: 2,
+				indentWithTabs: false,
 				extraKeys: {
 					"F4": function(cm) {
 					  cm.setOption("fullScreen", !cm.getOption("fullScreen"));
