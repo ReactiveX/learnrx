@@ -20,7 +20,7 @@
 	<ol>
 		<li>map</li>
 		<li>filter</li>
-		<li>mergeAll</li>
+		<li>concatAll</li>
 		<li>reduce</li>
 		<li>zip</li>
 	</ol>
@@ -868,7 +868,7 @@
 	<div class="lesson">
 		<h3>Querying Trees</h3>
 		<p>Sometimes, in addition to flat arrays, we need to query trees. Trees pose a challenge because we need to flatten them
-			into arrays in order to apply filter() and map() operations on them. In this section we'll define a mergeAll()
+			into arrays in order to apply filter() and map() operations on them. In this section we'll define a concatAll()
 			function that we can combine with map() and filter() to query trees.</p>
 
 		<h4>Exercise 9: Flatten the movieLists array into an array of video ids</h4>
@@ -1020,15 +1020,15 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 10: Implement mergeAll()</h4>
+		<h4>Exercise 10: Implement concatAll()</h4>
 
-		<p>Let's add a mergeAll() function to the Array type. The mergeAll() function iterates over each sub-array in the
-			array and collects the results in a new, flat array. Note: <b>the mergeAll() function expects that each item in
-				the array will be another array.</b>
+		<p>Let's add a concatAll() function to the Array type. The concatAll() function iterates over each sub-array in the
+			array and collects the results in a new, flat array. Notice that <b>the concatAll() function expects that each item in
+				the array to be another array.</b>
 		</p>
 
 		<textarea class="code" rows="20" cols="80">
-			Array.prototype.mergeAll = function() {
+			Array.prototype.concatAll = function() {
 				var results = [];
 				this.forEach(function(subArray) {
 					// ------------ INSERT CODE HERE! ----------------------------
@@ -1039,8 +1039,8 @@
 				return results;
 			};
 
-			// JSON.stringify([ [1,2,3], [4,5,6], [7,8,9] ].mergeAll()) === "[1,2,3,4,5,6,7,8,9]"
-			// [1,2,3].mergeAll(); // throws an error because this is a one-dimensional array
+			// JSON.stringify([ [1,2,3], [4,5,6], [7,8,9] ].concatAll()) === "[1,2,3,4,5,6,7,8,9]"
+			// [1,2,3].concatAll(); // throws an error because this is a one-dimensional array
 		</textarea>
 		<button class="go">Run</button>
 		<button class="showAnswer">Show Answer</button>
@@ -1054,7 +1054,7 @@
 					result,
 					expected = "[1,2,3,4,5,6,7,8,9]";
 
-				result = arr.mergeAll();
+				result = arr.concatAll();
 				result = result.sortBy(function(x) { return x; });
 				if (JSON.stringify(result) !== expected) {
 					throw 'Expected that [1,2,3].map(function(x) { return x + 1}) would equal [2,3,4].'
@@ -1062,7 +1062,7 @@
 			}
 		</pre>
 		<pre class="answer">
-			Array.prototype.mergeAll = function() {
+			Array.prototype.concatAll = function() {
 				var results = [];
 				this.forEach(function(subArray) {
 					results.push.apply(results, subArray);
@@ -1071,10 +1071,10 @@
 				return results;
 			};
 
-			// JSON.stringify([ [1,2,3], [4,5,6], [7,8,9] ].mergeAll()) === "[1,2,3,4,5,6,7,8,9]"
-			// [1,2,3].mergeAll(); // throws an error because this is a one-dimensional array
+			// JSON.stringify([ [1,2,3], [4,5,6], [7,8,9] ].concatAll()) === "[1,2,3,4,5,6,7,8,9]"
+			// [1,2,3].concatAll(); // throws an error because this is a one-dimensional array
 		</pre>
-		<p class="post">Merge is a very simple function, so much so that it may not be obvious yet how it can be combined
+		<p class="post">concatAll is a very simple function, so much so that it may not be obvious yet how it can be combined
 			with map() to query a tree. Let's try an example...</p>
 	</div>
 
@@ -1083,9 +1083,9 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 11: Use map() and mergeAll() to project and flatten the movieLists into an array of video ids</h4>
+		<h4>Exercise 11: Use map() and concatAll() to project and flatten the movieLists into an array of video ids</h4>
 
-		<p>Hint: use two nested calls to map() and one call to mergeAll().</p>
+		<p>Hint: use two nested calls to map() and one call to concatAll().</p>
 		<textarea class="code" rows="60" cols="80">
 			function() {
 				var movieLists = [
@@ -1134,7 +1134,7 @@
 					];
 
 				// ------------   INSERT CODE HERE!  -----------------------------------
-				// Use map and mergeAll to flatten the movieLists in a list of video ids.
+				// Use map and concatAll to flatten the movieLists in a list of video ids.
 				// ------------   INSERT CODE HERE!  -----------------------------------
 
 				return movieLists // Complete this expression!
@@ -1205,22 +1205,21 @@
 					];
 
 				// ------------   INSERT CODE HERE!  -----------------------------------
-				// Use map and mergeAll to flatten the movieLists in a list of video ids.
+				// Use map and concatAll to flatten the movieLists in a list of video ids.
 				// ------------   INSERT CODE HERE!  -----------------------------------
 
 				return movieLists.
 				  map(function(movieList) {
-					return movieList.videos.
-					  map(function(video) {
+					return movieList.videos.map(function(video) {
 						return video.id;
 					  });
 				  }).
-				  mergeAll();
+				  concatAll();
 
 			}
 		</pre>
 
-		<p class="post">Wow! <b>Great work.</b> Mastering the combination of map() and mergeAll() is key to effective
+		<p class="post">Wow! <b>Great work.</b> Mastering the combination of map() and concatAll() is key to effective
 			functional programming. You're half way there! Let's try a more complicated example...</p>
 	</div>
 
@@ -1235,7 +1234,7 @@
 			boxart url on each video, we had a collection of boxart objects, each with a different size and url. Create a
 			query that selects {id, title, boxart} for every video in the movieLists. This time though, the boxart property
 			in the result will be the url of the boxart object with dimensions of 150x200px. Let's see if you can solve this
-			problem with map(), mergeAll(), and filter().</p>
+			problem with map(), concatAll(), and filter().</p>
 		<a name="indexers"></a>
 
 		<p><b>There's just more one thing: you <u>can't</u> use indexers.</b> In other words, this is
@@ -1311,7 +1310,7 @@
 					];
 
 
-				// Use one or more map, mergeAll, and filter calls to create an array with the following items
+				// Use one or more map, concatAll, and filter calls to create an array with the following items
 				// [
 				//	 {"id": 675465,"title": "Fracture","boxart":"http://cdn-0.nflximg.com/images/2891/Fracture150.jpg" },
 				//	 {"id": 65432445,"title": "The Chamber","boxart":"http://cdn-0.nflximg.com/images/2891/TheChamber150.jpg" },
@@ -1413,7 +1412,7 @@
 					];
 
 
-				// Use one or more map, mergeAll, and filter calls to create an array with the following items
+				// Use one or more map, concatAll, and filter calls to create an array with the following items
 				// [
 				//     {"id": 675465,"title": "Fracture","boxart":"http://cdn-0.nflximg.com/images/2891/Fracture150.jpg" },
 				//     {"id": 65432445,"title": "The Chamber","boxart":"http://cdn-0.nflximg.com/images/2891/TheChamber150.jpg" },
@@ -1433,14 +1432,14 @@
 							return {id: video.id, title: video.title, boxart: boxart.url};
 						  });
 					  }).
-					  mergeAll();
+					  concatAll();
 				  }).
-				  mergeAll();
+				  concatAll();
 
 			}
 		</pre>
-		<p class="post">Fantastic job! Now you've learned to use mergeAll() alongside map() and filter() to queries trees.
-			Notice that <b>map() and mergeAll() are very commonly chained together.</b> Let's create a small helper function
+		<p class="post">Fantastic job! Now you've learned to use concatAll() alongside map() and filter() to queries trees.
+			Notice that <b>map() and concatAll() are very commonly chained together.</b> Let's create a small helper function
 			to help us with this common pattern.</p>
 	</div>
 
@@ -1449,13 +1448,13 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 13: Implement flatMap()</h4>
+		<h4>Exercise 13: Implement concatMap()</h4>
 
-		<p>Nearly every time we flatten a tree we chain map() and mergeAll(). Sometimes, if we're dealing with a tree
+		<p>Nearly every time we flatten a tree we chain map() and concatAll(). Sometimes, if we're dealing with a tree
 			several levels deep, we'll repeat this combination many times in our code. To save on typing, let's create a
-			flatMap function that's just a map operation, followed by a mergeAll.</p>
+			concatMap function that's just a map operation, followed by a concatAll.</p>
 		<textarea class="code" rows="20" cols="80">
-			Array.prototype.flatMap = function(projectionFunctionThatReturnsArray) {
+			Array.prototype.concatMap = function(projectionFunctionThatReturnsArray) {
 				return this.
 					map(function(item) {
 						// ------------   INSERT CODE HERE!  ----------------------------
@@ -1464,15 +1463,15 @@
 						// two-dimensional array.
 						// ------------   INSERT CODE HERE!  ----------------------------
 					}).
-					// apply the mergeAll function to flatten the two-dimensional array
-					mergeAll();
+					// apply the concatAll function to flatten the two-dimensional array
+					concatAll();
 			};
 
 			/*
 				var spanishFrenchEnglishWords = [ ["cero","rien","zero"], ["uno","un","one"], ["dos","deux","two"] ];
 				// collect all the words for each number, in every language, in a single, flat list
 				var allWords = [0,1,2].
-					flatMap(function(index) {
+					concatMap(function(index) {
 						return spanishFrenchEnglishWords[index];
 					});
 
@@ -1483,7 +1482,7 @@
 		<button class="showAnswer">Show Answer</button>
 		<div class="output"></div>
 		<pre class="verifier">
-			// Implement mergeAll
+			// Implement concatAll
 			function(str) {
 				var fun = eval(str),
 					spanishFrenchEnglishWords = [ ["cero","rien","zero"], ["uno","un","one"], ["dos","deux","two"] ],
@@ -1493,7 +1492,7 @@
 
 
 				var allWords = [0,1,2].
-					flatMap(function(index) {
+					concatMap(function(index) {
 						return spanishFrenchEnglishWords[index];
 					});
 
@@ -1503,20 +1502,20 @@
 			}
 		</pre>
 		<pre class="answer">
-			Array.prototype.flatMap = function(projectionFunctionThatReturnsArray) {
+			Array.prototype.concatMap = function(projectionFunctionThatReturnsArray) {
 				return this.
 					map(function(item) {
 						return projectionFunctionThatReturnsArray(item);
 					}).
-					// apply the mergeAll function to flatten the two-dimensional array
-					mergeAll();
+					// apply the concatAll function to flatten the two-dimensional array
+					concatAll();
 			};
 
 			/*
 				var spanishFrenchEnglishWords = [ ["cero","rien","zero"], ["uno","un","one"], ["dos","deux","two"] ];
 				// collect all the words for each number, in every language, in a single, flat list
 				var allWords = [0,1,2].
-					flatMap(function(index) {
+					concatMap(function(index) {
 						return spanishFrenchEnglishWords[index];
 					});
 
@@ -1525,7 +1524,7 @@
 		</pre>
 
 
-		<p class="post">Now, instead of using map().mergeAll() to flatten a tree, we can just use flatMap helper
+		<p class="post">Now, instead of using map().concatAll() to flatten a tree, we can just use concatMap helper
 			function.</p>
 	</div>
 
@@ -1534,10 +1533,10 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 14: Use flatMap() to retrieve id, title, and 150x200 box art url for every video</h4>
+		<h4>Exercise 14: Use concatMap() to retrieve id, title, and 150x200 box art url for every video</h4>
 
 		<p>Let's repeat the exercise we just performed. However this time we'll simplify the code by replacing the
-			map().mergeAll() calls with flatMap().</p>
+			map().concatAll() calls with concatMap().</p>
 		<textarea class="code" rows="60" cols="80">
 			function() {
 				var movieLists = [
@@ -1600,7 +1599,7 @@
 					];
 
 
-				// Use one or more flatMap, map, and filter calls to create an array with the following items
+				// Use one or more concatMap, map, and filter calls to create an array with the following items
 				// [
 				//	 {"id": 675465,"title": "Fracture","boxart":"http://cdn-0.nflximg.com/images/2891/Fracture150.jpg" },
 				//	 {"id": 65432445,"title": "The Chamber","boxart":"http://cdn-0.nflximg.com/images/2891/TheChamber150.jpg" },
@@ -1697,7 +1696,7 @@
 					];
 
 
-				// Use one or more flatMap, map, and filter calls to create an array with the following items
+				// Use one or more concatMap, map, and filter calls to create an array with the following items
 				// [
 				//     {"id": 675465,"title": "Fracture","boxart":"http://cdn-0.nflximg.com/images/2891/Fracture150.jpg" },
 				//     {"id": 65432445,"title": "The Chamber","boxart":"http://cdn-0.nflximg.com/images/2891/TheChamber150.jpg" },
@@ -1705,22 +1704,20 @@
 				//     {"id": 70111470,"title": "Die Hard","boxart":"http://cdn-0.nflximg.com/images/2891/DieHard150.jpg" }
 				// ];
 
-				return movieLists.
-				  flatMap(function(movieList) {
-					return movieList.videos.
-					  flatMap(function(video) {
+				return movieLists.concatMap(function(movieList) {
+					return movieList.videos.concatMap(function(video) {
 						return video.boxarts.
-						  filter(function(boxart) {
-							return boxart.width === 150;
-						  }).
-						  map(function(boxart) {
-							return {id: video.id, title: video.title, boxart: boxart.url};
-						  });
+							filter(function(boxart) {
+								return boxart.width === 150;
+						  	}).
+						  	map(function(boxart) {
+								return {id: video.id, title: video.title, boxart: boxart.url};
+							});
 					  });
 				  });
 			}
 		</pre>
-		<p class="post">It's a very common pattern to see several nested flatMap operations, with the last operation being a
+		<p class="post">It's a very common pattern to see several nested concatMap operations, with the last operation being a
 			map. You can think of this pattern as the functional version of a nested forEach.</p>
 	</div>
 
@@ -2278,7 +2275,7 @@
 				];
 
 
-				// Use one or more flatMap, map, and reduce calls to create an array with the following items (order doesn't matter)
+				// Use one or more concatMap, map, and reduce calls to create an array with the following items (order doesn't matter)
 				// [
 				//	 {"id": 675465,"title": "Fracture","boxart":"http://cdn-0.nflximg.com/images/2891/Fracture120.jpg" },
 				//	 {"id": 65432445,"title": "The Chamber","boxart":"http://cdn-0.nflximg.com/images/2891/TheChamber130.jpg" },
@@ -2287,7 +2284,7 @@
 				// ];
 
 				return movieLists.
-					flatMap(function(movieList) {
+					concatMap(function(movieList) {
 
 					})
 
@@ -2382,7 +2379,7 @@
 				];
 
 
-				// Use one or more flatMap, map, and reduce calls to create an array with the following items (order doesn't matter)
+				// Use one or more concatMap, map, and reduce calls to create an array with the following items (order doesn't matter)
 				// [
 				//     {"id": 675465,"title": "Fracture","boxart":"http://cdn-0.nflximg.com/images/2891/Fracture120.jpg" },
 				//     {"id": 65432445,"title": "The Chamber","boxart":"http://cdn-0.nflximg.com/images/2891/TheChamber130.jpg" },
@@ -2390,24 +2387,22 @@
 				//     {"id": 70111470,"title": "Die Hard","boxart":"http://cdn-0.nflximg.com/images/2891/DieHard150.jpg" }
 				// ];
 
-				return movieLists.
-					flatMap(function(movieList) {
-						return movieList.videos.
-						  flatMap(function(video) {
-							return video.boxarts.
-							  reduce(function(acc,curr) {
-								if (acc.width * acc.height < curr.width * curr.height) {
-								  return acc;
-								}
-								else {
-								  return curr;
-								}
-							  }).
-							  map(function(boxart) {
-								return {id: video.id, title: video.title, boxart: boxart.url};
-							  });
-						  });
-					});
+				return movieLists.concatMap(function(movieList) {
+				  return movieList.videos.concatMap(function(video) {
+				    return video.boxarts.
+					  reduce(function(acc,curr) {
+						if (acc.width * acc.height < curr.width * curr.height) {
+						  return acc;
+						}
+						else {
+						  return curr;
+						}
+					  }).
+					  map(function(boxart) {
+						return {id: video.id, title: video.title, boxart: boxart.url};
+					  });
+				  });
+				});
 
 			}
 		</pre>
@@ -2809,7 +2804,7 @@
 
 				//------------ COMPLETE THIS EXPRESSION --------------
 				return movieLists.
-					flatMap(function(movieList) {
+					concatMap(function(movieList) {
 
 					});
 
@@ -2910,29 +2905,25 @@
 					];
 
 				//------------ COMPLETE THIS EXPRESSION --------------
-				return movieLists.
-					flatMap(function(movieList) {
-						return movieList.videos.
-						  flatMap(function(video) {
-							return Array.zip(
-							  video.boxarts.
-								  reduce(function(acc,curr) {
-									if (acc.width * acc.height < curr.width * curr.height) {
-									  return acc;
-									}
-									else {
-									  return curr;
-									}
-								  }),
-							  video.interestingMoments.
-								filter(function(interestingMoment) {
-									return interestingMoment.type === "Middle";
-								}),
-							  function(boxart, interestingMoment) {
+				return movieLists.concatMap(function(movieList) {
+					return movieList.videos.concatMap(function(video) {
+						return Array.zip(
+							video.boxarts.reduce(function(acc,curr) {
+								if (acc.width * acc.height < curr.width * curr.height) {
+							  	  	return acc;
+								}
+								else {
+							  		return curr;
+								}
+						  	}),
+							video.interestingMoments.filter(function(interestingMoment) {
+								return interestingMoment.type === "Middle";
+							}),
+						  	function(boxart, interestingMoment) {
 								return {id: video.id, title: video.title, time: interestingMoment.time, url: boxart.url};
-							  })
-						  });
+						  	});
 					});
+				});
 			}
 		</pre>
 	</div>
@@ -3287,7 +3278,7 @@
 								filter(function(video) {
 									return video.listId === list.id;
 								}).
-								flatMap(function(video) {
+								concatMap(function(video) {
 									return Array.zip(
 										bookmarks.filter(function(bookmark) {
 											return bookmark.videoId === video.id;
@@ -3800,26 +3791,28 @@
 				seq([1,,,2,,,3]).filter(function(x) { return x > 1; })          === seq([2,,,3])
 				seq([1,,,2,,,3,,,]).filter(function(x) { return x > 1; })       === seq([2,,,3,,,])
 
-				// <b>mergeAll()</b>
+				// <b>concatAll()</b>
 
-				[ [1, 2, 3], [4, 5, 6] ].mergeAll()                             === [1,2,3,4,5,6]
-				seq([ seq([1,,,2,,,3]),,,seq([4,,,5,,,6]) ]).mergeAll()         === seq([1,,,2,,,3,,,4,,,5,,,6])
+				[ [1, 2, 3], [4, 5, 6] ].concatAll()                             === [1,2,3,4,5,6]
+				seq([ seq([1,,,2,,,3]),,,seq([4,,,5,,,6]) ]).concatAll()         === seq([1,,,2,,,3,,,4,,,5,,,6])
 
-				// Depending on when the elements in each
-				// sequence arrive, the order of the merged
-				// sequence could be different.
+				// If a new sequence arrives before all the items
+				// from the previous sequence have arrived, no attempt
+				// to retrieve the new sequence's elements is made until
+				// the previous sequence has completed. As a result the
+				// order of elements in the sequence is preserved.
 				seq([
-					seq([1,, ,,, ,,,2,,,3])
-					,,,seq([4,,,5,,,,,,,,6]) ]).
-					mergeAll()                                                  === seq([1,,,4,,,5,,,2,,,3,,,6])
+					seq([1,,,, ,2, ,3])
+					,,,seq([,,4, ,5, ,,6]) ]).
+					concatAll()                                                  === seq([1,,,,,2,,3,,4,,5,,,6])
 
 				// Notice that as long as at least one sequence being
-				// merged is incomplete, the merged sequence is also
+				// concatenated is incomplete, the concatenated sequence is also
 				// incomplete.
 				seq([
 					seq([1,, ,,, ,,,2,,,3])
 					,,,seq([4,,,5,,, ,,, ,,6,,,]) ]).
-					mergeAll()                                                  === seq([1,,,4,,,5,,,2,,,3,,,6,,,])
+					concatAll()                                                  === seq([1,,,4,,,5,,,2,,,3,,,6,,,])
 
 				// <b>reduce()</b>
 
@@ -3882,7 +3875,7 @@
 		<pre>
 			var moviesWithHighRatings =
 				movieLists.
-					flatMap(function(movieList) {
+					concatMap(function(movieList) {
 						return movieList.videos.
 							filter(function(video) {
 								return video.rating === 5.0;
@@ -3955,7 +3948,7 @@
 					spriteMouseDrags =
 						// For every mouse down event on the sprite...
 						spriteMouseDowns.
-							flatMap(function(contactPoint) {
+							concatMap(function(contactPoint) {
 								// ...retrieve all the mouse move events on the sprite container...
 								return spriteContainerMouseMoves.
 									// ...until a mouse up event occurs.
@@ -4014,7 +4007,7 @@
 					spriteMouseDrags =
 						// For every mouse down event on the sprite...
 						spriteMouseDowns.
-							flatMap(function(contactPoint) {
+							concatMap(function(contactPoint) {
 								// ...retrieve all the mouse move events on the sprite container...
 								return spriteContainerMouseMoves.
 									// ...until a mouse up event occurs.
@@ -4072,7 +4065,7 @@
 					spriteMouseDrags =
 						// For every mouse down event on the sprite...
 						spriteMouseDowns.
-							flatMap(function(contactPoint) {
+							concatMap(function(contactPoint) {
 								// ...retrieve all the mouse move events on the sprite container...
 								return spriteContainerMouseMoves.
 									// ...until a mouse up event occurs.
@@ -4453,10 +4446,10 @@
 				var movieListsSequence =
 					Observable.zip(
 						getJSON("http://api-global.netflix.com/abTestInformation").
-							flatMap(function(abTestInformation) {
+							concatMap(function(abTestInformation) {
 								return Observable.zip(
 									getJSON("http://api-global.netflix.com/" + abTestInformation.urlPrefix + "/config").
-										flatMap(function(config) {
+										concatMap(function(config) {
 											if (config.showInstantQueue) {
 												return getJSON("http://api-global.netflix.com/" + abTestInformation.urlPrefix + "/queue").
 													map(function(queueMessage) {
@@ -4567,7 +4560,7 @@
 			function (clicks, saveData, name) {
 				return clicks.
 					// TODO: Throttle the clicks so that it only happens every one second
-					flatMap(function () {
+					concatMap(function () {
 						return saveData(name);
 					});
 			}
@@ -4602,7 +4595,7 @@
 			function (clicks, saveData, name) {
 				return clicks.
 					throttle(1000).
-					flatMap(function () {
+					concatMap(function () {
 						return saveData(name);
 					})
 			}
@@ -4641,7 +4634,7 @@
 						return textBox.value;
 					}).
 					// TODO: Ensure that we only trigger a maximum of one search request per second
-					flatMap(function (text) {
+					concatMap(function (text) {
 
 					// TODO: Ensure this sequence ends as soon as another key press arrives
 					return getSearchResultSet(text);
@@ -4703,7 +4696,7 @@
 							return textBox.value;
 						}).
 						throttle(1000).
-						flatMap(function (text) {
+						concatMap(function (text) {
 							return getSearchResultSet(text).takeUntil(keyPresses);
 						});
 
@@ -4827,7 +4820,7 @@
 
 						// TODO: Make sure the text is not empty
 
-						flatMap(function (text) {
+						concatMap(function (text) {
 							return getSearchResultSet(text).takeUntil(keyPresses);
 						});
 
@@ -4887,7 +4880,7 @@
 						throttle(1000).
 						distinctUntilChanged().
 						filter(function (s) { return s.length > 0; }).
-						flatMap(function (text) {
+						concatMap(function (text) {
 							return getSearchResultSet(text).takeUntil(keyPresses);
 						});
 
@@ -4993,10 +4986,7 @@
 <script src="assets/codemirror/codemirror.js"></script>
 <script src="assets/app/javascript.js"></script>
 
-<script src="assets/rx/rx.compat.js"></script>
-<script src="assets/rx/rx.binding.js"></script>
-<script src="assets/rx/rx.async.compat.js"></script>
-<script src="assets/rx/rx.time.js"></script>
+<script src="assets/rx/rx.all.js"></script>
 
 <script src="assets/jquery/jquery-1.10.2.min.js"></script>
 <script src="assets/app/grab_answers.js"></script>
