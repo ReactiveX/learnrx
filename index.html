@@ -1729,13 +1729,13 @@
 		<h3>Reducing Arrays</h3>
 		<p>Sometimes we need to perform an operation on more than one item in the array <i>at the same time</i>. For example,
 			let's say we need to find the largest integer in an array. We can't use a filter() operation, because it only
-			examines one item at a time. To find the largest integer we need to the compare items in the array to each other.
+			examines one item at a time. To find the largest integer we need to compare items in the array to each other.
 		</p>
 		<p>One approach could be to select an item in the array as the <i>assumed</i> largest number (perhaps the first item),
 			and then compare that value to every other item in the array. Each time we come across a number that was larger than
 			our assumed largest number, we'd replace it with the larger value, and continue the process until the entire array
 			was traversed.</p>
-		<p>If we replaced the specific size comparison with a closure, we could write a function this handled the array
+		<p>If we replaced the specific size comparison with a closure, we could write a function that handled the array
 			traversal process for us. At each step our function would apply the closure to the last value and the current value
 			and use the result as the last value the next time. Finally we'd be left with only one value. This process is known
 			as <i>reducing</i> because we reduce many values to a single value.</p>
