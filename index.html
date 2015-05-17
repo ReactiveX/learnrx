@@ -4553,7 +4553,7 @@
 			interacting for one second, then we will get the user input. Let's say for example, the user clicks a button
 			once too many times upon saving and we only want to fire after they've stopped for a second.</p>
 		<pre>
-			seq([1,,,2,,,3,,,4,,,5,,,6,,,]).throttle(1000 /* ms */) === seq([,,,,,,,,3,,,,,,,,,,,6,,,]);
+			seq([1,2,3,,,,,,,4,5,6,,,]).throttle(1000 /* ms */) === seq([,,,,,,,3,,,,,,,,,,6,,,]);
 		</pre>
 
 		<textarea class="code" rows="60" cols="80">
