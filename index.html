@@ -792,7 +792,7 @@
 			function(str) {
 				var fun = eval("(" + str + ")"),
 					videoids = fun(),
-					expected = '[675465,654356453]';
+					expected = '[654356453, 675465]';
 
 				// Sorting by video id
 				videoids = videoids.sortBy(function(v) { return v; });
