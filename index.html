@@ -2602,7 +2602,7 @@
 	<div class="lesson">
 		<h4>Exercise 23: Combine videos and bookmarks by index</h4>
 
-		<p>Let's repeat exercise 19, but this time lets use your new zip() function. For each video and bookmark pair,
+		<p>Let's repeat exercise 21, but this time lets use your new zip() function. For each video and bookmark pair,
 			create a {videoId, bookmarkId} pair.</p>
 		<textarea class="code" rows="60" cols="80">
 			function() {
@@ -3525,7 +3525,7 @@
 				// In the case of an Observable, forEach returns a subscription object.
 				var subscription =
 					buttonClicks.
-						forEach(function(priceRecord) {
+						forEach(function(clickEvent) {
 							alert("Button was clicked. Stopping Traversal.");
 
 							// Stop traversing the button clicks
@@ -3610,7 +3610,7 @@
 				// and unsubscribe.
 				buttonClicks.
 					// Insert take() call here
-					forEach(function(priceRecord) {
+					forEach(function(clickEvent) {
 						alert("Button was clicked once. Stopping Traversal.");
 					});
 			}
@@ -4015,7 +4015,7 @@
 									// ------------   INSERT CODE HERE  -----------------
 									// Project each mouse move object into a new object
 									// with adjusted pageX and pageY properties.
-									// Translate each page coodrinate based on the value
+									// Translate each page coordinate based on the value
 									// of the offsetX and offsetY properties in the
 									// contactPoint.
 									// -------------------------------------------------
