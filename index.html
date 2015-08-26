@@ -3,6 +3,43 @@
 	<link rel="stylesheet" href="assets/codemirror/codemirror.css">
 	<link rel="stylesheet" href="assets/app/site.css">
 	<title>Functional Programming in Javascript</title>
+	<script type="text/javascript">
+		// Adds the implementation for Array.prototype.concatAll()
+		function defineConcatAll() {
+			Array.prototype.concatAll = function () {
+				var results = [];
+
+				this.forEach(function(subArray) {
+					results.push.apply(results, subArray);
+				});
+
+				return results;
+			};
+		}
+
+		/**
+		 * Add the implementation for Array.prototype.concatMap()
+		 */
+		function defineConcatMap() {
+			Array.prototype.concatMap = function(fnc) {
+				return this.
+					map(function (e) {
+						return fnc(e);
+					}).
+					// apply the concatAll function to flatten the two-dimensional array
+					concatAll();
+			};
+		}
+
+		/**
+		 * This function will be executed at the begining of each verifier function
+		 */
+		function preVerifierHook() {
+			// Add helpers to prevent 'undefined is not a function' like errors
+			defineConcatAll();
+			defineConcatMap();
+		}
+	</script>
 </head>
 <body>
 <div class="content">
@@ -102,6 +139,7 @@
 		<pre class="verifier">
 			// Traverse array with for loop
 			function(str) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")");
 				var items = [];
 				var got;
@@ -161,6 +199,7 @@
 		<pre class="verifier">
 			// Traverse array with foreach
 			function(str) {
+				preVerifierHook();
 				if (str.indexOf(".forEach") === -1) {
 					return "You have to use forEach!"
 				}
@@ -267,6 +306,7 @@
 		<pre class="verifier">
 			// Projection with with forEach
 			function(str) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					videoAndTitlePairs = fun(),
 					expected = '[{\"id\":675465,\"title\":\"Fracture\"},{\"id\":65432445,\"title\":\"The Chamber\"},{\"id\":70111470,\"title\":\"Die Hard\"},{\"id\":654356453,\"title\":\"Bad Boys\"}]';
@@ -374,6 +414,7 @@
 		<pre class="verifier">
 			// Implement map()
 			function(str) {
+				preVerifierHook();
 				var fun = eval(str),
 					arr = [1,2,3],
 					result;
@@ -466,6 +507,7 @@
 		<pre class="verifier">
 			// Projection with map
 			function(str) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					videoAndTitlePairs = fun(),
 					expected = '[{\"id\":675465,\"title\":\"Fracture\"},{\"id\":65432445,\"title\":\"The Chamber\"},{\"id\":70111470,\"title\":\"Die Hard\"},{\"id\":654356453,\"title\":\"Bad Boys\"}]';
@@ -594,6 +636,7 @@
 		<pre class="verifier">
 			// Filter with forEach
 			function(str) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					videos = fun(),
 					expected = '[{"id":675465,"title":"Fracture","boxart":"http://cdn-0.nflximg.com/images/2891/Fracture.jpg","uri":"http://api.netflix.com/catalog/titles/movies/70111470","rating":5,"bookmark":[{"id":432534,"time":65876586}]},{"id":654356453,"title":"Bad Boys","boxart":"http://cdn-0.nflximg.com/images/2891/BadBoys.jpg","uri":"http://api.netflix.com/catalog/titles/movies/70111470","rating":5,"bookmark":[{"id":432534,"time":65876586}]}]';
@@ -702,6 +745,7 @@
 		<pre class="verifier">
 			// Implement filter()
 			function(str) {
+				preVerifierHook();
 				var fun = eval(str),
 					arr = [1,2,3],
 					result;
@@ -793,6 +837,7 @@
 		<pre class="verifier">
 			// Filter with filter()
 			function(str) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					videoids = fun(),
 					expected = '[675465,654356453]';
@@ -1052,6 +1097,7 @@
 		<pre class="verifier">
 			// Flatten movieLists into an array of video ids
 			function(str) {
+				preVerifierHook();
 				var fun = eval(str),
 					arr = [[1,2,3],[4,5,6],[7,8,9]],
 					result,
@@ -1150,6 +1196,7 @@
 
 		<pre class="verifier">
 			function(str) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					videos = fun(),
 					expected = '[675465,65432445,70111470,654356453]';
@@ -1332,6 +1379,7 @@
 
 		<pre class="verifier">
 			function(str) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					videos = fun(),
 					got,
@@ -1487,6 +1535,7 @@
 		<pre class="verifier">
 			// Implement concatAll
 			function(str) {
+				preVerifierHook();
 				var fun = eval(str),
 					spanishFrenchEnglishWords = [ ["cero","rien","zero"], ["uno","un","one"], ["dos","deux","two"] ],
 					allWords = [0,1,2],
@@ -1620,6 +1669,7 @@
 
 		<pre class="verifier">
 			function(str) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					videos = fun(),
 					got,
@@ -1778,6 +1828,7 @@
 		<pre class="verifier">
 			// Find largest box art
 			function(str){
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					boxart = fun(),
 					got = JSON.stringify(boxart),
@@ -1869,6 +1920,7 @@
 		<pre class="verifier">
 			// Implement reduce
 			function(str) {
+				preVerifierHook();
 				var fun = eval(str),
 					numbers = [1,2,3],
 					sum = numbers.reduce(function(acc,curr) { return acc + curr }),
@@ -1947,6 +1999,7 @@
 		<pre class="verifier">
 			 // Find largest rating
 			function(str){
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					boxarts = fun(),
 					got = JSON.stringify(boxarts),
@@ -2009,6 +2062,7 @@
 		<pre class="verifier">
 			// Find largest box art with reduce
 			function(str){
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					boxarts = fun(),
 					got = JSON.stringify(boxarts),
@@ -2125,6 +2179,7 @@
 		<pre class="verifier">
 			// Reducing with an initial value
 			function(str){
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					videoMap = fun()[0],
 					expected = [
@@ -2300,6 +2355,7 @@
 		<pre class="verifier">
 			// Find the id, title, and smallest box art.
 			function(str) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					videos = fun(),
 					got,
@@ -2477,6 +2533,7 @@
 		<pre class="verifier">
 			// Zip imperatively
 			function(str) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					pairs = fun(),
 					got,
@@ -2571,6 +2628,7 @@
 		<pre class="verifier">
 			// Implement zip
 			function(str) {
+				preVerifierHook();
 				var fun = eval(str),
 					left = [1,2,3],
 					right = [4,5,6],
@@ -2655,6 +2713,7 @@
 		<pre class="verifier">
 			// Combine videos and bookmarks
 			function(str) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					pairs = fun(),
 					got,
@@ -2818,6 +2877,7 @@
 		<pre class="verifier">
 			// Find id, title, smallest box art, and bookmark id
 			function(str) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					videos = fun(),
 					got,
@@ -3029,6 +3089,7 @@
         <pre class="verifier">
 			// Combine videos and bookmarks
 			function(str) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					pairs = fun(),
 					got,
@@ -3210,6 +3271,7 @@
 		<pre class="verifier">
 			// Combine videos and bookmarks
 			function(str) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					pairs = fun(),
 					got,
@@ -3361,6 +3423,7 @@
         <pre class="verifier">
 			// Combine videos and bookmarks
 			function(str, lesson) {
+				preVerifierHook();
 				var output = $(".output", lesson)[0],
 					fun = eval("(" + str + ")"),
 					stockSymbols = ["MSFT", "GOOG","NFLX","OSTK"],
@@ -3500,6 +3563,7 @@
 		<pre class="verifier">
 			// Combine videos and bookmarks 2
 			function(str, lesson) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					button = $('.button', lesson)[0];
 
@@ -3543,6 +3607,7 @@
 		<pre class="verifier">
 			// Combine videos and bookmarks 2
 			function(str, lesson) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					button = $('.button', lesson)[0];
 
@@ -3626,6 +3691,7 @@
 		<pre class="verifier">
 			// Combine videos and bookmarks 2
 			function(str, lesson) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					button = $('.button', lesson)[0];
 
@@ -3698,6 +3764,7 @@
 		<pre class="verifier">
 			// Combine videos and bookmarks 2
 			function(str, lesson) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					output = $(".output", lesson)[0],
 					stopButton = $('.stop', lesson)[0],
@@ -3931,6 +3998,7 @@
 		<pre class="verifier">
 			// Combine videos and bookmarks 2
 			function(str, lesson) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					output = $(".output", lesson)[0],
 					container = $(".container", lesson)[0],
@@ -4044,6 +4112,7 @@
 
 		<pre class="verifier">
 			function(str, lesson) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					output = $(".output", lesson)[0],
 					container = $(".container", lesson)[0],
@@ -4121,6 +4190,7 @@
 		<pre class="verifier">
 			// Combine videos and bookmarks 2
 			function(str, lesson) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")");
 				fun(jQueryMock);
 			}
@@ -4261,6 +4331,7 @@
 		<pre class="verifier">
 			// Combine videos and bookmarks 2
 			function(str, lesson) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					NOOP = function() {};
 
@@ -4399,6 +4470,7 @@
 		<pre class="verifier">
 			// Combine videos and bookmarks 2
 			function(str, lesson) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					NOOP = function() {};
 
@@ -4492,6 +4564,7 @@
 		<pre class="verifier">
 			// Combine videos and bookmarks 2
 			function(str, lesson) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					getJSON = function(url) {
 						return Observable.create(function(observer) {
@@ -4578,6 +4651,7 @@
 
         <pre class="verifier">
 			function(str, lesson) {
+				preVerifierHook();
 				var $inputName = $('.inputName', lesson),
 					$savedValue = $('.savedValue', lesson);
 
@@ -4658,7 +4732,7 @@
 
         <pre class="verifier">
 			function(str, lesson) {
-
+				preVerifierHook();
 				var wordlist = window.wordlist;
 				wordlist.sort();
 
@@ -4754,6 +4828,7 @@
 
         <pre class="verifier">
 			function(str, lesson) {
+				preVerifierHook();
 				var $inputName = $('.inputName', lesson),
 					$filtered = $('.filteredKeysByDistinct', lesson);
 
@@ -4840,7 +4915,7 @@
 
         <pre class="verifier">
 			function(str, lesson) {
-
+				preVerifierHook();
 				var wordlist = window.wordlist;
 				wordlist.sort();
 
@@ -4942,6 +5017,7 @@
 
         <pre class="verifier">
 			function(str, lesson) {
+				preVerifierHook();
 				var $inputName = $('.inputName', lesson),
 					$filtered = $('.filteredKeysByDistinct', lesson);
 
