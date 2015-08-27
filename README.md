@@ -12,4 +12,4 @@ This is a series of interactive exercises for learning Microsoft's Reactive Exte
 
 Here's my promise to you: if you learn these 5 functions your code will become shorter, more self-descriptive, and more durable. Also, for reasons that might not be obvious right now, you'll learn that these five functions hold the key to simplifying asynchronous programming. Once you've finished this tutorial you'll also have all the tools you need to easily avoid race conditions, propagate and handle asynchronous errors, and sequence events and AJAX requests. In short, *these 5 functions will probably be the most powerful, flexible, and useful functions you'll ever learn.*
 
-##[Try it Online](http://jhusain.github.io/learnrx/).
+##[Try it Online](http://reactivex.io/learnrx/).
