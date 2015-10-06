@@ -12,6 +12,7 @@ function setJSONValue(text) {
         }
     }
 }
+//check for bootstrap modal
 if (typeof $.fn.modal !== 'undefined') {
     var isSaveBtn = false,
         $getJsonModal = $("#modalGetJSON"),
