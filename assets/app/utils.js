@@ -391,4 +391,16 @@ window.showAllAnswers = function(upTo) {
 		return this;
 	}
 })(jQuery);
+(function (window) {
+    window.Utils = {
+        isEquals: function (expected, got, isString) {
+            if (isString) {
+                return Rx.internals.isEqual(JSON.parse(expected), JSON.parse(got));
+            }
+            else {
+                return Rx.internals.isEqual(expected, got);
+            }
+        }
+    }
+})(window)
 

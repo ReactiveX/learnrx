@@ -153,7 +153,7 @@
 				});
 
 				got = JSON.stringify(items.sort());
-				if(got === expected) {
+				if(Utils.isEquals(expected, got, true)) {
 					return "Success!"
 				}
 				else {
@@ -314,7 +314,7 @@
 
 				// Sorting by video id
 				videoAndTitlePairs = videoAndTitlePairs.sortBy(function(video) { return video.id });
-				if (JSON.stringify(videoAndTitlePairs) === expected) {
+				if (Utils.isEquals(expected, JSON.stringify(videoAndTitlePairs), true)) {
 					return true;
 				}
 				else {
@@ -515,7 +515,7 @@
 
 				// Sorting by video id
 				videoAndTitlePairs = videoAndTitlePairs.sortBy(function(video) { return video.id });
-				if (JSON.stringify(videoAndTitlePairs) === expected) {
+				if (Utils.isEquals(expected, JSON.stringify(videoAndTitlePairs), true)) {
 					return true;
 				}
 				else {
@@ -644,7 +644,7 @@
 
 				// Sorting by video id
 				videos = videos.sortBy(function(v) { return v.id; });
-				if (JSON.stringify(videos) === expected) {
+				if (Utils.isEquals(expected, JSON.stringify(videos), true)) {
 					return true;
 				}
 				else {
@@ -845,7 +845,7 @@
 
 				// Sorting by video id
 				videoids = videoids.sortBy(function(v) { return v; });
-				if (JSON.stringify(videoids) === expected) {
+				if (Utils.isEquals(expected, JSON.stringify(videoids), true)) {
 					return true;
 				}
 				else {
@@ -1549,7 +1549,7 @@
 						return spanishFrenchEnglishWords[index];
 					});
 
-				if (JSON.stringify(allWords) !== expected) {
+				if (!Utils.isEquals(expected, JSON.stringify(allWords), true)) {
 					throw "Expected " + expected;
 				}
 			}
@@ -1683,7 +1683,7 @@
 
 				videos = videos.sortBy(function(v) { return v.id });
 				got = JSON.stringify(videos);
-				if (got !== expected) {
+				if (!Utils.isEquals(expected, got, true)) {
 					showLessonErrorMessage(expected, got);
 				}
 			}
@@ -1835,7 +1835,7 @@
 					got = JSON.stringify(boxart),
 					expected = JSON.stringify({ width: 425, height:150, url:"http://cdn-0.nflximg.com/images/2891/Fracture425.jpg" });
 
-				if (got !== expected) {
+				if (!Utils.isEquals(expected, got, true)) {
 					showLessonErrorMessage(expected, got);
 				}
 			}
@@ -1929,10 +1929,10 @@
 					sum2 = numbers.reduce(function(acc,curr) { return acc + curr },10),
 					expected2 = JSON.stringify([16]);
 
-				if (JSON.stringify(sum) !== expected) {
+				if (!Utils.isEquals(expected, JSON.stringify(sum), true)) {
 					throw "Expected that [1,2,3].reduce(function(accumulated,current) { return accumulated + current; }) === [6]. Instead got " + JSON.stringify(sum);
 				}
-				if (JSON.stringify(sum2) !== expected2) {
+				if (!Utils.isEquals(expected2, JSON.stringify(sum2), true)) {
 					throw "Expected that [1,2,3].reduce(function(accumulated,current) { return accumulated + current; }, 10) === [16]. Instead got " + JSON.stringify(sum2);
 				}
 			}
@@ -2007,7 +2007,7 @@
 					expected = JSON.stringify([5]);
 
 
-				if (got !== expected) {
+				if (!Utils.isEquals(expected, got, true)) {
 					showLessonErrorMessage(expected, got);
 				}
 			}
@@ -2070,7 +2070,7 @@
 					expected = JSON.stringify(["http://cdn-0.nflximg.com/images/2891/Fracture425.jpg"]);
 
 
-				if (got !== expected) {
+				if (!Utils.isEquals(expected, got, true)) {
 					showLessonErrorMessage(expected, got);
 				}
 			}
@@ -2372,7 +2372,7 @@
 				}
 				videos = videos.sortBy(function(v) { return v.id });
 				got = JSON.stringify(videos);
-				if (got !== expected) {
+				if (!Utils.isEquals(expected, got, true)) {
 					showLessonErrorMessage(expected, got);
 				}
 			}
@@ -2542,7 +2542,7 @@
 
 				pairs = pairs.sortBy(function(v) { return v.videoId });
 				got = JSON.stringify(pairs);
-				if (got !== expected) {
+				if (!Utils.isEquals(expected, got, true)) {
 					showLessonErrorMessage(expected, got);
 				}
 			}
@@ -2636,7 +2636,7 @@
 					sum = Array.zip(left, right, function(left, right){ return left + right; }),
 					expected = '[5,7,9]';
 
-				if (JSON.stringify(sum) !== expected) {
+				if (!Utils.isEquals(expected, JSON.stringify(sum), true) ) {
 					showLessonErrorMessage(expected, JSON.stringify(sum));
 				}
 			}
@@ -2722,7 +2722,7 @@
 
 				pairs = pairs.sortBy(function(v) { return v.videoId });
 				got = JSON.stringify(pairs);
-				if (got !== expected) {
+				if (!Utils.isEquals(expected, got, true)) {
 					showLessonErrorMessage(expected, got);
 				}
 			}
@@ -2886,7 +2886,7 @@
 
 				videos = videos.sortBy(function(v) { return v.id });
 				got = JSON.stringify(videos);
-				if (got !== expected) {
+				if (!Utils.isEquals(expected, got, true) ) {
 					showLessonErrorMessage(expected, got);
 				}
 			}
