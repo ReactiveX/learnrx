@@ -1,6 +1,7 @@
 <html>
 <head>
-	<link rel="stylesheet" href="assets/codemirror/codemirror.css">
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/codemirror/codemirror.css">
 	<link rel="stylesheet" href="assets/app/site.css">
 	<title>Functional Programming in Javascript</title>
 	<script type="text/javascript">
@@ -5059,6 +5060,28 @@
 			</p>
 		</div>
 	</div>
+    <div class="modal fade" id="modalGetJSON">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Enter your answer JSON below</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <textarea name="answerText" has-value="true" style="margin: 0px 0px 10px; height: 165px; width: 526px;resize: none"></textarea>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary save-btn" data-dismiss="modal">Save changes</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
 </div>
 
 <script src="assets/app/wordlist.js"></script>
@@ -5068,6 +5091,7 @@
 <script src="assets/rx/rx.all.js"></script>
 
 <script src="assets/jquery/jquery-1.10.2.min.js"></script>
+<script src="assets/bootstrap/js/bootstrap.min.js"></script>
 <script src="assets/app/grab_answers.js"></script>
 <script src="assets/app/show_answers.js"></script>
 
