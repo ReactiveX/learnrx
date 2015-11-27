@@ -6,6 +6,8 @@ $('.show-answers').on('click', function(){
             post = $(".post", item)[0],
             codeMirror = window.codeMirrors[cnt];
             
+        // Prevents the screen from freezing 
+        setTimeout(function(){
             $(code).val(answer);
             codeMirror.setValue(answer);
             codeMirror.save();
@@ -13,5 +15,6 @@ $('.show-answers').on('click', function(){
             if (post !== undefined) {
                 post.style.visibility = "visible";
             }
+        }, 1);
     });
 });
