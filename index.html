@@ -4981,85 +4981,12 @@
 	<div class="lesson">
 		<h4>Exercise 42: Retrying after errors</h4>
 
-		<p>You'll notice in the previous exercise that if you pressed your arrow keys while inside the textbox, the query
-			will still fire, regardless of whether the text actually changed or not. How do we prevent that? The
-			distinctUntilChanged filters out successive repetitive values.</p>
-		<pre>
-			seq([1,,,1,,,3,,,3,,,5,,,1,,,]).distinctUntilChanged() ===
-			seq([1,,,,,,,3,,,,,,,5,,,1,,,]);
-		</pre>
+		<h1>A Work in Progress</h1>
 
-		<textarea class="code" rows="60" cols="80">
-			function (keyPresses, isAlpha) {
-
-				return keyPresses.
-					map(function (e) { return String.fromCharCode(e.keyCode); }).
-
-					// Ensure we only have alphabetic characters
-					filter(function (character) { return isAlpha(character); }).
-
-					// TODO: Filter out successive repetitive keys
-
-					// Building up a string of all the characters typed.
-					scan('', function (stringSoFar, character) {
-						return stringSoFar + character;
-					});
-			}
-		</textarea>
-
-		<button class="go">Run</button>
-
-		<label for="inputName">Enter Keys</label>
-		<input type="text" class="inputName">
-
-		<div>Keys filtered by distinctUntilChanged</div>
-		<div class="filteredKeysByDistinct"></div>
-
-		<button class="showAnswer">Show Answer</button>
-
-        <pre class="verifier">
-			function(str, lesson) {
-				preVerifierHook();
-				var $inputName = $('.inputName', lesson),
-					$filtered = $('.filteredKeysByDistinct', lesson);
-
-				var keyups = Rx.Observable.fromEvent($inputName[0], 'keyup');
-
-				var isAlpha = function (x) {
-					return 'abcdefghijklmnopqrstuvwxyz'.indexOf(x.toLowerCase()) !== -1;
-				};
-
-				var code =  eval("(" + str + ")")
-				var code = code(keyups, isAlpha);
-
-				code
-					.subscribe(function (text) {
-						$filtered.text(text);
-					});
-			}
-		</pre>
-        <pre class="answer">
-			function (keyPresses, isAlpha) {
-
-				return keyPresses.
-					map(function (e) { return String.fromCharCode(e.keyCode); }).
-					filter(function (character) { return isAlpha(character); }).
-					distinctUntilChanged().
-					scan('', function (stringSoFar, character) {
-						return stringSoFar + character;
-					});
-			}
-        </pre>
-		<div class="post">
-			<p>Now that we know how to get only the distinct input, let's see how it applies to our autocomplete example...</p>
-
-			<h1>A Work in Progress</h1>
-
-			<p>Congratulations! You've made it this far, but you're not done. Learning is an on-going process. Go out and start
-				using the functions you've learned in your day-to-day coding. Over time, I'll be adding more exercises to this
-				tutorial. If you have suggestions for more exercises, send me a pull request!
-			</p>
-		</div>
+		<p>Congratulations! You've made it this far, but you're not done. Learning is an on-going process. Go out and start
+			using the functions you've learned in your day-to-day coding. Over time, I'll be adding more exercises to this
+			tutorial. If you have suggestions for more exercises, send me a pull request!
+		</p>
 	</div>
     <div class="modal hide" id="modalGetJSON">
         <div class="modal-dialog">
