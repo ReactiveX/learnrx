@@ -2970,25 +2970,16 @@
 					];
 
 				//------------ COMPLETE THIS EXPRESSION --------------
-				return movieLists.concatMap(function(movieList) {
-					return movieList.videos.concatMap(function(video) {
-						return Array.zip(
-							video.boxarts.reduce(function(acc,curr) {
-								if (acc.width * acc.height < curr.width * curr.height) {
-							  	  	return acc;
-								}
-								else {
-							  		return curr;
-								}
-						  	}),
-							video.interestingMoments.filter(function(interestingMoment) {
-								return interestingMoment.type === "Middle";
-							}),
-						  	function(boxart, interestingMoment) {
-								return {id: video.id, title: video.title, time: interestingMoment.time, url: boxart.url};
-						  	});
-					});
-				});
+				return movieLists.
+					concatMap(movieList =>
+						movieList.videos.concatMap(video =>
+						      	Array.zip(
+						        	video.boxarts.reduce((acc,curr) => (acc.width * acc.height < curr.width * curr.height) ? acc : curr),
+						        	video.interestingMoments.filter(moment => moment.type == 'Middle'),
+						        	(boxart, interestingMoment) => ({id: video.id, title: video.title, time: interestingMoment.time, url: boxart.url})
+						        )
+						)
+					);
 			}
 		</pre>
 	</div>
