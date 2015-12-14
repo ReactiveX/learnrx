@@ -28,3 +28,8 @@ pre {background-color: #F3F3F3; padding: 10px 10px 0 10px; font-family: 'courier
 .green-button, .go{background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #77d42a), color-stop(1, #5cb811) );background:-moz-linear-gradient( center top, #77d42a 5%, #5cb811 100% );filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#77d42a', endColorstr='#5cb811');background-color:#77d42a;-webkit-border-top-left-radius:4px;-moz-border-radius-topleft:4px;border-top-left-radius:4px;-webkit-border-top-right-radius:4px;-moz-border-radius-topright:4px;border-top-right-radius:4px;-webkit-border-bottom-right-radius:4px;-moz-border-radius-bottomright:4px;border-bottom-right-radius:4px;-webkit-border-bottom-left-radius:4px;-moz-border-radius-bottomleft:4px;border-bottom-left-radius:4px;text-indent:0;border:1px solid #268a16;display:inline-block;color:#306108;font-family:Arial;font-size:15px;font-weight:bold;font-style:normal;height:26px;margin:2px;width:61px;text-decoration:none;text-align:center;text-shadow:1px 1px 0px #aade7c;}
 .green-button:hover, .go:hover{background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #5cb811), color-stop(1, #77d42a) );background:-moz-linear-gradient( center top, #5cb811 5%, #77d42a 100% );filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#5cb811', endColorstr='#77d42a');background-color:#5cb811;}
 .green-button:active, .go:active{position:relative;top:1px;}
+
+.set-answer, .get-answer { width: 200px; height:19px; font-size: 13px; }
+.show-answers { width: 450px; height:25px; font-size: 15px; }
+.grab-answers { font-size: 12px; padding: 10px; background-color: #ccc; text-align: center; }
+

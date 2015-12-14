@@ -1,22 +1,67 @@
 <html>
 <head>
-	<link rel="stylesheet" href="assets/codemirror/codemirror.css">
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/codemirror/codemirror.css">
 	<link rel="stylesheet" href="assets/app/site.css">
 	<title>Functional Programming in Javascript</title>
+	<script type="text/javascript">
+		// Adds the implementation for Array.prototype.concatAll()
+		function defineConcatAll() {
+			Array.prototype.concatAll = function () {
+				var results = [];
+
+				this.forEach(function(subArray) {
+					results.push.apply(results, subArray);
+				});
+
+				return results;
+			};
+		}
+
+		/**
+		 * Add the implementation for Array.prototype.concatMap()
+		 */
+		function defineConcatMap() {
+			Array.prototype.concatMap = function(fnc) {
+				return this.
+					map(function (e) {
+						return fnc(e);
+					}).
+					// apply the concatAll function to flatten the two-dimensional array
+					concatAll();
+			};
+		}
+
+		/**
+		 * This function will be executed at the begining of each verifier function
+		 */
+		function preVerifierHook() {
+			// Add helpers to prevent 'undefined is not a function' like errors
+			defineConcatAll();
+			defineConcatMap();
+		}
+	</script>
 </head>
 <body>
 <div class="content">
+	<div class="grab-answers">
+		<p>This is an interactive learning course with exercises you fill out right in the browser. <b>If you just want to browse the content click the button below</b>:</p>
+		<button class="green-button show-answers">Show all the answers so I can just browse.</button>
+	</div>
 	<h1 class="center">Functional Programming in Javascript</h1>
 
-	<p>Functional programming provides developers with the tools to abstract common collection operations into reusable,
-		composable building blocks. You'll be surprised to learn that most of the operations you perform on collections
-		can be accomplished with
-		<b>five simple functions</b>:
+	<p>This is a series of interactive exercises for learning Microsoft's Reactive Extensions (Rx) Library for Javascript. 
+		So why is the title "Functional Programming in Javascript"? Well it turns out that the key to learning Rx is 
+		training yourself to use functional programming to manipulate collections.  Functional programming provides 
+		developers with the tools to abstract common collection operations into reusable, composable building blocks. 
+		You'll be surprised to learn that most of the operations you perform on collections can be accomplished with
+		<b>five simple functions</b> (some native to JavaScript and some included in the 
+		<a href="https://github.com/Reactive-Extensions/RxJS">RxJS library</a>):
 	</p>
 	<ol>
 		<li>map</li>
 		<li>filter</li>
-		<li>mergeAll</li>
+		<li>concatAll</li>
 		<li>reduce</li>
 		<li>zip</li>
 	</ol>
@@ -41,27 +86,33 @@
 	<p>This tutorial may have bugs, so if you get into a weird state or you're sure you've got the right answer but
 		can't move on, just refresh your browser. If you're using a modern browser, and if you're here I assume you are,
 		the state of your exercises will be saved. If you want, you can also
-		<a href="javascript:delete localStorage.newState; document.location.reload();">restart the lab.</a></p>
+		<a href="javascript:localStorage.newState = ''; document.location.reload();">restart the lab.</a></p>
 
 	<p>This tutorial is on
-		<a href="https://github.com/reactive-extensions/learnrx">GitHub</a>, and is asymptotically approaching
+		<a href="https://github.com/ReactiveX/learnrx">GitHub</a>, and is asymptotically approaching
 		completion. If you'd like to add an exercise, clarify a problem description, or fix a bug feel free to
-		<a href="https://github.com/reactive-extensions/learnrx/fork_select">fork</a> and send us a pull request. We'll
+		<a href="https://github.com/ReactiveX/learnrx/fork">fork</a> and send us a pull request. We'll
 		try and fit user-contributed exercises into a narrative.
 	</p>
+	<div class="grab-answers">
+		<p>Your answers will be saved in local storage. Use the buttons below if you want to transfer them to another machine:</p>
+		<button class="green-button get-answer">Get Answers as JSON</button>
+		<button class="blue-button set-answer">Set JSON Answers</button>
+	</div>
 
 	<h2>Working with Arrays</h2>
 
 	<p>The Array is Javascript's only collection type. Arrays are everywhere. We're going to add the five functions to
 		the Array type, and in the process make it much more powerful and useful. As a matter of fact, Array already has
-		the map, filter, and reduce functions! However we're going to to reimplement these functions as a learning
+		the map, filter, and reduce functions! However we're going to reimplement these functions as a learning
 		exercise.</p>
 
 	<p>This section will follow a pattern. First we'll solve problems the way you probably learned in school, or on your
-		own by reading other peoples code. In other words, we'll transform collections into new collections using loops
+		own by reading other people's code. In other words, we'll transform collections into new collections using loops
 		and statements. Then we'll implement one of the five functions, and then use it to solve the same problem again
 		<i>without</i> the loop. Once we've learned the five functions, you'll learn how to combine them to solve
-		complex problems with very little code.
+		complex problems with very little code. The first two exercises have been completed in advance, but please look
+		them over carefully!
 	</p>
 
 	<h3>Traversing an Array</h3>
@@ -90,6 +141,7 @@
 		<pre class="verifier">
 			// Traverse array with for loop
 			function(str) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")");
 				var items = [];
 				var got;
@@ -149,6 +201,7 @@
 		<pre class="verifier">
 			// Traverse array with foreach
 			function(str) {
+				preVerifierHook();
 				if (str.indexOf(".forEach") === -1) {
 					return "You have to use forEach!"
 				}
@@ -180,7 +233,7 @@
     	</pre>
 		<div class="post">
 			<p>
-				Notice that forEach let's us specify <i>what</i> we want to happen to each item in the array, but hides <i>how</i> the array is traversed.
+				Notice that forEach lets us specify <i>what</i> we want to happen to each item in the array, but hides <i>how</i> the array is traversed.
 			</p>
 			<h3>Projecting Arrays</h3>
 			<p>Applying a function to a value and creating a new value is called a <i>projection</i>. To project one array into
@@ -246,15 +299,16 @@
 				return videoAndTitlePairs;
 			}
 		</textarea>
-		
+
 		<button class="go">Run</button>
 		<button class="showAnswer">Show Answer</button>
-		
+
 		<div class="output"></div>
 
 		<pre class="verifier">
 			// Projection with with forEach
 			function(str) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					videoAndTitlePairs = fun(),
 					expected = '[{\"id\":675465,\"title\":\"Fracture\"},{\"id\":65432445,\"title\":\"The Chamber\"},{\"id\":70111470,\"title\":\"Die Hard\"},{\"id\":654356453,\"title\":\"Bad Boys\"}]';
@@ -362,6 +416,7 @@
 		<pre class="verifier">
 			// Implement map()
 			function(str) {
+				preVerifierHook();
 				var fun = eval(str),
 					arr = [1,2,3],
 					result;
@@ -454,6 +509,7 @@
 		<pre class="verifier">
 			// Projection with map
 			function(str) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					videoAndTitlePairs = fun(),
 					expected = '[{\"id\":675465,\"title\":\"Fracture\"},{\"id\":65432445,\"title\":\"The Chamber\"},{\"id\":70111470,\"title\":\"Die Hard\"},{\"id\":654356453,\"title\":\"Bad Boys\"}]';
@@ -569,7 +625,7 @@
 				videos = [];
 
 				// ------------ INSERT CODE HERE! -----------------------------------
-				// Use forEach function to accumulate ever video with a rating of 5.0
+				// Use forEach function to accumulate every video with a rating of 5.0
 				// ------------ INSERT CODE HERE! -----------------------------------
 
 				return videos;
@@ -582,6 +638,7 @@
 		<pre class="verifier">
 			// Filter with forEach
 			function(str) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					videos = fun(),
 					expected = '[{"id":675465,"title":"Fracture","boxart":"http://cdn-0.nflximg.com/images/2891/Fracture.jpg","uri":"http://api.netflix.com/catalog/titles/movies/70111470","rating":5,"bookmark":[{"id":432534,"time":65876586}]},{"id":654356453,"title":"Bad Boys","boxart":"http://cdn-0.nflximg.com/images/2891/BadBoys.jpg","uri":"http://api.netflix.com/catalog/titles/movies/70111470","rating":5,"bookmark":[{"id":432534,"time":65876586}]}]';
@@ -670,8 +727,8 @@
 				var results = [];
 				this.forEach(function(itemInArray) {
 					// ------------ INSERT CODE HERE! ----------------------------
-					// Apply the predicateFunction to each item in the array. If the
-					// result is truthy, add each result to the results array.
+					// Apply the predicateFunction to each item in the array.
+					// If the result is truthy, add the item to the results array.
 					// Note: remember you can add items to the array using the array's
 					// push() method.
 					// ------------ INSERT CODE HERE! ----------------------------
@@ -690,6 +747,7 @@
 		<pre class="verifier">
 			// Implement filter()
 			function(str) {
+				preVerifierHook();
 				var fun = eval(str),
 					arr = [1,2,3],
 					result;
@@ -718,7 +776,7 @@
 
 			// JSON.stringify([1,2,3].filter(function(x) { return x > 2})) === "[3]"
 		</pre>
-		<p class="post">Like map(), filter() let's us express <i>what</i> data we want without requiring us to specify <i>how</i>
+		<p class="post">Like map(), filter() lets us express <i>what</i> data we want without requiring us to specify <i>how</i>
 			we want to collect the data.</p>
 	</div>
 
@@ -781,6 +839,7 @@
 		<pre class="verifier">
 			// Filter with filter()
 			function(str) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					videoids = fun(),
 					expected = '[675465,654356453]';
@@ -859,12 +918,12 @@
 	<div class="lesson">
 		<h3>Querying Trees</h3>
 		<p>Sometimes, in addition to flat arrays, we need to query trees. Trees pose a challenge because we need to flatten them
-			into arrays in order to apply filter() and map() operations on them. In this section we'll define a mergeAll()
+			into arrays in order to apply filter() and map() operations on them. In this section we'll define a concatAll()
 			function that we can combine with map() and filter() to query trees.</p>
 
 		<h4>Exercise 9: Flatten the movieLists array into an array of video ids</h4>
 
-		<p>Let's start by using two nested forEach loops collect the id of every video in the two-dimensional movieLists
+		<p>Let's start by using two nested forEach loops to collect the id of every video in the two-dimensional movieLists
 			array.</p>
 
 		<textarea class="code" rows="60" cols="80">
@@ -1011,15 +1070,15 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 10: Implement mergeAll()</h4>
+		<h4>Exercise 10: Implement concatAll()</h4>
 
-		<p>Let's add a mergeAll() function to the Array type. The mergeAll() function iterates over each sub-array in the
-			array and collects the results in a new, flat array. Note: <b>the mergeAll() function expects that each item in
-				the array will be another array.</b>
+		<p>Let's add a concatAll() function to the Array type. The concatAll() function iterates over each sub-array in the
+			array and collects the results in a new, flat array. Notice that <b>the concatAll() function expects each item in
+				the array to be another array.</b>
 		</p>
 
 		<textarea class="code" rows="20" cols="80">
-			Array.prototype.mergeAll = function() {
+			Array.prototype.concatAll = function() {
 				var results = [];
 				this.forEach(function(subArray) {
 					// ------------ INSERT CODE HERE! ----------------------------
@@ -1030,8 +1089,8 @@
 				return results;
 			};
 
-			// JSON.stringify([ [1,2,3], [4,5,6], [7,8,9] ].mergeAll()) === "[1,2,3,4,5,6,7,8,9]"
-			// [1,2,3].mergeAll(); // throws an error because this is a one-dimensional array
+			// JSON.stringify([ [1,2,3], [4,5,6], [7,8,9] ].concatAll()) === "[1,2,3,4,5,6,7,8,9]"
+			// [1,2,3].concatAll(); // throws an error because this is a one-dimensional array
 		</textarea>
 		<button class="go">Run</button>
 		<button class="showAnswer">Show Answer</button>
@@ -1040,20 +1099,21 @@
 		<pre class="verifier">
 			// Flatten movieLists into an array of video ids
 			function(str) {
+				preVerifierHook();
 				var fun = eval(str),
 					arr = [[1,2,3],[4,5,6],[7,8,9]],
 					result,
 					expected = "[1,2,3,4,5,6,7,8,9]";
 
-				result = arr.mergeAll();
+				result = arr.concatAll();
 				result = result.sortBy(function(x) { return x; });
 				if (JSON.stringify(result) !== expected) {
-					throw 'Expected that [1,2,3].map(function(x) { return x + 1}) would equal [2,3,4].'
+					throw 'Expected that [[1,2,3],[4,5,6],[7,8,9]].concatAll() would equal [1,2,3,4,5,6,7,8,9].'
 				}
 			}
 		</pre>
 		<pre class="answer">
-			Array.prototype.mergeAll = function() {
+			Array.prototype.concatAll = function() {
 				var results = [];
 				this.forEach(function(subArray) {
 					results.push.apply(results, subArray);
@@ -1062,10 +1122,10 @@
 				return results;
 			};
 
-			// JSON.stringify([ [1,2,3], [4,5,6], [7,8,9] ].mergeAll()) === "[1,2,3,4,5,6,7,8,9]"
-			// [1,2,3].mergeAll(); // throws an error because this is a one-dimensional array
+			// JSON.stringify([ [1,2,3], [4,5,6], [7,8,9] ].concatAll()) === "[1,2,3,4,5,6,7,8,9]"
+			// [1,2,3].concatAll(); // throws an error because this is a one-dimensional array
 		</pre>
-		<p class="post">Merge is a very simple function, so much so that it may not be obvious yet how it can be combined
+		<p class="post">concatAll is a very simple function, so much so that it may not be obvious yet how it can be combined
 			with map() to query a tree. Let's try an example...</p>
 	</div>
 
@@ -1074,9 +1134,9 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 11: Use map() and mergeAll() to project and flatten the movieLists into an array of video ids</h4>
+		<h4>Exercise 11: Use map() and concatAll() to project and flatten the movieLists into an array of video ids</h4>
 
-		<p>Hint: use two nested calls to map() and one call to mergeAll().</p>
+		<p>Hint: use two nested calls to map() and one call to concatAll().</p>
 		<textarea class="code" rows="60" cols="80">
 			function() {
 				var movieLists = [
@@ -1125,7 +1185,7 @@
 					];
 
 				// ------------   INSERT CODE HERE!  -----------------------------------
-				// Use map and mergeAll to flatten the movieLists in a list of video ids.
+				// Use map and concatAll to flatten the movieLists in a list of video ids.
 				// ------------   INSERT CODE HERE!  -----------------------------------
 
 				return movieLists // Complete this expression!
@@ -1138,6 +1198,7 @@
 
 		<pre class="verifier">
 			function(str) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					videos = fun(),
 					expected = '[675465,65432445,70111470,654356453]';
@@ -1196,22 +1257,21 @@
 					];
 
 				// ------------   INSERT CODE HERE!  -----------------------------------
-				// Use map and mergeAll to flatten the movieLists in a list of video ids.
+				// Use map and concatAll to flatten the movieLists in a list of video ids.
 				// ------------   INSERT CODE HERE!  -----------------------------------
 
 				return movieLists.
 				  map(function(movieList) {
-					return movieList.videos.
-					  map(function(video) {
+					return movieList.videos.map(function(video) {
 						return video.id;
 					  });
 				  }).
-				  mergeAll();
+				  concatAll();
 
 			}
 		</pre>
 
-		<p class="post">Wow! <b>Great work.</b> Mastering the combination of map() and mergeAll() is key to effective
+		<p class="post">Wow! <b>Great work.</b> Mastering the combination of map() and concatAll() is key to effective
 			functional programming. You're half way there! Let's try a more complicated example...</p>
 	</div>
 
@@ -1226,7 +1286,7 @@
 			boxart url on each video, we had a collection of boxart objects, each with a different size and url. Create a
 			query that selects {id, title, boxart} for every video in the movieLists. This time though, the boxart property
 			in the result will be the url of the boxart object with dimensions of 150x200px. Let's see if you can solve this
-			problem with map(), mergeAll(), and filter().</p>
+			problem with map(), concatAll(), and filter().</p>
 		<a name="indexers"></a>
 
 		<p><b>There's just more one thing: you <u>can't</u> use indexers.</b> In other words, this is
@@ -1302,7 +1362,7 @@
 					];
 
 
-				// Use one or more map, mergeAll, and filter calls to create an array with the following items
+				// Use one or more map, concatAll, and filter calls to create an array with the following items
 				// [
 				//	 {"id": 675465,"title": "Fracture","boxart":"http://cdn-0.nflximg.com/images/2891/Fracture150.jpg" },
 				//	 {"id": 65432445,"title": "The Chamber","boxart":"http://cdn-0.nflximg.com/images/2891/TheChamber150.jpg" },
@@ -1321,6 +1381,7 @@
 
 		<pre class="verifier">
 			function(str) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					videos = fun(),
 					got,
@@ -1404,7 +1465,7 @@
 					];
 
 
-				// Use one or more map, mergeAll, and filter calls to create an array with the following items
+				// Use one or more map, concatAll, and filter calls to create an array with the following items
 				// [
 				//     {"id": 675465,"title": "Fracture","boxart":"http://cdn-0.nflximg.com/images/2891/Fracture150.jpg" },
 				//     {"id": 65432445,"title": "The Chamber","boxart":"http://cdn-0.nflximg.com/images/2891/TheChamber150.jpg" },
@@ -1424,14 +1485,14 @@
 							return {id: video.id, title: video.title, boxart: boxart.url};
 						  });
 					  }).
-					  mergeAll();
+					  concatAll();
 				  }).
-				  mergeAll();
+				  concatAll();
 
 			}
 		</pre>
-		<p class="post">Fantastic job! Now you've learned to use mergeAll() alongside map() and filter() to queries trees.
-			Notice that <b>map() and mergeAll() are very commonly chained together.</b> Let's create a small helper function
+		<p class="post">Fantastic job! Now you've learned to use concatAll() alongside map() and filter() to queries trees.
+			Notice that <b>map() and concatAll() are very commonly chained together.</b> Let's create a small helper function
 			to help us with this common pattern.</p>
 	</div>
 
@@ -1440,13 +1501,13 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 13: Implement flatMap()</h4>
+		<h4>Exercise 13: Implement concatMap()</h4>
 
-		<p>Nearly every time we flatten a tree we chain map() and mergeAll(). Sometimes, if we're dealing with a tree
+		<p>Nearly every time we flatten a tree we chain map() and concatAll(). Sometimes, if we're dealing with a tree
 			several levels deep, we'll repeat this combination many times in our code. To save on typing, let's create a
-			flatMap function that's just a map operation, followed by a mergeAll.</p>
+			concatMap function that's just a map operation, followed by a concatAll.</p>
 		<textarea class="code" rows="20" cols="80">
-			Array.prototype.flatMap = function(projectionFunctionThatReturnsArray) {
+			Array.prototype.concatMap = function(projectionFunctionThatReturnsArray) {
 				return this.
 					map(function(item) {
 						// ------------   INSERT CODE HERE!  ----------------------------
@@ -1455,15 +1516,15 @@
 						// two-dimensional array.
 						// ------------   INSERT CODE HERE!  ----------------------------
 					}).
-					// apply the mergeAll function to flatten the two-dimensional array
-					mergeAll();
+					// apply the concatAll function to flatten the two-dimensional array
+					concatAll();
 			};
 
 			/*
 				var spanishFrenchEnglishWords = [ ["cero","rien","zero"], ["uno","un","one"], ["dos","deux","two"] ];
 				// collect all the words for each number, in every language, in a single, flat list
 				var allWords = [0,1,2].
-					flatMap(function(index) {
+					concatMap(function(index) {
 						return spanishFrenchEnglishWords[index];
 					});
 
@@ -1474,8 +1535,9 @@
 		<button class="showAnswer">Show Answer</button>
 		<div class="output"></div>
 		<pre class="verifier">
-			// Implement mergeAll
+			// Implement concatAll
 			function(str) {
+				preVerifierHook();
 				var fun = eval(str),
 					spanishFrenchEnglishWords = [ ["cero","rien","zero"], ["uno","un","one"], ["dos","deux","two"] ],
 					allWords = [0,1,2],
@@ -1484,7 +1546,7 @@
 
 
 				var allWords = [0,1,2].
-					flatMap(function(index) {
+					concatMap(function(index) {
 						return spanishFrenchEnglishWords[index];
 					});
 
@@ -1494,20 +1556,20 @@
 			}
 		</pre>
 		<pre class="answer">
-			Array.prototype.flatMap = function(projectionFunctionThatReturnsArray) {
+			Array.prototype.concatMap = function(projectionFunctionThatReturnsArray) {
 				return this.
 					map(function(item) {
 						return projectionFunctionThatReturnsArray(item);
 					}).
-					// apply the mergeAll function to flatten the two-dimensional array
-					mergeAll();
+					// apply the concatAll function to flatten the two-dimensional array
+					concatAll();
 			};
 
 			/*
 				var spanishFrenchEnglishWords = [ ["cero","rien","zero"], ["uno","un","one"], ["dos","deux","two"] ];
 				// collect all the words for each number, in every language, in a single, flat list
 				var allWords = [0,1,2].
-					flatMap(function(index) {
+					concatMap(function(index) {
 						return spanishFrenchEnglishWords[index];
 					});
 
@@ -1516,7 +1578,7 @@
 		</pre>
 
 
-		<p class="post">Now, instead of using map().mergeAll() to flatten a tree, we can just use flatMap helper
+		<p class="post">Now, instead of using map().concatAll() to flatten a tree, we can just use concatMap helper
 			function.</p>
 	</div>
 
@@ -1525,10 +1587,10 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 14: Use flatMap() to retrieve id, title, and 150x200 box art url for every video</h4>
+		<h4>Exercise 14: Use concatMap() to retrieve id, title, and 150x200 box art url for every video</h4>
 
 		<p>Let's repeat the exercise we just performed. However this time we'll simplify the code by replacing the
-			map().mergeAll() calls with flatMap().</p>
+			map().concatAll() calls with concatMap().</p>
 		<textarea class="code" rows="60" cols="80">
 			function() {
 				var movieLists = [
@@ -1591,7 +1653,7 @@
 					];
 
 
-				// Use one or more flatMap, map, and filter calls to create an array with the following items
+				// Use one or more concatMap, map, and filter calls to create an array with the following items
 				// [
 				//	 {"id": 675465,"title": "Fracture","boxart":"http://cdn-0.nflximg.com/images/2891/Fracture150.jpg" },
 				//	 {"id": 65432445,"title": "The Chamber","boxart":"http://cdn-0.nflximg.com/images/2891/TheChamber150.jpg" },
@@ -1609,6 +1671,7 @@
 
 		<pre class="verifier">
 			function(str) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					videos = fun(),
 					got,
@@ -1688,7 +1751,7 @@
 					];
 
 
-				// Use one or more flatMap, map, and filter calls to create an array with the following items
+				// Use one or more concatMap, map, and filter calls to create an array with the following items
 				// [
 				//     {"id": 675465,"title": "Fracture","boxart":"http://cdn-0.nflximg.com/images/2891/Fracture150.jpg" },
 				//     {"id": 65432445,"title": "The Chamber","boxart":"http://cdn-0.nflximg.com/images/2891/TheChamber150.jpg" },
@@ -1696,22 +1759,20 @@
 				//     {"id": 70111470,"title": "Die Hard","boxart":"http://cdn-0.nflximg.com/images/2891/DieHard150.jpg" }
 				// ];
 
-				return movieLists.
-				  flatMap(function(movieList) {
-					return movieList.videos.
-					  flatMap(function(video) {
+				return movieLists.concatMap(function(movieList) {
+					return movieList.videos.concatMap(function(video) {
 						return video.boxarts.
-						  filter(function(boxart) {
-							return boxart.width === 150;
-						  }).
-						  map(function(boxart) {
-							return {id: video.id, title: video.title, boxart: boxart.url};
-						  });
+							filter(function(boxart) {
+								return boxart.width === 150;
+						  	}).
+						  	map(function(boxart) {
+								return {id: video.id, title: video.title, boxart: boxart.url};
+							});
 					  });
 				  });
 			}
 		</pre>
-		<p class="post">It's a very common pattern to see several nested flatMap operations, with the last operation being a
+		<p class="post">It's a very common pattern to see several nested concatMap operations, with the last operation being a
 			map. You can think of this pattern as the functional version of a nested forEach.</p>
 	</div>
 
@@ -1723,13 +1784,13 @@
 		<h3>Reducing Arrays</h3>
 		<p>Sometimes we need to perform an operation on more than one item in the array <i>at the same time</i>. For example,
 			let's say we need to find the largest integer in an array. We can't use a filter() operation, because it only
-			examines one item at a time. To find the largest integer we need to the compare items in the array to each other.
+			examines one item at a time. To find the largest integer we need to compare items in the array to each other.
 		</p>
 		<p>One approach could be to select an item in the array as the <i>assumed</i> largest number (perhaps the first item),
 			and then compare that value to every other item in the array. Each time we come across a number that was larger than
 			our assumed largest number, we'd replace it with the larger value, and continue the process until the entire array
 			was traversed.</p>
-		<p>If we replaced the specific size comparison with a closure, we could write a function this handled the array
+		<p>If we replaced the specific size comparison with a closure, we could write a function that handled the array
 			traversal process for us. At each step our function would apply the closure to the last value and the current value
 			and use the result as the last value the next time. Finally we'd be left with only one value. This process is known
 			as <i>reducing</i> because we reduce many values to a single value.</p>
@@ -1769,6 +1830,7 @@
 		<pre class="verifier">
 			// Find largest box art
 			function(str){
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					boxart = fun(),
 					got = JSON.stringify(boxart),
@@ -1844,7 +1906,7 @@
 
 					// Loop through the array, feeding the current value and the result of
 					// the previous computation back into the combiner function until
-					// we've exhausted the entire array and are left with only one function.
+					// we've exhausted the entire array and are left with only one value.
 					while(counter < this.length) {
 						accumulatedValue = combiner(accumulatedValue, this[counter])
 						counter++;
@@ -1860,6 +1922,7 @@
 		<pre class="verifier">
 			// Implement reduce
 			function(str) {
+				preVerifierHook();
 				var fun = eval(str),
 					numbers = [1,2,3],
 					sum = numbers.reduce(function(acc,curr) { return acc + curr }),
@@ -1938,6 +2001,7 @@
 		<pre class="verifier">
 			 // Find largest rating
 			function(str){
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					boxarts = fun(),
 					got = JSON.stringify(boxarts),
@@ -1988,7 +2052,7 @@
 						{ width: 425, height:150, url:"http://cdn-0.nflximg.com/images/2891/Fracture425.jpg" }
 					];
 
-				// You should return an array containing only the largest box art. Remember that reduce always
+				// You should return an array containing only the URL of the largest box art. Remember that reduce always
 				// returns an array with one item.
 				return boxarts.
 					reduce   // Complete this expression
@@ -2000,6 +2064,7 @@
 		<pre class="verifier">
 			// Find largest box art with reduce
 			function(str){
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					boxarts = fun(),
 					got = JSON.stringify(boxarts),
@@ -2116,6 +2181,7 @@
 		<pre class="verifier">
 			// Reducing with an initial value
 			function(str){
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					videoMap = fun()[0],
 					expected = [
@@ -2269,7 +2335,7 @@
 				];
 
 
-				// Use one or more flatMap, map, and reduce calls to create an array with the following items (order doesn't matter)
+				// Use one or more concatMap, map, and reduce calls to create an array with the following items (order doesn't matter)
 				// [
 				//	 {"id": 675465,"title": "Fracture","boxart":"http://cdn-0.nflximg.com/images/2891/Fracture120.jpg" },
 				//	 {"id": 65432445,"title": "The Chamber","boxart":"http://cdn-0.nflximg.com/images/2891/TheChamber130.jpg" },
@@ -2278,7 +2344,7 @@
 				// ];
 
 				return movieLists.
-					flatMap(function(movieList) {
+					concatMap(function(movieList) {
 
 					})
 
@@ -2291,6 +2357,7 @@
 		<pre class="verifier">
 			// Find the id, title, and smallest box art.
 			function(str) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					videos = fun(),
 					got,
@@ -2373,7 +2440,7 @@
 				];
 
 
-				// Use one or more flatMap, map, and reduce calls to create an array with the following items (order doesn't matter)
+				// Use one or more concatMap, map, and reduce calls to create an array with the following items (order doesn't matter)
 				// [
 				//     {"id": 675465,"title": "Fracture","boxart":"http://cdn-0.nflximg.com/images/2891/Fracture120.jpg" },
 				//     {"id": 65432445,"title": "The Chamber","boxart":"http://cdn-0.nflximg.com/images/2891/TheChamber130.jpg" },
@@ -2381,24 +2448,22 @@
 				//     {"id": 70111470,"title": "Die Hard","boxart":"http://cdn-0.nflximg.com/images/2891/DieHard150.jpg" }
 				// ];
 
-				return movieLists.
-					flatMap(function(movieList) {
-						return movieList.videos.
-						  flatMap(function(video) {
-							return video.boxarts.
-							  reduce(function(acc,curr) {
-								if (acc.width * acc.height < curr.width * curr.height) {
-								  return acc;
-								}
-								else {
-								  return curr;
-								}
-							  }).
-							  map(function(boxart) {
-								return {id: video.id, title: video.title, boxart: boxart.url};
-							  });
-						  });
-					});
+				return movieLists.concatMap(function(movieList) {
+				  return movieList.videos.concatMap(function(video) {
+				    return video.boxarts.
+					  reduce(function(acc,curr) {
+						if (acc.width * acc.height < curr.width * curr.height) {
+						  return acc;
+						}
+						else {
+						  return curr;
+						}
+					  }).
+					  map(function(boxart) {
+						return {id: video.id, title: video.title, boxart: boxart.url};
+					  });
+				  });
+				});
 
 			}
 		</pre>
@@ -2470,6 +2535,7 @@
 		<pre class="verifier">
 			// Zip imperatively
 			function(str) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					pairs = fun(),
 					got,
@@ -2545,7 +2611,7 @@
 
 		<p>
 		<textarea class="code" rows="40" cols="80">
-			// JSON.stringify(Array.zip([1,2,3],[4,5,6], function(left, right) { return left + right })) === '[5,7,9]' accumulatedValue + currentValue; }); === [6];
+			// JSON.stringify(Array.zip([1,2,3],[4,5,6], function(left, right) { return left + right })) === '[5,7,9]'
 
 			Array.zip = function(left, right, combinerFunction) {
 				var counter,
@@ -2564,6 +2630,7 @@
 		<pre class="verifier">
 			// Implement zip
 			function(str) {
+				preVerifierHook();
 				var fun = eval(str),
 					left = [1,2,3],
 					right = [4,5,6],
@@ -2576,7 +2643,7 @@
 			}
 		</pre>
 		<pre class="answer">
-			// JSON.stringify(Array.zip([1,2,3],[4,5,6], function(left, right) { return left + right })) === '[5,7,9]' accumulatedValue + currentValue; }); === [6];
+			// JSON.stringify(Array.zip([1,2,3],[4,5,6], function(left, right) { return left + right })) === '[5,7,9]'
 
 			Array.zip = function(left, right, combinerFunction) {
 				var counter,
@@ -2598,7 +2665,7 @@
 	<div class="lesson">
 		<h4>Exercise 23: Combine videos and bookmarks by index</h4>
 
-		<p>Let's repeat exercise 19, but this time let's use your new zip() function. For each video and bookmark pair,
+		<p>Let's repeat exercise 21, but this time lets use your new zip() function. For each video and bookmark pair,
 			create a {videoId, bookmarkId} pair.</p>
 		<textarea class="code" rows="60" cols="80">
 			function() {
@@ -2648,6 +2715,7 @@
 		<pre class="verifier">
 			// Combine videos and bookmarks
 			function(str) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					pairs = fun(),
 					got,
@@ -2800,7 +2868,7 @@
 
 				//------------ COMPLETE THIS EXPRESSION --------------
 				return movieLists.
-					flatMap(function(movieList) {
+					concatMap(function(movieList) {
 
 					});
 
@@ -2811,6 +2879,7 @@
 		<pre class="verifier">
 			// Find id, title, smallest box art, and bookmark id
 			function(str) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					videos = fun(),
 					got,
@@ -2901,29 +2970,25 @@
 					];
 
 				//------------ COMPLETE THIS EXPRESSION --------------
-				return movieLists.
-					flatMap(function(movieList) {
-						return movieList.videos.
-						  flatMap(function(video) {
-							return Array.zip(
-							  video.boxarts.
-								  reduce(function(acc,curr) {
-									if (acc.width * acc.height < curr.width * curr.height) {
-									  return acc;
-									}
-									else {
-									  return curr;
-									}
-								  }),
-							  video.interestingMoments.
-								filter(function(interestingMoment) {
-									return interestingMoment.type === "Middle";
-								}),
-							  function(boxart, interestingMoment) {
+				return movieLists.concatMap(function(movieList) {
+					return movieList.videos.concatMap(function(video) {
+						return Array.zip(
+							video.boxarts.reduce(function(acc,curr) {
+								if (acc.width * acc.height < curr.width * curr.height) {
+							  	  	return acc;
+								}
+								else {
+							  		return curr;
+								}
+						  	}),
+							video.interestingMoments.filter(function(interestingMoment) {
+								return interestingMoment.type === "Middle";
+							}),
+						  	function(boxart, interestingMoment) {
 								return {id: video.id, title: video.title, time: interestingMoment.time, url: boxart.url};
-							  })
-						  });
+						  	});
 					});
+				});
 			}
 		</pre>
 	</div>
@@ -2991,7 +3056,7 @@
 						},
 						{
 							"id": 65456475,
-							name: "Thrillers"
+							"name": "Thrillers"
 						}
 					],
 					videos = [
@@ -3026,6 +3091,7 @@
         <pre class="verifier">
 			// Combine videos and bookmarks
 			function(str) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					pairs = fun(),
 					got,
@@ -3098,7 +3164,7 @@
 	<div class="lesson">
 		<h4>Exercise 26: Converting from Arrays to <i>Deeper</i> Trees</h4>
 
-		<p>Let's try creating a deeper tree structure. This time we have 4 seperate arrays each containing lists, videos,
+		<p>Let's try creating a deeper tree structure. This time we have 4 separate arrays each containing lists, videos,
 			boxarts, and bookmarks respectively. Each object has a parent id, indicating its parent. We want to build an
 			array of list objects, each with a name and a videos array. The videos array will contain the video's id, title,
 			bookmark time, and smallest boxart url. In other words we want to build the following structure:</p>
@@ -3207,6 +3273,7 @@
 		<pre class="verifier">
 			// Combine videos and bookmarks
 			function(str) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					pairs = fun(),
 					got,
@@ -3278,7 +3345,7 @@
 								filter(function(video) {
 									return video.listId === list.id;
 								}).
-								flatMap(function(video) {
+								concatMap(function(video) {
 									return Array.zip(
 										bookmarks.filter(function(bookmark) {
 											return bookmark.videoId === video.id;
@@ -3311,7 +3378,7 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 28: Stock Ticker</h4>
+		<h4>Exercise 27: Stock Ticker</h4>
 
 		<p>Let's try an easier question. Let's say we have a collection of all of the prices for NASDAQ stocks over time.
 			Every time the price of a stock changes on the NASDAQ ticker an entry is added to this collection. Let's say
@@ -3335,7 +3402,7 @@
 			function(pricesNASDAQ, printRecord) {
 				var microsoftPrices,
 					now = new Date(),
-					tenDaysAgo = new Date( now.getYear(), now.getMonth(), now.getDate() - 10);
+					tenDaysAgo = new Date( now.getFullYear(), now.getMonth(), now.getDate() - 10);
 
 				// use filter() to filter the trades for MSFT prices recorded any time after 10 days ago
 				microsoftPrices =
@@ -3358,6 +3425,7 @@
         <pre class="verifier">
 			// Combine videos and bookmarks
 			function(str, lesson) {
+				preVerifierHook();
 				var output = $(".output", lesson)[0],
 					fun = eval("(" + str + ")"),
 					stockSymbols = ["MSFT", "GOOG","NFLX","OSTK"],
@@ -3397,7 +3465,7 @@
 			function(pricesNASDAQ, printRecord) {
 				var microsoftPrices,
 					now = new Date(),
-					tenDaysAgo = new Date( now.getYear(), now.getMonth(), now.getDate() - 10);
+					tenDaysAgo = new Date( now.getFullYear(), now.getMonth(), now.getDate() - 10);
 
 				// use filter() to filter the trades for MSFT prices recorded any time after 10 days ago
 				microsoftPrices =
@@ -3421,7 +3489,7 @@
 			<p>The solution to the riddle is that <b>pricesNASDAQ is <u>not</u> an array</b>. Unlike an array, which can
 				only store a snapshot of stock prices, this new type can react to changes and update over time.</p>
 
-			<p>In the next section I'll reveal the inner workings of this magical type. You'll learn how you can use it
+			<p>In the next section I'll reveal the inner workings of this magical type. You'll learn how you can use it to
 				model everything from mouse events to asynchronous JSON requests. Finally I'll show you how <b>you can query
 					this type using the 5 query functions you already know.</b> It's about time we gave this magical type a
 				name...</p>
@@ -3472,7 +3540,7 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 29: Subscribing to an event</h4>
+		<h4>Exercise 28: Subscribing to an event</h4>
 
 		<p>You're probably used to thinking about events as a list of handlers stored in an object. In this example, we
 			subscribe to a button click event and then unsubscribe the first time the button is clicked.</p>
@@ -3497,6 +3565,7 @@
 		<pre class="verifier">
 			// Combine videos and bookmarks 2
 			function(str, lesson) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					button = $('.button', lesson)[0];
 
@@ -3513,7 +3582,7 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 30: Traversing an Event</h4>
+		<h4>Exercise 29: Traversing an Event</h4>
 
 		<p>Subscribing to an Event and traversing an Array are fundamentally the same operation. The only difference is that
 			<b>Array traversal is synchronous and completes, and Event traversal is asynchronous and <u>never completes</u>.</b>
@@ -3525,7 +3594,7 @@
 				// In the case of an Observable, forEach returns a subscription object.
 				var subscription =
 					buttonClicks.
-						forEach(function(priceRecord) {
+						forEach(function(clickEvent) {
 							alert("Button was clicked. Stopping Traversal.");
 
 							// Stop traversing the button clicks
@@ -3540,6 +3609,7 @@
 		<pre class="verifier">
 			// Combine videos and bookmarks 2
 			function(str, lesson) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					button = $('.button', lesson)[0];
 
@@ -3564,7 +3634,7 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 31: Completing Sequences with take()</h4>
+		<h4>Exercise 30: Completing Sequences with take()</h4>
 
 		<p><b>Have you ever wished that you could listen for the next occurrence of an event and then immediately
 			unsubscribe?</b> For example, developers will often attach an event handler to window.onload, expecting that
@@ -3610,7 +3680,7 @@
 				// and unsubscribe.
 				buttonClicks.
 					// Insert take() call here
-					forEach(function(priceRecord) {
+					forEach(function(clickEvent) {
 						alert("Button was clicked once. Stopping Traversal.");
 					});
 			}
@@ -3623,6 +3693,7 @@
 		<pre class="verifier">
 			// Combine videos and bookmarks 2
 			function(str, lesson) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					button = $('.button', lesson)[0];
 
@@ -3637,7 +3708,7 @@
 				// and unsubscribe.
 				buttonClicks.
 					take(1).
-					forEach(function(priceRecord) {
+					forEach(function() {
 						alert("Button was clicked once. Stopping Traversal.");
 					});
 			}
@@ -3653,7 +3724,7 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 32: Completing sequences with takeUntil()</h4>
+		<h4>Exercise 31: Completing sequences with takeUntil()</h4>
 
 		<p><b>Have you ever wanted to unsubscribe from one Event when another Event fires?</b> Observable's takeUntil() function
 		is a convenient way of completing a sequence when another Event occurs.</b> Here's how takeUntil() works:
@@ -3695,6 +3766,7 @@
 		<pre class="verifier">
 			// Combine videos and bookmarks 2
 			function(str, lesson) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					output = $(".output", lesson)[0],
 					stopButton = $('.stop', lesson)[0],
@@ -3791,26 +3863,28 @@
 				seq([1,,,2,,,3]).filter(function(x) { return x > 1; })          === seq([2,,,3])
 				seq([1,,,2,,,3,,,]).filter(function(x) { return x > 1; })       === seq([2,,,3,,,])
 
-				// <b>mergeAll()</b>
+				// <b>concatAll()</b>
 
-				[ [1, 2, 3], [4, 5, 6] ].mergeAll()                             === [1,2,3,4,5,6]
-				seq([ seq([1,,,2,,,3]),,,seq([4,,,5,,,6]) ]).mergeAll()         === seq([1,,,2,,,3,,,4,,,5,,,6])
+				[ [1, 2, 3], [4, 5, 6] ].concatAll()                             === [1,2,3,4,5,6]
+				seq([ seq([1,,,2,,,3]),,,seq([4,,,5,,,6]) ]).concatAll()         === seq([1,,,2,,,3,,,4,,,5,,,6])
 
-				// Depending on when the elements in each
-				// sequence arrive, the order of the merged
-				// sequence could be different.
+				// If a new sequence arrives before all the items
+				// from the previous sequence have arrived, no attempt
+				// to retrieve the new sequence's elements is made until
+				// the previous sequence has completed. As a result the
+				// order of elements in the sequence is preserved.
 				seq([
-					seq([1,, ,,, ,,,2,,,3])
-					,,,seq([4,,,5,,,,,,,,6]) ]).
-					mergeAll()                                                  === seq([1,,,4,,,5,,,2,,,3,,,6])
+					seq([1,,,, ,2, ,3])
+					,,,seq([,,4, ,5, ,,6]) ]).
+					concatAll()                                                  === seq([1,,,,,2,,3,,4,,5,,,6])
 
 				// Notice that as long as at least one sequence being
-				// merged is incomplete, the merged sequence is also
+				// concatenated is incomplete, the concatenated sequence is also
 				// incomplete.
 				seq([
 					seq([1,, ,,, ,,,2,,,3])
 					,,,seq([4,,,5,,, ,,, ,,6,,,]) ]).
-					mergeAll()                                                  === seq([1,,,4,,,5,,,2,,,3,,,6,,,])
+					concatAll()                                                  === seq([1,,,,,,,,2,,,3,4,,,5,,,,,,,,6,,,])
 
 				// <b>reduce()</b>
 
@@ -3862,7 +3936,7 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 33: Creating a mouse drag event</h4>
+		<h4>Exercise 32: Creating a mouse drag event</h4>
 
 		<p>Remember the exercise we solved earlier? The one in which we retrieved all the movies with a rating of 5.0 from
 			an array of movie lists? If we were to describe the solution in pseudocode it might read something like
@@ -3873,7 +3947,7 @@
 		<pre>
 			var moviesWithHighRatings =
 				movieLists.
-					flatMap(function(movieList) {
+					concatMap(function(movieList) {
 						return movieList.videos.
 							filter(function(video) {
 								return video.rating === 5.0;
@@ -3914,7 +3988,8 @@
 			}
 		</textarea>
 		<button class="go">Run</button>
-		<!-- <button class="showAnswer">Show Answer</button> -->
+		<button class="showAnswer">Show Answer</button>
+		<button class="resetSprite">Reset Sprite</button>
 		<div class="control output container" style="height:200px;text-align:center">
             <span class="control sprite" style="position:absolute; border: solid 1px black; background-color: white;z-index:23">
                 Sprite
@@ -3925,6 +4000,7 @@
 		<pre class="verifier">
 			// Combine videos and bookmarks 2
 			function(str, lesson) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					output = $(".output", lesson)[0],
 					container = $(".container", lesson)[0],
@@ -3945,7 +4021,7 @@
 					spriteMouseDrags =
 						// For every mouse down event on the sprite...
 						spriteMouseDowns.
-							flatMap(function(contactPoint) {
+							concatMap(function(contactPoint) {
 								// ...retrieve all the mouse move events on the sprite container...
 								return spriteContainerMouseMoves.
 									// ...until a mouse up event occurs.
@@ -3959,7 +4035,7 @@
 				});
 			}
         </pre>
-		<p class="post">Now we're really cooking. We just created a complex event with a few lines a code. We didn't have to
+		<p class="post">Now we're really cooking. We just created a complex event with a few lines of code. We didn't have to
 			deal with any subscriptions objects, or write any stateful code whatsoever. Let's try something a little
 			harder.</p>
 	</div>
@@ -3969,7 +4045,7 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 34: Improving our mouse drag event</h4>
+		<h4>Exercise 33: Improving our mouse drag event</h4>
 
 		<p>Our mouse drag event is a little <i>too</i> simple. Notice that when we drag around the sprite, it always
 			positions itself at the top-left corner of the mouse. Ideally we'd like our drag event to offset its
@@ -4004,7 +4080,7 @@
 					spriteMouseDrags =
 						// For every mouse down event on the sprite...
 						spriteMouseDowns.
-							flatMap(function(contactPoint) {
+							concatMap(function(contactPoint) {
 								// ...retrieve all the mouse move events on the sprite container...
 								return spriteContainerMouseMoves.
 									// ...until a mouse up event occurs.
@@ -4012,7 +4088,7 @@
 									// ------------   INSERT CODE HERE  -----------------
 									// Project each mouse move object into a new object
 									// with adjusted pageX and pageY properties.
-									// Translate each page coodrinate based on the value
+									// Translate each page coordinate based on the value
 									// of the offsetX and offsetY properties in the
 									// contactPoint.
 									// -------------------------------------------------
@@ -4028,6 +4104,7 @@
 		</textarea>
 		<button class="go">Run</button>
 		<button class="showAnswer">Show Answer</button>
+		<button class="resetSprite">Reset Sprite</button>
 		<div class="control output container" style="height:200px;text-align:center">
             <span class="control sprite" style="position:absolute; border: solid 1px black; background-color: white;z-index:23">
                 Sprite
@@ -4037,6 +4114,7 @@
 
 		<pre class="verifier">
 			function(str, lesson) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					output = $(".output", lesson)[0],
 					container = $(".container", lesson)[0],
@@ -4061,7 +4139,7 @@
 					spriteMouseDrags =
 						// For every mouse down event on the sprite...
 						spriteMouseDowns.
-							flatMap(function(contactPoint) {
+							concatMap(function(contactPoint) {
 								// ...retrieve all the mouse move events on the sprite container...
 								return spriteContainerMouseMoves.
 									// ...until a mouse up event occurs.
@@ -4088,7 +4166,7 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 35: HTTP requests</h4>
+		<h4>Exercise 34: HTTP requests</h4>
 
 		<p>Events aren't the only source of asynchronous data in an application. There's also HTTP requests. Most of the
 			time HTTP requests are exposed via a <b>callback-based API</b>. To receive data asynchronously from a
@@ -4114,6 +4192,7 @@
 		<pre class="verifier">
 			// Combine videos and bookmarks 2
 			function(str, lesson) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")");
 				fun(jQueryMock);
 			}
@@ -4127,7 +4206,7 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 36: Sequencing HTTP requests with callbacks</h4>
+		<h4>Exercise 35: Sequencing HTTP requests with callbacks</h4>
 
 		<p>Let's say that we're writing the startup flow for a web application. On startup, the application must perform the
 			following operations:</p>
@@ -4254,6 +4333,7 @@
 		<pre class="verifier">
 			// Combine videos and bookmarks 2
 			function(str, lesson) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					NOOP = function() {};
 
@@ -4300,7 +4380,7 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 37: Traversing callback-based Asynchronous APIs</h4>
+		<h4>Exercise 36: Traversing callback-based Asynchronous APIs</h4>
 
 		<p><b>If a callback API were a sequence, what kind of sequence would it be?</b> We've seen that UI Event sequences
 			can contain anywhere from 0 to infinite items, but will never complete on their own.
@@ -4332,7 +4412,7 @@
 			<li>The client needs to be able to receive data.</li>
 			<li>The client needs to be able to receive error information.</li>
 			<li>The client needs to be able to be alerted that the operation is complete.</li>
-			<li>The client needs to be able to indicate that they're no longer interested the result of the operation.</li>
+			<li>The client needs to be able to indicate that they're no longer interested in the result of the operation.</li>
 		</ol>
 		<p>In the following example, we'll use the Observable.create() function to create an Observable that issues a
 			request to getJSON when it's traversed.
@@ -4392,6 +4472,7 @@
 		<pre class="verifier">
 			// Combine videos and bookmarks 2
 			function(str, lesson) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					NOOP = function() {};
 
@@ -4433,7 +4514,7 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 38: Sequencing HTTP requests with Observable</h4>
+		<h4>Exercise 37: Sequencing HTTP requests with Observable</h4>
 
 		<p>Let's use the getJSON function that returns Observables, and the Observable.fromEvent() to complete the exercise
 			we completed earlier.</p>
@@ -4442,10 +4523,10 @@
 				var movieListsSequence =
 					Observable.zip(
 						getJSON("http://api-global.netflix.com/abTestInformation").
-							flatMap(function(abTestInformation) {
+							concatMap(function(abTestInformation) {
 								return Observable.zip(
 									getJSON("http://api-global.netflix.com/" + abTestInformation.urlPrefix + "/config").
-										flatMap(function(config) {
+										concatMap(function(config) {
 											if (config.showInstantQueue) {
 												return getJSON("http://api-global.netflix.com/" + abTestInformation.urlPrefix + "/queue").
 													map(function(queueMessage) {
@@ -4485,6 +4566,7 @@
 		<pre class="verifier">
 			// Combine videos and bookmarks 2
 			function(str, lesson) {
+				preVerifierHook();
 				var fun = eval("(" + str + ")"),
 					getJSON = function(url) {
 						return Observable.create(function(observer) {
@@ -4532,8 +4614,8 @@
 			}
 		</pre>
 		<div class="post">
-			<p>Almost every workflow in an web application starts with an event, continues with an HTTP request, and results
-				in a state change. Now we know how express the first two tasks elegantly.</p>
+			<p>Almost every workflow in a web application starts with an event, continues with an HTTP request, and results
+				in a state change. Now we know how to express the first two tasks elegantly.</p>
 		</div>
 	</div>
 
@@ -4542,21 +4624,21 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 40: Throttle Input</h4>
+		<h4>Exercise 38: Throttle Input</h4>
 
 		<p>When dealing with user input, there will be times when the user's input is too noisy, and will potentially clog
 			your servers with extraneous requests. We want the ability to throttle the users's input so that if they
 			interacting for one second, then we will get the user input. Let's say for example, the user clicks a button
 			once too many times upon saving and we only want to fire after they've stopped for a second.</p>
 		<pre>
-			seq([1,,,2,,,3,,,4,,,5,,,6,,,]).throttle(1000 */ms */) === seq([,,,,,,,,3,,,,,,,,,,,6,,,]);
+			seq([1,2,3,,,,,,,4,5,6,,,]).throttle(1000 /* ms */) === seq([,,,,,,,3,,,,,,,,,,6,,,]);
 		</pre>
 
 		<textarea class="code" rows="60" cols="80">
 			function (clicks, saveData, name) {
 				return clicks.
 					// TODO: Throttle the clicks so that it only happens every one second
-					flatMap(function () {
+					concatMap(function () {
 						return saveData(name);
 					});
 			}
@@ -4571,6 +4653,7 @@
 
         <pre class="verifier">
 			function(str, lesson) {
+				preVerifierHook();
 				var $inputName = $('.inputName', lesson),
 					$savedValue = $('.savedValue', lesson);
 
@@ -4591,7 +4674,7 @@
 			function (clicks, saveData, name) {
 				return clicks.
 					throttle(1000).
-					flatMap(function () {
+					concatMap(function () {
 						return saveData(name);
 					})
 			}
@@ -4607,11 +4690,11 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 41: Autocomplete Box</h4>
+		<h4>Exercise 39: Autocomplete Box</h4>
 
 		<p>One of the most common problems in web development is the autocomplete box. This seems like it should be an easy
 			problem, but is actually quite challenging. For example, how do we throttle the input? How do we make sure we're
-			not getting out or order requests coming back? For example if I type "react" then type "reactive" I want
+			not getting out of order requests coming back? For example if I type "react" then type "reactive" I want
 			"reactive" to be my result, regardless of which actually returned first from the service.</p>
 
 		<p>In the example below, you will be receiving a sequence of key presses, a textbox, and a function when called
@@ -4630,7 +4713,7 @@
 						return textBox.value;
 					}).
 					// TODO: Ensure that we only trigger a maximum of one search request per second
-					flatMap(function (text) {
+					concatMap(function (text) {
 
 					// TODO: Ensure this sequence ends as soon as another key press arrives
 					return getSearchResultSet(text);
@@ -4651,7 +4734,7 @@
 
         <pre class="verifier">
 			function(str, lesson) {
-
+				preVerifierHook();
 				var wordlist = window.wordlist;
 				wordlist.sort();
 
@@ -4692,7 +4775,7 @@
 							return textBox.value;
 						}).
 						throttle(1000).
-						flatMap(function (text) {
+						concatMap(function (text) {
 							return getSearchResultSet(text).takeUntil(keyPresses);
 						});
 
@@ -4710,7 +4793,7 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 42: Distinct Until Changed Input</h4>
+		<h4>Exercise 40: Distinct Until Changed Input</h4>
 
 		<p>You'll notice in the previous exercise that if you pressed your arrow keys while inside the textbox, the query
 			will still fire, regardless of whether the text actually changed or not. How do we prevent that? The
@@ -4747,6 +4830,7 @@
 
         <pre class="verifier">
 			function(str, lesson) {
+				preVerifierHook();
 				var $inputName = $('.inputName', lesson),
 					$filtered = $('.filteredKeysByDistinct', lesson);
 
@@ -4788,7 +4872,7 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 43: Autocomplete Box Part 2: Electric Boogaloo</h4>
+		<h4>Exercise 41: Autocomplete Box Part 2: Electric Boogaloo</h4>
 
 		<p>In the previous version of the autocomplete box, there were two bugs</p>
 		<ul>
@@ -4816,7 +4900,7 @@
 
 						// TODO: Make sure the text is not empty
 
-						flatMap(function (text) {
+						concatMap(function (text) {
 							return getSearchResultSet(text).takeUntil(keyPresses);
 						});
 
@@ -4833,7 +4917,7 @@
 
         <pre class="verifier">
 			function(str, lesson) {
-
+				preVerifierHook();
 				var wordlist = window.wordlist;
 				wordlist.sort();
 
@@ -4876,7 +4960,7 @@
 						throttle(1000).
 						distinctUntilChanged().
 						filter(function (s) { return s.length > 0; }).
-						flatMap(function (text) {
+						concatMap(function (text) {
 							return getSearchResultSet(text).takeUntil(keyPresses);
 						});
 
@@ -4895,99 +4979,71 @@
 
 	<!-- ************************* LESSON ************************* -->
 	<div class="lesson">
-		<h4>Exercise 44: Retrying after errors</h4>
+		<h4>Exercise 42: Retrying after errors</h4>
 
-		<p>You'll notice in the previous exercise that if you pressed your arrow keys while inside the textbox, the query
-			will still fire, regardless of whether the text actually changed or not. How do we prevent that? The
-			distinctUntilChanged filters out successive repetitive values.</p>
-		<pre>
-			seq([1,,,1,,,3,,,3,,,5,,,1,,,]).distinctUntilChanged() ===
-			seq([1,,,,,,,3,,,,,,,5,,,1,,,]);
-		</pre>
+		<h1>A Work in Progress</h1>
 
-		<textarea class="code" rows="60" cols="80">
-			function (keyPresses, isAlpha) {
-
-				return keyPresses.
-					map(function (e) { return String.fromCharCode(e.keyCode); }).
-
-					// Ensure we only have alphabetic characters
-					filter(function (character) { return isAlpha(character); }).
-
-					// TODO: Filter out successive repetitive keys
-
-					// Building up a string of all the characters typed.
-					scan('', function (stringSoFar, character) {
-						return stringSoFar + character;
-					});
-			}
-		</textarea>
-
-		<button class="go">Run</button>
-
-		<label for="inputName">Enter Keys</label>
-		<input type="text" class="inputName">
-
-		<div>Keys filtered by distinctUntilChanged</div>
-		<div class="filteredKeysByDistinct"></div>
-
-		<button class="showAnswer">Show Answer</button>
-
-        <pre class="verifier">
-			function(str, lesson) {
-				var $inputName = $('.inputName', lesson),
-					$filtered = $('.filteredKeysByDistinct', lesson);
-
-				var keyups = Rx.Observable.fromEvent($inputName[0], 'keyup');
-
-				var isAlpha = function (x) {
-					return 'abcdefghijklmnopqrstuvwxyz'.indexOf(x.toLowerCase()) !== -1;
-				};
-
-				var code =  eval("(" + str + ")")
-				var code = code(keyups, isAlpha);
-
-				code
-					.subscribe(function (text) {
-						$filtered.text(text);
-					});
-			}
-		</pre>
-        <pre class="answer">
-			function (keyPresses, isAlpha) {
-
-				return keyPresses.
-					map(function (e) { return String.fromCharCode(e.keyCode); }).
-					filter(function (character) { return isAlpha(character); }).
-					distinctUntilChanged().
-					scan('', function (stringSoFar, character) {
-						return stringSoFar + character;
-					});
-			}
-        </pre>
-		<div class="post">
-			<p>Now that we know how to get only the distinct input, let's see how it applies to our autocomplete example...</p>
-
-			<h1>A Work in Progress</h1>
-
-			<p>Congratulations! You've made it this far, but you're not done. Learning is an on-going process. Go out and start
-				using the functions you've learned in your day-to-day coding. Over time, I'll be adding more exercises to this
-				tutorial. If you have suggestions for more exercises, send me a pull request!
-			</p>
+		<p>Congratulations! You've made it this far, but you're not done. Learning is an on-going process. Go out and start
+			using the functions you've learned in your day-to-day coding. Over time, I'll be adding more exercises to this
+			tutorial. If you have suggestions for more exercises, send me a pull request!
+		</p>
+	</div>
+    <div class="modal hide" id="modalGetJSON">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Enter your answer JSON below</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <textarea name="answerText" has-value="true" style="margin: 0px 0px 10px; height: 165px; width: 526px;resize: none"></textarea>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary save-btn" data-dismiss="modal">Save changes</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+	<div class="modal hide" id="modalShowJSON">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+							aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">Ctrl-C your answer JSON below</h4>
+				</div>
+				<div class="modal-body">
+					<form>
+						<textarea name="answerText" readonly="readonly" has-value="true" style="margin: 0px 0px 10px; height: 165px; width: 526px;resize: none"></textarea>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
 		</div>
+		<!-- /.modal-dialog -->
 	</div>
 </div>
 
 <script src="assets/app/wordlist.js"></script>
 <script src="assets/codemirror/codemirror.js"></script>
+<script src="assets/codemirror/matchbrackets.js"></script>
 <script src="assets/app/javascript.js"></script>
 
-<script src="assets/rx/rx.compat.js"></script>
-<script src="assets/rx/rx.binding.js"></script>
-<script src="assets/rx/rx.async.compat.js"></script>
-<script src="assets/rx/rx.time.js"></script>
+<script src="assets/rx/rx.all.js"></script>
 
 <script src="assets/jquery/jquery-1.10.2.min.js"></script>
+<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="assets/app/grab_answers.js"></script>
+<script src="assets/app/show_answers.js"></script>
 
 <script src="assets/app/utils.js"></script>
 <script src="assets/app/main.js"></script>
