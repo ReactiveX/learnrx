@@ -4146,8 +4146,8 @@
 									takeUntil(spriteContainerMouseUps).
 									map(function(movePoint) {
 										return {
-											pageX: movePoint.pageX - contactPoint.offsetX,
-											pageY: movePoint.pageY - contactPoint.offsetY
+											pageX: movePoint.pageX + contactPoint.offsetX,
+											pageY: movePoint.pageY + contactPoint.offsetY
 										};
 									});
 							});
