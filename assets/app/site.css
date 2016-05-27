@@ -1,11 +1,11 @@
-body {font-family: sans-serif;}
+body {font-family: sans-serif; padding:0 5px; }
 textarea, pre { -moz-tab-size: 4; -o-tab-size: 4; -webkit-tab-size: 4; tab-size: 4; }
 
 pre {background-color: #F3F3F3; padding: 10px 10px 0 10px; font-family: 'courier new'; font-size: 14px;}
-.content {width: 850px; margin: 0 auto}
+.content { width 100%; max-width: 850px; margin: 0 auto}
 .output { background-color: #E6E6E6; border: 1px black solid; }
 .code { font-family: monospace }
-.model { font-family: monospace; width: 500px; height: 400px }
+.model { font-family: monospace; width: 76%; max-width: 500px; height: 400px }
 .illegal { color: red; }
 .legal {color: green; }
 .question { border: solid 1px black; }
@@ -30,6 +30,6 @@ pre {background-color: #F3F3F3; padding: 10px 10px 0 10px; font-family: 'courier
 .green-button:active, .go:active{position:relative;top:1px;}
 
 .set-answer, .get-answer { width: 200px; height:19px; font-size: 13px; }
-.show-answers { width: 450px; height:25px; font-size: 15px; }
+.show-answers { width:100%; max-width: 450px; height:25px; font-size: 15px; }
 .grab-answers { font-size: 12px; padding: 10px; background-color: #ccc; text-align: center; }
 

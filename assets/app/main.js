@@ -45,9 +45,12 @@ window.onload = function() {
 	var lessons = $(".lesson");
 
 	lessons.each(function(cnt, item) {
+		var code = $('.code', item)[0];
+		if(!code) {
+			return;
+		}
 		var go = $(".go", item)[0],
 			output = $(".output", item)[0],
-			code = $(".code", item)[0],
 			showAnswer = $(".showAnswer", item)[0],
 			answer = $(".answer", item).text(),
 			resetSprite = $(".resetSprite", item)[0],
