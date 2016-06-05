@@ -52,6 +52,7 @@ window.onload = function() {
 		var go = $(".go", item)[0],
 			output = $(".output", item)[0],
 			showAnswer = $(".showAnswer", item)[0],
+			fullScreen = $(".fullScreen", item)[0],
 			answer = $(".answer", item).text(),
 			resetSprite = $(".resetSprite", item)[0],
 			sprite = $(".sprite", item)[0],
@@ -63,12 +64,12 @@ window.onload = function() {
 				indentWithTabs: false,
 				extraKeys: {
 					"F4": function(cm) {
-					  cm.setOption("fullScreen", !cm.getOption("fullScreen"));
+						enterFullScreen(cm);
 					},
 					"Esc": function(cm) {
-					  if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
+						exitFullScreen(cm);
 					}
-				  }
+				}
 			}),
 			post = $(".post", item)[0],
 			verifierScript = $(".verifier", item).text(),
@@ -105,6 +106,12 @@ window.onload = function() {
 			};
 		}
 
+		if (fullScreen) {
+			fullScreen.onclick = function(){
+				enterFullScreen(codeMirror);
+			};
+		}
+
 		if (resetSprite) {
 			resetSprite.onclick = function() {
 				if (sprite) {
@@ -114,4 +121,18 @@ window.onload = function() {
 		}
 
 	});
+
+
+	function enterFullScreen(codeMirror){
+		codeMirror.setOption('fullScreen', true);
+		var backdrop = $('<div class="editorBackdrop modal-backdrop fade in" style="z-index: 6"></div>').appendTo('body');
+		backdrop.click(function(){
+			exitFullScreen(codeMirror);
+		});
+	}
+
+	function exitFullScreen(codeMirror){
+			codeMirror.setOption('fullScreen', false);
+			$('.editorBackdrop').remove();
+	}
 }
