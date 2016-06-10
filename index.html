@@ -1772,17 +1772,20 @@
 				//     {"id": 70111470,"title": "Die Hard","boxart":"http://cdn-0.nflximg.com/images/2891/DieHard150.jpg" }
 				// ];
 
-				return movieLists.concatMap(function(movieList) {
-					return movieList.videos.concatMap(function(video) {
-						return video.boxarts.
-							filter(function(boxart) {
-								return boxart.width === 150;
-						  	}).
-						  	map(function(boxart) {
-								return {id: video.id, title: video.title, boxart: boxart.url};
-							});
-					  });
-				  });
+				return movieLists.concatMap(movieList =>
+				  	movieList.videos.concatMap(video =>
+				    		video.boxarts.
+				      			filter(boxart => boxart.width === 150).
+						    	map(boxart => 
+						        	({
+						          		'id': video.id,
+						          		'title': video.title,
+						          		'boxart': boxart.url
+						        	})
+						    	)
+				    	)
+				 );
+				 
 			}
 		</pre>
 		<p class="post">It's a very common pattern to see several nested concatMap operations, with the last operation being a
