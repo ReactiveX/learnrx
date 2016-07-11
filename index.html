@@ -4206,100 +4206,91 @@
 		</ol>
 		<textarea class="code" rows="60" cols="80">
 			function(window, $, showMovieLists, showError) {
-				var error,
-					configDone,
-					movieLists,
-					queueList,
-					windowLoaded,
-					outputDisplayed,
-					errorHandler = function() {
-						// Otherwise show the error.
-						error = "There was a connectivity error";
+				var error, configDone, movieLists,
+					queueList, windowLoaded, outputDisplayed;
 
-						// We may be ready to display out
-						tryToDisplayOutput();
-					},
-					tryToDisplayOutput = function() {
-						if (outputDisplayed) {
-							return;
-						}
-						if (windowLoaded) {
-							if (configDone && movieLists !== undefined) {
-								if (queueList !== undefined) {
-									movieLists.push(queueList);
-								}
-								outputDisplayed = true;
-								showMovieLists(JSON.stringify(movieLists));
-							}
-							else if (error) {
-								outputDisplayed = true;
-								showError(error);
-							}
-						}
-					},
-					windowLoadHandler = function() {
-						windowLoaded = true;
+				var hostUrl = "http://api-global.netflix.com/";
 
-						// Remember to unsubscribe from events
-						window.removeEventListener("load", windowLoadHandler);
+				function errorHandler() {
+					// Otherwise show the error.
+					error = "There was a connectivity error:";
+					// We may be ready to display out
+					tryToDisplayOutput();
+				}
 
-						// This may be the last task we're waiting on, so try and display output.
-						tryToDisplayOutput();
-					};
+				function tryToDisplayOutput() {
+					// Wait for window. Output once.
+					if (!windowLoaded || outputDisplayed) return;
+
+					// Wait for both parallel requests
+					// member's config and movie list. 
+					if (!configDone || !movieLists) {
+						// Only if something is missing check for an error instead.
+						if(!error) return; 
+						outputDisplayed = true;
+						return showError(error);
+					}
+					// If queue list has been requested, append it to result
+					if (queueList) movieLists.push(queueList);
+					outputDisplayed = true;
+					showMovieLists(JSON.stringify(movieLists));
+				}
+
+				function windowLoadHandler() {
+					windowLoaded = true;
+					// Remember to unsubscribe from events
+					window.removeEventListener("load", windowLoadHandler);
+					// This may be the last task we're waiting on
+					// so try and display output.
+					tryToDisplayOutput();
+				}
 
 				// Register for the load event
 				window.addEventListener("load", windowLoadHandler);
 
 				// Request the service url prefix for the users AB test
-				$.getJSON(
-					"http://api-global.netflix.com/abTestInformation",
-					{
-						success: function(abTestInformation) {
-							// Request the member's config information to determine whether their instant
-							// queue should be displayed.
-							$.getJSON(
-								"http://api-global.netflix.com/" + abTestInformation.urlPrefix + "/config",
-								{
-									success: function(config) {
-										// Parallel retrieval of movie list could've failed,
-										// in which case we don't want to issue this call.
-										if (!error) {
-											// If we're supposed to
-											if (config.showInstantQueue) {
-												$.getJSON(
-													"http://api-global.netflix.com/" + abTestInformation.urlPrefix + "/queue",
-													{
-														success: function(queueMessage) {
-															queueList = queueMessage.list;
+				$.getJSON( hostUrl + "abTestInformation", {
+					success: function(abTestInformation) {
+						var servicePath = hostUrl + abTestInformation.urlPrefix + '/';
+					
+						// Request the member's config information to determine 
+						// whether their instant queue should be displayed.
+						$.getJSON(servicePath + "config", {
+							success: function(config) {
+								// Parallel retrieval of movie list could've failed,
+								// in which case we don't want to issue this call.
+								if (error) return
 
-															configDone = true;
-															tryToDisplayOutput();
-														},
-														error: errorHandler
-													});
-											}
-											else {
-												configDone = true;
-												tryToDisplayOutput();
-											}
-										}
-									},
-									error: errorHandler
-								});
+								// If we're not supposed to
+								if (!config.showInstantQueue) {
+									configDone = true;
+									tryToDisplayOutput();
+									return              
+								}
 
-							// Retrieve the movie list
-							$.getJSON(
-								"http://api-global.netflix.com/" + abTestInformation.urlPrefix + "/movieLists",
-								{
-									success: function(movieListMessage) {
-										movieLists = movieListMessage.list;
+								$.getJSON(servicePath + "queue", {
+									success: function(queueMessage) {
+										queueList = queueMessage.list;
+										configDone = true;
 										tryToDisplayOutput();
 									},
 									error: errorHandler
 								});
-						},
-						error: errorHandler
-					});
+							},
+							error: errorHandler
+						});
+
+						// Retrieve the movie list
+						$.getJSON(servicePath + "movieLists", {
+							success: function(movieListMessage) {
+								movieLists = movieListMessage.list;
+								tryToDisplayOutput();
+							},
+							error: errorHandler
+						});
+					},
+					error: errorHandler
+				});
 			}
 		</textarea>
 		<button class="go">Run</button>
