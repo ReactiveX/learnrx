@@ -57,7 +57,7 @@
 		developers with the tools to abstract common collection operations into reusable, composable building blocks.
 		You'll be surprised to learn that most of the operations you perform on collections can be accomplished with
 		<b>five simple functions</b> (some native to JavaScript and some included in the
-		<a href="https://github.com/Reactive-Extensions/RxJS">RxJS library</a>):
+		<a href="https://github.com/ReactiveX/rxjs">RxJS library</a>):
 	</p>
 	<ol>
 		<li>map</li>
@@ -4636,7 +4636,7 @@
 				var clicks = Observable.fromEvent($('.submitInputName', lesson)[0], 'click');
 
 				var code =  eval("(" + str + ")")
-				var code = code(clicks, function(name) { return Rx.Observable.returnValue(name.val()); }, $inputName);
+				var code = code(clicks, function(name) { return Rx.Observable.of(name.val()); }, $inputName);
 
 				code
 					.subscribe(function (data) {
@@ -4719,7 +4719,7 @@
 						return x.indexOf(text) === 0;
 					});
 
-					return Rx.Observable.returnValue(
+					return Rx.Observable.of(
 						matched.slice(0, 10)
 					);
 				};
@@ -4904,7 +4904,7 @@
 						return x.indexOf(text) === 0;
 					});
 
-					return Rx.Observable.returnValue(
+					return Rx.Observable.of(
 						matched.slice(0, 10)
 					);
 				};
@@ -5015,7 +5015,7 @@
 <script src="assets/codemirror/matchbrackets.js"></script>
 <script src="assets/app/javascript.js"></script>
 
-<script src="assets/rx/rx.all.js"></script>
+<script src="https://unpkg.com/@reactivex/rxjs/dist/global/Rx.js"></script>
 
 <script src="assets/jquery/jquery-1.10.2.min.js"></script>
 <script src="assets/bootstrap/js/bootstrap.min.js"></script>
