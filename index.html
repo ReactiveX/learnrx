@@ -4031,19 +4031,19 @@
 
 		<pre>
 			spriteContainerMouseMoves =
-				seq([ {x: 200, y: 400, offsetX: 10, offsetY: 15},,,{x: 210, y: 410, offsetX: 20, offsetY: 26},,, ])
+				seq([ {x: 200, y: 400, layerX: 10, layerY: 15},,,{x: 210, y: 410, layerX: 20, layerY: 26},,, ])
 		</pre>
 		<p>
 			Each item in the mouse event sequences contains an x, y value that represents that absolute location of the
 			mouse event on the page. The moveSprite() function uses these coordinates to position the sprite. Each item in
-			the sequence <i>also</i> contains a pair of offsetX and offsetY properties that indicate the position of the
+			the sequence <i>also</i> contains a pair of layerX and layerY properties that indicate the position of the
 			mouse event relative to the event target.
 		</p>
 
 		<textarea class="code" rows="60" cols="80">
 			function(sprite, spriteContainer) {
 				// All of the mouse event sequences look like this:
-				// seq([ {pageX: 22, pageY: 3423, offsetX: 14, offsetY: 22} ,,, ])
+				// seq([ {pageX: 22, pageY: 3423, layerX: 14, layerY: 22} ,,, ])
 				var spriteMouseDowns = Observable.fromEvent(sprite, "mousedown"),
 					spriteContainerMouseMoves = Observable.fromEvent(spriteContainer, "mousemove"),
 					spriteContainerMouseUps = Observable.fromEvent(spriteContainer, "mouseup"),
@@ -4061,7 +4061,7 @@
 									// Project each mouse move object into a new object
 									// with adjusted pageX and pageY properties.
 									// Translate each page coordinate based on the value
-									// of the offsetX and offsetY properties in the
+									// of the layerX and layerY properties in the
 									// contactPoint.
 									// -------------------------------------------------
 									// Complete expression...
@@ -4103,7 +4103,7 @@
 		<pre class="answer">
 			function(sprite, spriteContainer) {
 				// All of the mouse event sequences look like this:
-				// seq([ {pageX: 22, pageY: 3423, offsetX: 14, offsetY: 22} ,,, ])
+				// seq([ {pageX: 22, pageY: 3423, layerX: 14, layerY: 22} ,,, ])
 				var spriteMouseDowns = Observable.fromEvent(sprite, "mousedown"),
 					spriteContainerMouseMoves = Observable.fromEvent(spriteContainer, "mousemove"),
 					spriteContainerMouseUps = Observable.fromEvent(spriteContainer, "mouseup"),
@@ -4119,8 +4119,8 @@
 									takeUntil(spriteContainerMouseUps).
 									map(function(movePoint) {
 										return {
-											pageX: movePoint.pageX - contactPoint.offsetX,
-											pageY: movePoint.pageY - contactPoint.offsetY
+											pageX: movePoint.pageX - contactPoint.layerX,
+											pageY: movePoint.pageY - contactPoint.layerY
 										};
 									});
 							});
