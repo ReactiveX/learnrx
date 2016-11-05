@@ -9,7 +9,7 @@ var seq = function(array, interval) {
 		function doWork() {
 			if (counter === array.length) {
 				if (lastValue !== undefined) {
-					observer.onCompleted();
+					observer.complete();
 					return;
 				}
 			}
@@ -21,7 +21,7 @@ var seq = function(array, interval) {
 			}
 			else {
 				counter++;
-				observer.onNext(lastValue);
+				observer.next(lastValue);
 				if (!unsubscribed) {
 					doWork();
 				}
@@ -89,7 +89,7 @@ Observable.fromEvent = function(dom, name) {
 	return Observable.create(function(observer) {
 		var handler = function(e) {
 			e.preventDefault();
-			observer.onNext(e);
+			observer.next(e);
 		};
 		dom.addEventListener(name,handler, false);
 
