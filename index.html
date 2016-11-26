@@ -4629,7 +4629,7 @@
 			interacting for one second, then we will get the user input. Let's say for example, the user clicks a button
 			once too many times upon saving and we only want to fire after they've stopped for a second.</p>
 		<pre>
-			seq([1,2,3,,,,,,,4,5,6,,,]).throttle(1000 /* ms */) === seq([,,,,,,,3,,,,,,,,,,6,,,]);
+			seq([1,2,3,,,,,,,4,5,6,,,]).throttleTime(1000 /* ms */) === seq([,,,,,,,3,,,,,,,,,,6,,,]);
 		</pre>
 
 		<textarea class="code" rows="60" cols="80">
@@ -4672,7 +4672,7 @@
         <pre class="answer">
 			function (clicks, saveData, name) {
 				return clicks.
-					throttle(1000).
+					throttleTime(1000).
 					concatMap(function () {
 						return saveData(name);
 					})
@@ -4774,7 +4774,7 @@
 						map(function () {
 							return textBox.value;
 						}).
-						throttle(1000).
+						throttleTime(1000).
 						concatMap(function (text) {
 							return getSearchResultSet(text).takeUntil(keyPresses);
 						});
@@ -4815,9 +4815,9 @@
 					// TODO: Filter out successive repetitive keys
 
 					// Building up a string of all the characters typed.
-					scan('', function (stringSoFar, character) {
+					scan(function (stringSoFar, character) {
 						return stringSoFar + character;
-					});
+					}, '');
 			}
 		</textarea>
 
@@ -4857,9 +4857,9 @@
 					map(function (e) { return String.fromCharCode(e.keyCode); }).
 					filter(function (character) { return isAlpha(character); }).
 					distinctUntilChanged().
-					scan('', function (stringSoFar, character) {
+					scan(function (stringSoFar, character) {
 						return stringSoFar + character;
-					});
+					}, '');
 			}
         </pre>
 		<div class="post">
@@ -4895,7 +4895,7 @@
 						map(function () {
 							return textBox.value;
 						}).
-						throttle(1000).
+						throttleTime(1000).
 
 						// TODO: Make sure we only get distinct values
 
@@ -4959,7 +4959,7 @@
 						map(function () {
 							return textBox.value;
 						}).
-						throttle(1000).
+						throttleTime(1000).
 						distinctUntilChanged().
 						filter(function (s) { return s.length > 0; }).
 						concatMap(function (text) {
