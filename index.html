@@ -4403,42 +4403,49 @@
 										// If client is still interested in the results, send them.
 										if (subscribed) {
 											// Send data to the client
-											observer.onNext(data);
+											observer.next(data);
 											// Immediately complete the sequence
-											observer.onCompleted();
+											observer.complete();
 										}
 									},
 								error: function(ex) {
 									// If client is still interested in the results, send them.
 									if (subscribed) {
 										// Inform the client that an error occurred.
-										observer.onError(ex);
+										observer.error(ex);
 									}
 								}
 							});
 
-						// Definition of the Subscription objects dispose() method.
+						// Definition of the Subscription objects unsubscribe (dispose in RxJS 4) method.
 						return function() {
 							subscribed = false;
 						}
 					});
 				};
 
+				var observer = {
+					// onNext in RxJS 4
+					next: function (data) {
+						alert(JSON.stringify(data));
+					},
+					// onError in RxJS 4
+					error: function (err) {
+						alert(err);
+					},
+					// onComplete in RxJS 4
+					complete: function () {
+						alert("The asynchronous operation has completed.");
+					}
+				};
+
 				var subscription =
-					getJSON("http://api-global.netflix.com/abTestInformation").
-						forEach(
-							// observer.onNext()
-							function(data) {
-								alert(JSON.stringify(data));
-							},
-							// observer.onError()
-							function(err) {
-								alert(err)
-							},
-							// observer.onCompleted()
-							function() {
-								alert("The asynchronous operation has completed.")
-							});
+					getJSON("http://api-global.netflix.com/abTestInformation").subscribe(observer);
+
+				// setTimeout(function () {
+				// 	alert("Changed my mind, I do not want notifications any more!")
+				// 	subscription.unsubscribe();
+				// }, 10);
 			}
 		</textarea>
 		<button class="go">Run</button>
@@ -4462,20 +4469,38 @@
 			}
 		</pre>
 		<div class="post">
-			<p>Understand that <b>the function passed to Observable.create() is the definition of the forEach() function for
-				<i>this</i> Observable.</b> In other words, all we have to do to define an Observable is to define its
-				traversal function. Notice that although we pass three functions to the Observable's forEach() function, the
-				function we pass to Observable.create() accepts only one value: an Observer. An Observer is just a triple
-				containing three handlers:</p>
+			<p>
+				The argument passed into Observable.create() above is known as the subscribe function. Things that might be
+				interested in data that the created Observable might produce (i.e. an Observer) can express this intention
+				by subscribing to it. They must conform to the interface of an Observer in order for notifications pushed by
+				the Observable to be delivered. Observers are then passed as an argument into the subscribe function of
+				the created Observable.
+			</p>
+			<p>
+				Take note that the subscribe function defined for an Observable represents a lazy evaluation that only
+				occurs for each Observer when it subscribes. Once an Observer no longer interested in the data an Observable
+				has to provide, it should unsubscribe itself. The return value of calling subscribe on an Observable with
+				some Observer is a Subscription, which represents a disposable resource. Calling unsubscribe on a Subscription
+				object will clean up the Observable execution for the corresponding Observer.
+			</p>
+			<p>
+				Notice that the Observer above defines three methods:
+			</p>
 			<ul>
-				<li>The onNext() handler used to send data to the client.</li>
-				<li>The onError() handler used to send error information to the client.</li>
-				<li>The onCompleted() handler used to inform the client that the sequence has completed.</li>
+				<li><b>next()</b>, used by Observables to deliver new data</li>
+				<li><b>error()</b>, used by Observables to deliver error information</li>
+				<li><b>complete()</b>, used by Observables to indicate a data sequence has completed</li>
 			</ul>
-			<p>The three handlers we pass to forEach() are packaged together into a single Observer object for convenience.
-				Finally Observable.create() returns a function that defines the dispose() method of the Subscription object
-				during Traversal. Like the Observer, the Observable.create() function creates the Subscription object for us
-				and uses our function as the dispose() definition.</p>
+			<p>
+				Observers are not expected to implement all the methods above (i.e. they may be partial).
+				For callbacks that are not provided, Observable execution still proceeds normally, except some types of
+				notifications will be ignored.
+			</p>
+			<p>
+				Between RxJS 4 and 5, there are some slight API differences to be wary of that relate to the discussion here.
+				Please consult this <a href="https://github.com/ReactiveX/rxjs/blob/master/MIGRATION.md">migration guide</a>
+				for a detailed list of changes.
+			</p>
 
 			<p>Now that we've built a version of the getJSON function that returns an Observable sequence, let's use it to
 				improve our solution to the previous exercise...</p>
