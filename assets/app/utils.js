@@ -219,7 +219,7 @@ Array.prototype.reduce = function(combiner, initialValue) {
 };
 
 // JSON.stringify(Array.zip([1,2,3],[4,5,6], function(left, right) { return left + right })) === '[5,7,9]' accumulatedValue + currentValue; }); === [6];
-Array.zip = function(left, right, combinerFunction) {
+Array.prototype.zip = function(left, right, combinerFunction) {
 	var counter,
 		results = [];
 
