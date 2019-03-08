@@ -3555,20 +3555,20 @@
 
 		<p>Subscribing to an Event and traversing an Array are fundamentally the same operation. The only difference is that
 			<b>Array traversal is synchronous and completes, and Event traversal is asynchronous and <u>never completes</u>.</b>
-			If we convert a button click Event to an Observable object, we can use forEach() to traverse the Event.</p>
+			If we convert a button click Event to an Observable object, we can use do() to traverse the Event.</p>
 		<textarea class="code" rows="60" cols="80">
 			function(button) {
 				var buttonClicks = Observable.fromEvent(button, "click");
 
-				// In the case of an Observable, forEach returns a subscription object.
 				var subscription =
 					buttonClicks.
-						forEach(function(clickEvent) {
+						do(function(clickEvent) {
 							alert("Button was clicked. Stopping Traversal.");
 
 							// Stop traversing the button clicks
-							subscription.dispose();
-						});
+							subscription.unsubscribe();
+						}).
+						subscribe();
 			}
 		</textarea>
 		<button class="go">Run</button>
