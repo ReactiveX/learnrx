@@ -4537,7 +4537,7 @@
 										}),
 									getJSON("http://api-global.netflix.com/" + abTestInformation.urlPrefix + "/movieLists"),
 									function(queue, movieListsMessage) {
-										var copyOfMovieLists = Object.create(movieListsMessage.list);
+										var copyOfMovieLists = [].concat(movieListsMessage.list);
 										if (queue !== undefined) {
 											copyOfMovieLists.push(queue);
 										}
@@ -4551,13 +4551,15 @@
 						});
 
 				movieListsSequence.
-					forEach(
+					do(
 						function(movieLists) {
 							showMovieLists(movieLists);
 						},
 						function(err) {
 							showError(err);
-						});
+						}
+					).
+					subscribe();
 			}
 		</textarea>
 		<button class="go">Run</button>
@@ -4577,16 +4579,16 @@
 											// If client is still interested in the results, send them.
 											if (subscribed) {
 												// Send data to the client
-												observer.onNext(data);
+												observer.next(data);
 												// Immediately complete the sequence
-												observer.onCompleted();
+												observer.complete();
 											}
 										},
 									error: function(ex) {
 										// If client is still interested in the results, send them.
 										if (subscribed) {
 											// Inform the client that an error occurred.
-											observer.onError(ex);
+											observer.error(ex);
 										}
 									}
 								});
@@ -4602,8 +4604,10 @@
 				fun(
 					{
 						addEventListener: function(event, handler) {
-							window.setTimeout(handler, 200)
-						},
+							window.setTimeout(function(){
+								var fakeEvent = { preventDefault: NOOP };
+								handler(fakeEvent);
+						}, 200);						},
 						removeEventListener: NOOP
 					},
 					getJSON,
