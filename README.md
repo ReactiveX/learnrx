@@ -6,7 +6,7 @@ This is a series of interactive exercises for learning Microsoft's Reactive Exte
 
 1. map
 2. filter
-3. mergeAll
+3. concatAll
 4. reduce
 5. zip
 
